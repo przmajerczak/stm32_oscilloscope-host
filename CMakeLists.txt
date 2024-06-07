@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.22)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+project("stm32_oscilloscope-host")
+
+find_package(OpenGL REQUIRED)
+
+set(GLUT_INCLUDE_DIR /usr/include/)
+set(GLUT_LIBRARY /usr/lib/x86_64-linux-gnu/libglut.so)
+
+add_executable(stm32_oscilloscope-host ${SOURCE})
+add_subdirectory("src")
+
+set(SOURCE ${SOURCE} ${CMAKE_CURRENT_SOURCE_DIR}/stm32_oscilloscope-host.cpp)
+
+target_sources(stm32_oscilloscope-host PRIVATE ${SOURCE})
+
+target_include_directories(stm32_oscilloscope-host PRIVATE ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
+target_link_libraries(stm32_oscilloscope-host ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
