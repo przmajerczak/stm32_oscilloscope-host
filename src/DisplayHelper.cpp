@@ -12,8 +12,8 @@ namespace
 
 void DisplayHelper::triggerDisplay(const RawValuesContainer values)
 {
-    display_trigger_flag = true;
     raw_retrieved_values = values;
+    display_trigger_flag = true;
 }
 
 void DisplayHelper::display()
