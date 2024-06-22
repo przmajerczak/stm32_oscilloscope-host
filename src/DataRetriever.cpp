@@ -4,6 +4,8 @@
 #include "utils.hpp"
 #include <iostream>
 
+extern int errno;
+
 void DataRetriever::runContinuousDataRetrieve(const unsigned int timer_value_ms)
 {
     std::thread t([timer_value_ms, this]()
@@ -49,7 +51,14 @@ std::optional<std::string> DataRetriever::retrieveData()
     }
     else
     {
-        std::cerr << "Error: unable to connect to the device. Retrying." << std::endl;
+        if (errno == EACCES) // permission denied
+        {
+            system("sudo chmod +r /dev/ttyACM0");
+        }
+        else
+        {
+            std::cerr << "Error: unable to connect to the device. Retrying." << std::endl;
+        }
     }
     return {};
 }
