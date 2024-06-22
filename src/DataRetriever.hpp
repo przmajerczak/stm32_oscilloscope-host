@@ -1,23 +1,14 @@
 #pragma once
 
 #include "DataAnalyzer.hpp"
-#include <fstream>
+#include <unistd.h>
+#include <fcntl.h>
 #include <string>
 #include <optional>
 
 class DataRetriever
 {
 public:
-    DataRetriever()
-    {
-        device.open("/dev/ttyACM0");
-    }
-
-    ~DataRetriever()
-    {
-        device.close();
-    }
-
     void runContinuousDataRetrieve(const unsigned int timer_value_ms);
 
 private:
@@ -26,5 +17,5 @@ private:
     int convertRawDataToValue(std::string raw_data);
 
     DataAnalyzer dataAnalyzer;
-    std::ifstream device;
+    int deviceFileDescriptor;
 };

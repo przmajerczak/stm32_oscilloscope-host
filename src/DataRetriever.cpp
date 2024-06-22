@@ -31,24 +31,25 @@ void DataRetriever::singleDataRetrieve()
 
 std::optional<std::string> DataRetriever::retrieveData()
 {
-    if (device.is_open())
-    {
-        std::string rawData;
+    deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
 
-        for (unsigned int attempt_count = 0; attempt_count < FILE_READ_ATTEMPTS_LIMIT; ++attempt_count)
+    if (deviceFileDescriptor > 0)
+    {
+        char rawData[4];
+        int readBytes = read(deviceFileDescriptor, rawData, 4);
+
+        close(deviceFileDescriptor);
+
+        if (readBytes > 1)
         {
-            std::getline(device, rawData);
-            if (not rawData.empty())
-            {
-                return rawData;
-            }
+            std::string rawDataString{rawData};
+            return rawDataString;
         }
         std::cerr << "No data received from the device." << std::endl;
     }
     else
     {
         std::cerr << "Error: unable to connect to the device. Retrying." << std::endl;
-        device.open("/dev/ttyACM0");
     }
     return {};
 }
