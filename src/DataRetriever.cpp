@@ -6,15 +6,15 @@
 
 extern int errno;
 
-void DataRetriever::runContinuousDataRetrieve(const unsigned int timer_value_ms)
+void DataRetriever::runContinuousDataRetrieve()
 {
-    std::thread t([timer_value_ms, this]()
+    std::thread t([this]()
     {
+        deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+
         while (1)
         {
             singleDataRetrieve();
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(timer_value_ms));
         }
     });
     t.detach();
@@ -33,21 +33,19 @@ void DataRetriever::singleDataRetrieve()
 
 std::optional<std::string> DataRetriever::retrieveData()
 {
-    deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
-
     if (deviceFileDescriptor > 0)
     {
         char rawData[4];
+
         int readBytes = read(deviceFileDescriptor, rawData, 4);
 
-        close(deviceFileDescriptor);
-
-        if (readBytes > 1)
+        while (readBytes != 4)
         {
-            std::string rawDataString{rawData};
-            return rawDataString;
+            readBytes = read(deviceFileDescriptor, rawData, 4);
         }
-        std::cerr << "No data received from the device." << std::endl;
+
+        std::string rawDataString{rawData};
+        return rawDataString;
     }
     else
     {
@@ -58,6 +56,8 @@ std::optional<std::string> DataRetriever::retrieveData()
         else
         {
             std::cerr << "Error: unable to connect to the device. Retrying." << std::endl;
+
+            deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
         }
     }
     return {};

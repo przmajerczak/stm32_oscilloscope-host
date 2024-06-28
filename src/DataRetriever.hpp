@@ -9,7 +9,12 @@
 class DataRetriever
 {
 public:
-    void runContinuousDataRetrieve(const unsigned int timer_value_ms);
+    ~DataRetriever()
+    {
+        close(deviceFileDescriptor);
+    }
+
+    void runContinuousDataRetrieve();
 
 private:
     void singleDataRetrieve();

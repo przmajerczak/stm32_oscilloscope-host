@@ -7,7 +7,7 @@ int main(int argc, char **argv)
     DisplayHelper::init(argc, argv);
 
     DataRetriever dataRetriever; 
-    dataRetriever.runContinuousDataRetrieve(DATA_RETRIEVAL_TIMER_VALUE_MS);
+    dataRetriever.runContinuousDataRetrieve();
 
     DisplayHelper::run();
     return 0;
