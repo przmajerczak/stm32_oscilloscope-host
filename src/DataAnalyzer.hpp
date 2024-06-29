@@ -2,6 +2,7 @@
 
 #include "types.hpp"
 #include "constants.hpp"
+#include <cstdint>
 
 class DataAnalyzer
 {
@@ -14,7 +15,7 @@ public:
     void handleData(const int current_value);
 
 private:
-    bool triggerCondition(const ThresholdTrigger trigger);
-    
+    bool triggerCondition(const uint16_t threshold, const ThresholdTrigger trigger);
+
     RawValuesContainer raw_retrieved_values;
 };
