@@ -14,7 +14,7 @@ public:
     void handleData(const int current_value);
 
 private:
-    bool triggerCondition();
+    bool triggerCondition(const ThresholdTrigger trigger);
     
     RawValuesContainer raw_retrieved_values;
 };
