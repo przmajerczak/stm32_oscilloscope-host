@@ -70,7 +70,7 @@ void DisplayHelper::init(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(X_SIZE, Y_SIZE);
-    glutInitWindowPosition(100, 100);
+    glutInitWindowPosition(X_POSITION, Y_POSITION);
     glutCreateWindow("STM32 Oscilloscope");
 
     glClearColor(0.0, 0.0, 0.0, 0.0);
