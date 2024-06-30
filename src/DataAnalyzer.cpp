@@ -1,5 +1,6 @@
 #include "DataAnalyzer.hpp"
 #include "DisplayHelper.hpp"
+#include "SettingsWindow.hpp"
 #include "constants.hpp"
 #include "types.hpp"
 
@@ -12,7 +13,9 @@ void DataAnalyzer::handleData(const int current_value)
 
     if (triggerCondition(defaultThreshold, ThresholdTrigger::FALLING_EDGE))
     {
+        SettingsWindow::notifyAboutThresholdTrigger();
         DisplayHelper::triggerDisplay(raw_retrieved_values);
+
     }
 }
 
