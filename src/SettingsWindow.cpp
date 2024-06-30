@@ -15,6 +15,7 @@ namespace
 
     constexpr uint16_t defaultThreshold{(INPUT_RESOLUTION / 2)};
     uint16_t triggerThresholdSliderValue = defaultThreshold;
+    ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
 } // namespace
 
 void SettingsWindow::init()
@@ -89,4 +90,9 @@ gboolean SettingsWindow::frequencyLabelTimeoutAction(gpointer widgetPtr)
 uint16_t SettingsWindow::getTriggerThresholdSliderValue()
 {
     return triggerThresholdSliderValue;
+}
+
+ThresholdTrigger SettingsWindow::getThresholdTrigger()
+{
+    return thresholdTrigger;
 }

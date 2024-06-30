@@ -9,19 +9,20 @@ void DataAnalyzer::handleData(const int current_value)
     raw_retrieved_values.pop_back();
     raw_retrieved_values.push_front(current_value);
 
-    if (triggerCondition(ThresholdTrigger::FALLING_EDGE))
+    if (triggerCondition())
     {
         SettingsWindow::notifyAboutThresholdTrigger();
         DisplayHelper::triggerDisplay(raw_retrieved_values);
     }
 }
 
-bool DataAnalyzer::triggerCondition(const ThresholdTrigger trigger)
+bool DataAnalyzer::triggerCondition()
 {
     const int current_value{*(raw_retrieved_values.begin())};
     const int previous_value{*(std::next(raw_retrieved_values.begin(), 1))};
 
     const uint16_t threshold{SettingsWindow::getTriggerThresholdSliderValue()};
+    const ThresholdTrigger trigger{SettingsWindow::getThresholdTrigger()};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)
     {
