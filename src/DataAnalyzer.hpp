@@ -1,14 +1,15 @@
 #pragma once
 
-#include "types.hpp"
 #include "constants.hpp"
+#include "types.hpp"
 
 class DataAnalyzer
 {
 public:
     DataAnalyzer()
     {
-        raw_retrieved_values.resize(BUFFER_SIZE);
+        rawRetrievedValues_leftHalf.resize(BUFFER_SIZE / 2);
+        rawRetrievedValues_rightHalf.resize(BUFFER_SIZE / 2);
     }
 
     void handleData(const int current_value);
@@ -16,5 +17,6 @@ public:
 private:
     bool triggerCondition();
 
-    RawValuesContainer raw_retrieved_values;
+    RawValuesContainer rawRetrievedValues_leftHalf;
+    RawValuesContainer rawRetrievedValues_rightHalf;
 };

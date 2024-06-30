@@ -8,12 +8,15 @@ namespace
 {
     bool initial_display{true};
     bool display_trigger_flag{false};
-    RawValuesContainer raw_retrieved_values;
+    RawValuesContainer rawValues_leftHalf;
+    RawValuesContainer rawValues_rightHalf;
 } // namespace
 
-void DisplayHelper::triggerDisplay(const RawValuesContainer values)
+void DisplayHelper::triggerDisplay(const RawValuesContainer values_leftHalf,
+                                   const RawValuesContainer values_rightHalf)
 {
-    raw_retrieved_values = values;
+    rawValues_leftHalf = values_leftHalf;
+    rawValues_rightHalf = values_rightHalf;
     display_trigger_flag = true;
 }
 
@@ -33,9 +36,6 @@ void DisplayHelper::display()
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        int y{static_cast<int>(raw_retrieved_values.front())};
-        y = scaleRawValueToScreenHeight(y);
-
         drawGrid(10, 8);
         drawTriggerIndicator((X_SIZE / 2),
                              scaleRawValueToScreenHeight(
@@ -48,11 +48,24 @@ void DisplayHelper::display()
 
         glBegin(GL_LINES);
 
-        uint16_t x = 0;
+        uint16_t x{0};
+        uint16_t y{scaleRawValueToScreenHeight(rawValues_leftHalf.front())};
+
         glVertex2f(x, y);
 
-        for (auto value_it = std::next(raw_retrieved_values.begin(), 1);
-             value_it != raw_retrieved_values.end(); ++value_it)
+        for (auto value_it = std::next(rawValues_leftHalf.begin(), 1);
+             value_it != rawValues_leftHalf.end(); ++value_it)
+        {
+
+            x += X_LENGTH;
+            y = scaleRawValueToScreenHeight(*value_it);
+
+            glVertex2f(x, y);
+            glVertex2f(x, y);
+        }
+
+        for (auto value_it = rawValues_rightHalf.begin();
+             value_it != rawValues_rightHalf.end(); ++value_it)
         {
 
             x += X_LENGTH;

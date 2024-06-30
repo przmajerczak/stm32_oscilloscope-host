@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cstdint>
 #include <iostream>
 
 #include "constants.hpp"
 
-static int scaleRawValueToScreenHeight(const int value)
+static uint16_t scaleRawValueToScreenHeight(const uint16_t value)
 {
     return (static_cast<double>(value) / INPUT_RESOLUTION) * Y_SIZE;
 }

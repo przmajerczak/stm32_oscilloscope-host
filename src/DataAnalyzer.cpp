@@ -6,35 +6,36 @@
 
 void DataAnalyzer::handleData(const int current_value)
 {
-    raw_retrieved_values.pop_back();
-    raw_retrieved_values.push_front(current_value);
+    rawRetrievedValues_leftHalf.pop_front();
+    rawRetrievedValues_leftHalf.push_back(rawRetrievedValues_rightHalf.front());
+
+    rawRetrievedValues_rightHalf.pop_front();
+    rawRetrievedValues_rightHalf.push_back(current_value);
 
     if (triggerCondition())
     {
         SettingsWindow::notifyAboutThresholdTrigger();
-        DisplayHelper::triggerDisplay(raw_retrieved_values);
+        DisplayHelper::triggerDisplay(rawRetrievedValues_leftHalf,
+                                      rawRetrievedValues_rightHalf);
     }
 }
 
 bool DataAnalyzer::triggerCondition()
 {
-    // TODO: split list into two for faster std::next calls
-    const int middleValue{*(std::next(raw_retrieved_values.begin(),
-                                      raw_retrieved_values.size() / 2))};
-    const int nextToMiddleValue{*(std::next(
-        raw_retrieved_values.begin(), 1 + (raw_retrieved_values.size() / 2)))};
+    const int leftMiddleValue{rawRetrievedValues_leftHalf.back()};
+    const int rightMiddleValue{rawRetrievedValues_rightHalf.front()};
 
     const uint16_t threshold{SettingsWindow::getTriggerThresholdSliderValue()};
     const ThresholdTrigger trigger{SettingsWindow::getThresholdTrigger()};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)
     {
-        return (middleValue < threshold and nextToMiddleValue >= threshold);
+        return (leftMiddleValue < threshold and rightMiddleValue >= threshold);
     }
 
     if (trigger == ThresholdTrigger::FALLING_EDGE)
     {
-        return (middleValue >= threshold and nextToMiddleValue < threshold);
+        return (leftMiddleValue >= threshold and rightMiddleValue < threshold);
     }
 
     return false;
