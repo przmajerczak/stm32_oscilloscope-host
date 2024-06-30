@@ -15,4 +15,5 @@ public:
 private:
     static void init();
     static gboolean frequencyLabelTimeoutAction(gpointer widgetPtr);
+    static void triggerThresholdSliderOnChangeAction(GtkRange *range);
 };

@@ -10,11 +10,11 @@ namespace
     GtkWidget *window = nullptr;
     GtkWidget *grid = nullptr;
     GtkWidget *frequencyLabel = nullptr;
+    GtkWidget *triggerThresholdSlider = nullptr;
 
     uint32_t thresholdTriggersSinceLastFreqLabelReset = 0;
 
-    constexpr uint16_t defaultThreshold{(INPUT_RESOLUTION / 2)};
-    uint16_t triggerThresholdSliderValue = defaultThreshold;
+    uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
     ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
 } // namespace
 
@@ -35,7 +35,16 @@ void SettingsWindow::init()
     frequencyLabel = gtk_label_new("Signal frequency: --- Hz");
     gtk_widget_set_hexpand(frequencyLabel, TRUE);
     gtk_grid_attach(GTK_GRID(grid), frequencyLabel, 0, 0, 1, 1);
-    g_timeout_add(FREQUENCY_LABEL_TIMEOUT_MS, frequencyLabelTimeoutAction, frequencyLabel);
+    g_timeout_add(FREQUENCY_LABEL_TIMEOUT_MS, frequencyLabelTimeoutAction,
+                  frequencyLabel);
+
+    triggerThresholdSlider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
+                                                      0, INPUT_RESOLUTION, 1);
+    gtk_range_set_value(GTK_RANGE(triggerThresholdSlider), DEFAULT_TRIGGER_THRESHOLD);
+    gtk_grid_attach(GTK_GRID(grid), triggerThresholdSlider, 0, 1, 1, 1);
+
+    g_signal_connect(triggerThresholdSlider, "value-changed",
+                     G_CALLBACK(triggerThresholdSliderOnChangeAction), nullptr);
 }
 
 void SettingsWindow::run()
@@ -85,6 +94,11 @@ gboolean SettingsWindow::frequencyLabelTimeoutAction(gpointer widgetPtr)
     }
 
     return TRUE;
+}
+
+void SettingsWindow::triggerThresholdSliderOnChangeAction(GtkRange *range)
+{
+    triggerThresholdSliderValue = static_cast<uint16_t>(gtk_range_get_value(range));
 }
 
 uint16_t SettingsWindow::getTriggerThresholdSliderValue()

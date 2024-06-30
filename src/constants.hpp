@@ -10,3 +10,4 @@ constexpr int INPUT_RESOLUTION{4096};
 constexpr double HORIZONTAL_PACE_FACTOR{5};
 constexpr unsigned int BUFFER_SIZE{80};
 constexpr uint16_t FREQUENCY_LABEL_TIMEOUT_MS{500};
+constexpr uint16_t DEFAULT_TRIGGER_THRESHOLD{(INPUT_RESOLUTION / 2)};
