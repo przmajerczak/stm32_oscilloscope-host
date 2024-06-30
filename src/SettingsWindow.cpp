@@ -12,6 +12,9 @@ namespace
     GtkWidget *frequencyLabel = nullptr;
 
     uint32_t thresholdTriggersSinceLastFreqLabelReset = 0;
+
+    constexpr uint16_t defaultThreshold{(INPUT_RESOLUTION / 2)};
+    uint16_t triggerThresholdSliderValue = defaultThreshold;
 } // namespace
 
 void SettingsWindow::init()
@@ -81,4 +84,9 @@ gboolean SettingsWindow::frequencyLabelTimeoutAction(gpointer widgetPtr)
     }
 
     return TRUE;
+}
+
+uint16_t SettingsWindow::getTriggerThresholdSliderValue()
+{
+    return triggerThresholdSliderValue;
 }
