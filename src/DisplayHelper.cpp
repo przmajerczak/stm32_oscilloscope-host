@@ -19,16 +19,12 @@ void DisplayHelper::triggerDisplay(const RawValuesContainer values)
 
 void DisplayHelper::display()
 {
-    int x{X_SIZE / 2};
-
     if (initial_display)
     {
         drawGrid(10, 8);
-        drawTriggerIndicator(
-            x, Y_SIZE *
-                   static_cast<float>(
-                       SettingsWindow::getTriggerThresholdSliderValue()) /
-                   INPUT_RESOLUTION);
+        drawTriggerIndicator((X_SIZE / 2),
+                             scaleRawValueToScreenHeight(
+                                 SettingsWindow::getTriggerThresholdSliderValue()));
 
         glFlush();
         initial_display = false;
@@ -37,14 +33,11 @@ void DisplayHelper::display()
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        const int x_length{
-            (X_SIZE / static_cast<int>(raw_retrieved_values.size())) / 2};
-
         int y{static_cast<int>(raw_retrieved_values.front())};
         y = scaleRawValueToScreenHeight(y);
 
         drawGrid(10, 8);
-        drawTriggerIndicator(x,
+        drawTriggerIndicator((X_SIZE / 2),
                              scaleRawValueToScreenHeight(
                                  SettingsWindow::getTriggerThresholdSliderValue()));
 
@@ -54,13 +47,15 @@ void DisplayHelper::display()
         glLineWidth(2.0);
 
         glBegin(GL_LINES);
+
+        uint16_t x = 0;
         glVertex2f(x, y);
 
         for (auto value_it = std::next(raw_retrieved_values.begin(), 1);
              value_it != raw_retrieved_values.end(); ++value_it)
         {
 
-            x += x_length;
+            x += X_LENGTH;
             y = scaleRawValueToScreenHeight(*value_it);
 
             glVertex2f(x, y);

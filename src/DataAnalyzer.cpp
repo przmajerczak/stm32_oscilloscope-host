@@ -18,20 +18,23 @@ void DataAnalyzer::handleData(const int current_value)
 
 bool DataAnalyzer::triggerCondition()
 {
-    const int current_value{*(raw_retrieved_values.begin())};
-    const int previous_value{*(std::next(raw_retrieved_values.begin(), 1))};
+    // TODO: split list into two for faster std::next calls
+    const int middleValue{*(std::next(raw_retrieved_values.begin(),
+                                      raw_retrieved_values.size() / 2))};
+    const int nextToMiddleValue{*(std::next(
+        raw_retrieved_values.begin(), 1 + (raw_retrieved_values.size() / 2)))};
 
     const uint16_t threshold{SettingsWindow::getTriggerThresholdSliderValue()};
     const ThresholdTrigger trigger{SettingsWindow::getThresholdTrigger()};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)
     {
-        return (current_value < threshold and previous_value >= threshold);
+        return (middleValue < threshold and nextToMiddleValue >= threshold);
     }
 
     if (trigger == ThresholdTrigger::FALLING_EDGE)
     {
-        return (current_value >= threshold and previous_value < threshold);
+        return (middleValue >= threshold and nextToMiddleValue < threshold);
     }
 
     return false;
