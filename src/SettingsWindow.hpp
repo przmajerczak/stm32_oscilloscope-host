@@ -16,4 +16,6 @@ private:
     static void init();
     static gboolean frequencyLabelTimeoutAction(gpointer widgetPtr);
     static void triggerThresholdSliderOnChangeAction(GtkRange *range);
+    static void onTriggerRisingEdgeButtonClicked(GtkWidget *button, gpointer data);
+    static void onTriggerFallingEdgeButtonClicked(GtkWidget *button, gpointer data);
 };

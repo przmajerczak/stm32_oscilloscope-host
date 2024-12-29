@@ -34,17 +34,39 @@ void SettingsWindow::init()
 
     frequencyLabel = gtk_label_new("Signal frequency: --- Hz");
     gtk_widget_set_hexpand(frequencyLabel, TRUE);
-    gtk_grid_attach(GTK_GRID(grid), frequencyLabel, 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), frequencyLabel, 0, 0, 2, 1);
     g_timeout_add(FREQUENCY_LABEL_TIMEOUT_MS, frequencyLabelTimeoutAction,
                   frequencyLabel);
 
+    GtkWidget *thresholdLabel = gtk_label_new("Threshold trigger value:");
+    gtk_widget_set_hexpand(thresholdLabel, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), thresholdLabel, 0, 1, 2, 1);
+
     triggerThresholdSlider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
                                                       0, INPUT_RESOLUTION, 1);
-    gtk_range_set_value(GTK_RANGE(triggerThresholdSlider), DEFAULT_TRIGGER_THRESHOLD);
-    gtk_grid_attach(GTK_GRID(grid), triggerThresholdSlider, 0, 1, 1, 1);
+    gtk_widget_set_hexpand(triggerThresholdSlider, TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(triggerThresholdSlider), TRUE);
+    gtk_range_set_value(GTK_RANGE(triggerThresholdSlider),
+                        DEFAULT_TRIGGER_THRESHOLD);
+    gtk_grid_attach(GTK_GRID(grid), triggerThresholdSlider, 0, 2, 2, 1);
 
     g_signal_connect(triggerThresholdSlider, "value-changed",
                      G_CALLBACK(triggerThresholdSliderOnChangeAction), nullptr);
+
+    GtkWidget *triggerLabel = gtk_label_new("Threshold trigger edge:");
+    gtk_widget_set_hexpand(triggerLabel, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), triggerLabel, 0, 3, 2, 1);
+
+    GtkWidget *triggerRisingEdgeButton = gtk_button_new_with_label("__/‾‾");
+    g_signal_connect(triggerRisingEdgeButton, "clicked",
+                     G_CALLBACK(onTriggerRisingEdgeButtonClicked), NULL);
+    gtk_grid_attach(GTK_GRID(grid), triggerRisingEdgeButton, 0, 4, 1, 1);
+
+    GtkWidget *triggerFallingEdgeButton = gtk_button_new_with_label("‾‾\\__");
+    g_signal_connect(triggerFallingEdgeButton, "clicked",
+                     G_CALLBACK(onTriggerFallingEdgeButtonClicked), NULL);
+
+    gtk_grid_attach(GTK_GRID(grid), triggerFallingEdgeButton, 1, 4, 1, 1);
 }
 
 void SettingsWindow::run()
@@ -98,7 +120,8 @@ gboolean SettingsWindow::frequencyLabelTimeoutAction(gpointer widgetPtr)
 
 void SettingsWindow::triggerThresholdSliderOnChangeAction(GtkRange *range)
 {
-    triggerThresholdSliderValue = static_cast<uint16_t>(gtk_range_get_value(range));
+    triggerThresholdSliderValue =
+        static_cast<uint16_t>(gtk_range_get_value(range));
 }
 
 uint16_t SettingsWindow::getTriggerThresholdSliderValue()
@@ -109,4 +132,15 @@ uint16_t SettingsWindow::getTriggerThresholdSliderValue()
 ThresholdTrigger SettingsWindow::getThresholdTrigger()
 {
     return thresholdTrigger;
+}
+
+void SettingsWindow::onTriggerRisingEdgeButtonClicked(GtkWidget *button,
+                                                      gpointer data)
+{
+    thresholdTrigger = ThresholdTrigger::RISING_EDGE;
+}
+void SettingsWindow::onTriggerFallingEdgeButtonClicked(GtkWidget *button,
+                                                       gpointer data)
+{
+    thresholdTrigger = ThresholdTrigger::FALLING_EDGE;
 }
