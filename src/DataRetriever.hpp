@@ -19,6 +19,8 @@ private:
     void singleDataRetrieve();
     std::string retrieveData();
     int convertRawDataToValue(std::string raw_data);
+    bool configureTty(const int deviceFileDescriptor);
+
 
     DataAnalyzer dataAnalyzer;
     int deviceFileDescriptor;
