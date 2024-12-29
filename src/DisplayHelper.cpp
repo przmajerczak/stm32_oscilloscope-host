@@ -34,9 +34,6 @@ void DisplayHelper::display()
         glClear(GL_COLOR_BUFFER_BIT);
 
         drawGrid(10, 8);
-        drawTriggerIndicator((X_SIZE / 2),
-                             scaleRawValueToScreenHeight(
-                                 SettingsWindow::getTriggerThresholdSliderValue()));
 
         glPointSize(1.0);
 
@@ -64,6 +61,11 @@ void DisplayHelper::display()
         glVertex2f(x, y);
 
         glEnd();
+
+        drawTriggerIndicator((X_SIZE / 2),
+                             scaleRawValueToScreenHeight(
+                                 SettingsWindow::getTriggerThresholdSliderValue()));
+
         glFlush();
 
         display_trigger_flag = false;
