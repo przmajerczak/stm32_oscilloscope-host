@@ -9,8 +9,7 @@ class DataAnalyzer
 public:
     DataAnalyzer()
     {
-        rawRetrievedValues_leftHalf.resize(BUFFER_SIZE / 2);
-        rawRetrievedValues_rightHalf.resize(BUFFER_SIZE / 2);
+        rawRetrievedValues.resize(BUFFER_SIZE);
     }
 
     void handleData(const std::vector<uint16_t> current_values);
@@ -18,6 +17,5 @@ public:
 private:
     bool triggerCondition();
 
-    RawValuesContainer rawRetrievedValues_leftHalf;
-    RawValuesContainer rawRetrievedValues_rightHalf;
+    RawValuesContainer rawRetrievedValues;
 };

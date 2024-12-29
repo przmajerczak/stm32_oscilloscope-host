@@ -8,15 +8,12 @@ namespace
 {
     bool initial_display{true};
     bool display_trigger_flag{false};
-    RawValuesContainer rawValues_leftHalf;
-    RawValuesContainer rawValues_rightHalf;
+    RawValuesContainer rawValues;
 } // namespace
 
-void DisplayHelper::triggerDisplay(const RawValuesContainer values_leftHalf,
-                                   const RawValuesContainer values_rightHalf)
+void DisplayHelper::triggerDisplay(const RawValuesContainer values)
 {
-    rawValues_leftHalf = values_leftHalf;
-    rawValues_rightHalf = values_rightHalf;
+    rawValues = values;
     display_trigger_flag = true;
 }
 
@@ -49,12 +46,12 @@ void DisplayHelper::display()
         glBegin(GL_LINES);
 
         uint16_t x{0};
-        uint16_t y{scaleRawValueToScreenHeight(rawValues_leftHalf.front())};
+        uint16_t y{scaleRawValueToScreenHeight(rawValues.front())};
 
         glVertex2f(x, y);
 
-        for (auto value_it = std::next(rawValues_leftHalf.begin(), 1);
-             value_it != rawValues_leftHalf.end(); ++value_it)
+        for (auto value_it = std::next(rawValues.begin(), 1);
+             value_it != rawValues.end(); ++value_it)
         {
 
             x += X_LENGTH;
@@ -64,16 +61,6 @@ void DisplayHelper::display()
             glVertex2f(x, y);
         }
 
-        for (auto value_it = rawValues_rightHalf.begin();
-             value_it != rawValues_rightHalf.end(); ++value_it)
-        {
-
-            x += X_LENGTH;
-            y = scaleRawValueToScreenHeight(*value_it);
-
-            glVertex2f(x, y);
-            glVertex2f(x, y);
-        }
         glVertex2f(x, y);
 
         glEnd();
