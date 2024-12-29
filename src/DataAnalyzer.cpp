@@ -15,7 +15,13 @@ void DataAnalyzer::handleData(const RawValuesContainer &current_values)
 RawValuesContainer DataAnalyzer::centerValuesOnTrigger(const RawValuesContainer &current_values)
 {
     const auto triggersIndexes{detectTriggers(current_values)};
-    const std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
+
+    if (triggersIndexes.size() == 0)
+    {
+        return current_values;
+    }
+
+    std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
     const int shiftCountForTriggerCenter{static_cast<int>(selectedTrigger - (X_SIZE / 2))};
 
     RawValuesContainer valuesToDisplay;
