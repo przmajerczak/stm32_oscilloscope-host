@@ -10,7 +10,21 @@ void DataRetriever::runContinuousDataRetrieve()
 {
     std::thread t([this]()
     {
+        // TODO: auto-detect correct path
         deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+
+        while (deviceFileDescriptor == 0)
+        {
+            std::cerr << "Error while trying to connect to the device. Retrying." << std::endl;
+
+            if (errno == EACCES) // permission denied
+            {
+                std::cerr << "Read access permission needed." << std::endl;
+                system("sudo chmod +r /dev/ttyACM0");
+            }
+
+            deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+        }
 
         while (1)
         {
@@ -22,45 +36,23 @@ void DataRetriever::runContinuousDataRetrieve()
 
 void DataRetriever::singleDataRetrieve()
 {
-    auto raw_data{retrieveData()};
-
-    if (raw_data.has_value())
-    {
-        int retrieved_value{convertRawDataToValue(raw_data.value())};
-        dataAnalyzer.handleData(retrieved_value);
-    }
+    int retrieved_value{convertRawDataToValue(retrieveData())};
+    dataAnalyzer.handleData(retrieved_value);
 }
 
-std::optional<std::string> DataRetriever::retrieveData()
+std::string DataRetriever::retrieveData()
 {
-    if (deviceFileDescriptor > 0)
+    char rawData[4];
+
+    int readBytes = read(deviceFileDescriptor, rawData, 4);
+
+    while (readBytes != 4)
     {
-        char rawData[4];
-
-        int readBytes = read(deviceFileDescriptor, rawData, 4);
-
-        while (readBytes != 4)
-        {
-            readBytes = read(deviceFileDescriptor, rawData, 4);
-        }
-
-        std::string rawDataString{rawData};
-        return rawDataString;
+        readBytes = read(deviceFileDescriptor, rawData, 4);
     }
-    else
-    {
-        if (errno == EACCES) // permission denied
-        {
-            system("sudo chmod +r /dev/ttyACM0");
-        }
-        else
-        {
-            std::cerr << "Error: unable to connect to the device. Retrying." << std::endl;
 
-            deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
-        }
-    }
-    return {};
+    std::string rawDataString{rawData};
+    return rawDataString;
 }
 
 int DataRetriever::convertRawDataToValue(std::string raw_data)

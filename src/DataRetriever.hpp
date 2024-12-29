@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string>
-#include <optional>
 
 class DataRetriever
 {
@@ -18,7 +17,7 @@ public:
 
 private:
     void singleDataRetrieve();
-    std::optional<std::string> retrieveData();
+    std::string retrieveData();
     int convertRawDataToValue(std::string raw_data);
 
     DataAnalyzer dataAnalyzer;
