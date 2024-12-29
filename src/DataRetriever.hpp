@@ -3,7 +3,7 @@
 #include "DataAnalyzer.hpp"
 #include <unistd.h>
 #include <fcntl.h>
-#include <string>
+#include <vector>
 
 class DataRetriever
 {
@@ -17,10 +17,9 @@ public:
 
 private:
     void singleDataRetrieve();
-    std::string retrieveData();
-    int convertRawDataToValue(std::string raw_data);
+    std::vector<uint8_t>  retrieveData();
+    std::vector<uint16_t> convertRawDataToValues(std::vector<uint8_t> raw_data);
     bool configureTty(const int deviceFileDescriptor);
-
 
     DataAnalyzer dataAnalyzer;
     int deviceFileDescriptor;

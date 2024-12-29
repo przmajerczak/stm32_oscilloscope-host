@@ -42,39 +42,48 @@ void DataRetriever::runContinuousDataRetrieve()
 
 void DataRetriever::singleDataRetrieve()
 {
-    int retrieved_value{convertRawDataToValue(retrieveData())};
-    dataAnalyzer.handleData(retrieved_value);
+    std::vector<uint16_t> retrieved_values{convertRawDataToValues(retrieveData())};
+    dataAnalyzer.handleData(retrieved_values);
 }
 
-std::string DataRetriever::retrieveData()
+std::vector<uint8_t> DataRetriever::retrieveData()
 {
-    char rawData[4];
+    uint8_t byte{0};
+    uint8_t previous_byte{0};
 
-    int readBytes = read(deviceFileDescriptor, rawData, 4);
+    std::vector<uint8_t> data;
 
-    while (readBytes != 4)
+    while (not(byte == 0xff and previous_byte == '\n'))
     {
-        readBytes = read(deviceFileDescriptor, rawData, 4);
+        previous_byte = byte;
+        long int bytes_received{read(deviceFileDescriptor, &byte, 1)};
+        if (bytes_received > 0)
+        {
+            data.push_back(byte);
+        }
     }
 
-    std::string rawDataString{rawData};
-    return rawDataString;
+    data.pop_back();
+    data.pop_back();
+
+    return data;
 }
 
-int DataRetriever::convertRawDataToValue(std::string raw_data)
+std::vector<uint16_t> DataRetriever::convertRawDataToValues(std::vector<uint8_t> raw_data)
 {
-    int value{0};
+    std::vector<uint16_t> values;
+    values.resize(raw_data.size() / 2);
 
-    try
+    auto values_it{values.begin()};
+
+    for (std::size_t i = 0; i < raw_data.size(); i += 2)
     {
-        value = std::stoi(raw_data);
-    }
-    catch (...)
-    {
-        std::cerr << "Stoi failed for raw data: \"" << raw_data << "\"." << std::endl;
+        *values_it = raw_data.at(i) + (raw_data.at(i + 1) << 8);
+
+        ++values_it;
     }
 
-    return value;
+    return values;
 }
 
 bool DataRetriever::configureTty(const int deviceFileDescriptor)

@@ -4,15 +4,18 @@
 #include "constants.hpp"
 #include "types.hpp"
 
-void DataAnalyzer::handleData(const int current_value)
+void DataAnalyzer::handleData(const std::vector<uint16_t> current_values)
 {
-    rawRetrievedValues_leftHalf.pop_front();
-    rawRetrievedValues_leftHalf.push_back(rawRetrievedValues_rightHalf.front());
+    for (int i = 0; i < current_values.size(); ++i)
+    {
+        rawRetrievedValues_leftHalf.pop_front();
+        rawRetrievedValues_leftHalf.push_back(rawRetrievedValues_rightHalf.front());
 
-    rawRetrievedValues_rightHalf.pop_front();
-    rawRetrievedValues_rightHalf.push_back(current_value);
+        rawRetrievedValues_rightHalf.pop_front();
+        rawRetrievedValues_rightHalf.push_back(current_values.at(i));
+    }
 
-    if (triggerCondition())
+    // if (triggerCondition())
     {
         SettingsWindow::notifyAboutThresholdTrigger();
         DisplayHelper::triggerDisplay(rawRetrievedValues_leftHalf,

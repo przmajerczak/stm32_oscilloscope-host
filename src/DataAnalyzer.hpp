@@ -2,6 +2,7 @@
 
 #include "constants.hpp"
 #include "types.hpp"
+#include <vector>
 
 class DataAnalyzer
 {
@@ -12,7 +13,7 @@ public:
         rawRetrievedValues_rightHalf.resize(BUFFER_SIZE / 2);
     }
 
-    void handleData(const int current_value);
+    void handleData(const std::vector<uint16_t> current_values);
 
 private:
     bool triggerCondition();
