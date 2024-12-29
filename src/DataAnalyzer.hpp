@@ -12,5 +12,6 @@ public:
     void handleData(const RawValuesContainer &current_values);
 
 private:
-    bool triggerCondition();
+    std::vector<std::size_t> detectTriggers(const RawValuesContainer &current_values);
+    bool isTrigger(const uint16_t leftValue, const uint16_t rightValue);
 };
