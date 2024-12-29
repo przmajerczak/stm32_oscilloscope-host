@@ -11,3 +11,4 @@ constexpr unsigned int BUFFER_SIZE{X_SIZE};
 constexpr uint8_t X_LENGTH{X_SIZE / BUFFER_SIZE};
 constexpr uint16_t FREQUENCY_LABEL_TIMEOUT_MS{500};
 constexpr uint16_t DEFAULT_TRIGGER_THRESHOLD{(INPUT_RESOLUTION / 2)};
+constexpr uint16_t INVALID_VALUE{0xffff};

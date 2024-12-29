@@ -43,14 +43,28 @@ void DisplayHelper::display()
         glBegin(GL_LINES);
 
         uint16_t x{0};
-        uint16_t y{scaleRawValueToScreenHeight(rawValues.front())};
+
+        auto value_it{rawValues.begin()};
+
+        while (*value_it == INVALID_VALUE)
+        {
+            x += X_LENGTH;
+            ++value_it;
+        }
+
+        uint16_t y{scaleRawValueToScreenHeight(*value_it)};
+        ++value_it;
 
         glVertex2f(x, y);
 
-        for (auto value_it = std::next(rawValues.begin(), 1);
+        for (value_it;
              value_it != rawValues.end(); ++value_it)
         {
 
+            if (*value_it == INVALID_VALUE)
+            {
+                break;
+            }
             x += X_LENGTH;
             y = scaleRawValueToScreenHeight(*value_it);
 

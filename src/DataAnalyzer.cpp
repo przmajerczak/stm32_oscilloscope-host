@@ -30,7 +30,7 @@ RawValuesContainer DataAnalyzer::centerValuesOnTrigger(const RawValuesContainer 
         }
         else
         {
-            valuesToDisplay.at(idx) = 0xffff;
+            valuesToDisplay.at(idx) = INVALID_VALUE;
         }
     }
 
