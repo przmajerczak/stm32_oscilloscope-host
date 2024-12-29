@@ -17,8 +17,8 @@ public:
 
 private:
     void singleDataRetrieve();
-    std::vector<uint8_t>  retrieveData();
-    std::vector<uint16_t> convertRawDataToValues(std::vector<uint8_t> raw_data);
+    std::vector<uint8_t> retrieveData();
+    RawValuesContainer convertRawDataToValues(std::vector<uint8_t> raw_data);
     bool configureTty(const int deviceFileDescriptor);
 
     DataAnalyzer dataAnalyzer;

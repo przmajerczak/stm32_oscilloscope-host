@@ -11,7 +11,7 @@ namespace
     RawValuesContainer rawValues;
 } // namespace
 
-void DisplayHelper::triggerDisplay(const RawValuesContainer values)
+void DisplayHelper::triggerDisplay(const RawValuesContainer &values)
 {
     rawValues = values;
     display_trigger_flag = true;

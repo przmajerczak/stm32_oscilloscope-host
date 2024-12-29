@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cstdint>
-#include <list>
+#include <vector>
 
-using RawValuesContainer = std::list<uint16_t>;
+using RawValuesContainer = std::vector<uint16_t>;
 
 enum class ThresholdTrigger
 {

@@ -42,7 +42,7 @@ void DataRetriever::runContinuousDataRetrieve()
 
 void DataRetriever::singleDataRetrieve()
 {
-    std::vector<uint16_t> retrieved_values{convertRawDataToValues(retrieveData())};
+    RawValuesContainer retrieved_values{convertRawDataToValues(retrieveData())};
     dataAnalyzer.handleData(retrieved_values);
 }
 
@@ -69,9 +69,9 @@ std::vector<uint8_t> DataRetriever::retrieveData()
     return data;
 }
 
-std::vector<uint16_t> DataRetriever::convertRawDataToValues(std::vector<uint8_t> raw_data)
+RawValuesContainer DataRetriever::convertRawDataToValues(std::vector<uint8_t> raw_data)
 {
-    std::vector<uint16_t> values;
+    RawValuesContainer values;
     values.resize(raw_data.size() / 2);
 
     auto values_it{values.begin()};

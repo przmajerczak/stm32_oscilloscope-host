@@ -4,18 +4,13 @@
 #include "constants.hpp"
 #include "types.hpp"
 
-void DataAnalyzer::handleData(const std::vector<uint16_t> current_values)
+void DataAnalyzer::handleData(const RawValuesContainer &current_values)
 {
-    for (int i = 0; i < current_values.size(); ++i)
-    {
-        rawRetrievedValues.pop_front();
-        rawRetrievedValues.push_back(current_values.at(i));
-    }
 
     // if (triggerCondition())
     {
         SettingsWindow::notifyAboutThresholdTrigger();
-        DisplayHelper::triggerDisplay(rawRetrievedValues);
+        DisplayHelper::triggerDisplay(current_values);
     }
 }
 
