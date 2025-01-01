@@ -42,7 +42,22 @@ void DataRetriever::runContinuousDataRetrieve()
 
 void DataRetriever::singleDataRetrieve()
 {
-    RawValuesContainer retrieved_values{convertRawDataToValues(retrieveData())};
+    const auto undecodedRetrievedData{retrieveData()};
+    constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_0{1600};
+    const std::size_t receivedBytes{undecodedRetrievedData.size()};
+
+    // TODO: fix shattered transmissions issue
+    if (receivedBytes != expectedReceivedDataSizeUnderInterfaceV2_0)
+    {
+        std::cerr << "Received data transmission shorter than expected "
+                  << expectedReceivedDataSizeUnderInterfaceV2_0
+                  << ". Received bytes: " << receivedBytes << std::endl;
+
+        return;
+    }
+
+    RawValuesContainer retrieved_values{
+        convertRawDataToValues(undecodedRetrievedData)};
     dataAnalyzer.handleData(retrieved_values);
 }
 
