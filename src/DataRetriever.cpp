@@ -42,8 +42,8 @@ void DataRetriever::runContinuousDataRetrieve()
 
 void DataRetriever::singleDataRetrieve()
 {
-    const auto undecodedRetrievedData{retrieveData()};
-    constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_0{1600};
+    auto undecodedRetrievedData{retrieveData()};
+    constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_0{1604};
     const std::size_t receivedBytes{undecodedRetrievedData.size()};
 
     // TODO: fix shattered transmissions issue
@@ -55,6 +55,9 @@ void DataRetriever::singleDataRetrieve()
 
         return;
     }
+
+    [[maybe__unused]] uint32_t measurement_period{
+        pullMeasurementPeriodFromUndecodedRetrievedData(undecodedRetrievedData)};
 
     RawValuesContainer retrieved_values{
         convertRawDataToValues(undecodedRetrievedData)};
@@ -130,4 +133,22 @@ bool DataRetriever::configureTty(const int deviceFileDescriptor)
     }
 
     return true;
+}
+
+uint32_t DataRetriever::pullMeasurementPeriodFromUndecodedRetrievedData(
+    std::list<uint8_t> &undecodedRetrievedData)
+{
+
+    uint32_t measurement_period{0};
+
+    for (int i = 3; i >= 0; --i)
+    {
+        measurement_period += (undecodedRetrievedData.back() << (i * 8));
+        undecodedRetrievedData.pop_back();
+    }
+
+    std::cout << "Measurement period: "
+              << static_cast<long long int>(measurement_period) << std::endl;
+
+    return measurement_period;
 }

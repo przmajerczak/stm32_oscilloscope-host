@@ -20,6 +20,7 @@ private:
     std::list<uint8_t> retrieveData();
     RawValuesContainer convertRawDataToValues(std::list<uint8_t> raw_data);
     bool configureTty(const int deviceFileDescriptor);
+    uint32_t pullMeasurementPeriodFromUndecodedRetrievedData(std::list<uint8_t> &undecodedRetrievedData);
 
     DataAnalyzer dataAnalyzer;
     int deviceFileDescriptor;
