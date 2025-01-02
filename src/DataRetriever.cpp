@@ -61,12 +61,12 @@ void DataRetriever::singleDataRetrieve()
     dataAnalyzer.handleData(retrieved_values);
 }
 
-std::vector<uint8_t> DataRetriever::retrieveData()
+std::list<uint8_t> DataRetriever::retrieveData()
 {
     uint8_t byte{0};
     uint8_t previous_byte{0};
 
-    std::vector<uint8_t> data;
+    std::list<uint8_t> data;
 
     while (not(byte == 0xff and previous_byte == '\n'))
     {
@@ -84,18 +84,24 @@ std::vector<uint8_t> DataRetriever::retrieveData()
     return data;
 }
 
-RawValuesContainer DataRetriever::convertRawDataToValues(std::vector<uint8_t> raw_data)
+RawValuesContainer DataRetriever::convertRawDataToValues(std::list<uint8_t> raw_data)
 {
     RawValuesContainer values;
     values.resize(raw_data.size() / 2);
 
     auto values_it{values.begin()};
 
-    for (std::size_t i = 0; i < raw_data.size(); i += 2)
-    {
-        *values_it = raw_data.at(i) + (raw_data.at(i + 1) << 8);
+    auto current_raw_data{raw_data.begin()};
+    auto next_raw_data{std::next(current_raw_data, 1)};
 
-        ++values_it;
+    for (auto &value : values)
+    {
+        value = *current_raw_data + (*next_raw_data << 8);
+
+        ++current_raw_data;
+        ++current_raw_data;
+        ++next_raw_data;
+        ++next_raw_data;
     }
 
     return values;
