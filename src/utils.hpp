@@ -7,7 +7,7 @@
 
 static uint16_t scaleRawValueToScreenHeight(const uint16_t value)
 {
-    return (static_cast<double>(value) / INPUT_RESOLUTION) * Y_SIZE;
+    return (static_cast<double>(value) / INPUT_SIGNAL_RESOLUTION) * Y_DISPLAY_RESOLUTION;
 }
 
 static void displayContainer(const std::string label, const auto &values)

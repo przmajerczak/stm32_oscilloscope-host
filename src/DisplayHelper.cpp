@@ -2,6 +2,7 @@
 #include "SettingsWindow.hpp"
 
 #include "constants.hpp"
+#include <GL/glut.h>
 #include "utils.hpp"
 
 namespace
@@ -22,7 +23,7 @@ void DisplayHelper::display()
     if (initial_display)
     {
         drawGrid(10, 8);
-        drawTriggerIndicator((X_SIZE / 2),
+        drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
                              scaleRawValueToScreenHeight(
                                  SettingsWindow::getTriggerThresholdSliderValue()));
 
@@ -76,7 +77,7 @@ void DisplayHelper::display()
 
         glEnd();
 
-        drawTriggerIndicator((X_SIZE / 2),
+        drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
                              scaleRawValueToScreenHeight(
                                  SettingsWindow::getTriggerThresholdSliderValue()));
 
@@ -92,15 +93,15 @@ void DisplayHelper::init(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(X_SIZE, Y_SIZE);
-    glutInitWindowPosition(X_POSITION, Y_POSITION);
+    glutInitWindowSize(X_DISPLAY_RESOLUTION, Y_DISPLAY_RESOLUTION);
+    glutInitWindowPosition(X_INITIAL_WINDOW_POSITION, Y_INITIAL_WINDOW_POSITION);
     glutCreateWindow("STM32 Oscilloscope");
 
     glClearColor(0.0, 0.0, 0.0, 0.0);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, X_SIZE, 0.0, Y_SIZE);
+    gluOrtho2D(0.0, X_DISPLAY_RESOLUTION, 0.0, Y_DISPLAY_RESOLUTION);
 }
 
 void DisplayHelper::run()

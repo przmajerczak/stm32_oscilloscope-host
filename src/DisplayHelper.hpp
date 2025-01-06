@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GL/glut.h>
-
 #include "drawingUtils.hpp"
 #include "types.hpp"
 

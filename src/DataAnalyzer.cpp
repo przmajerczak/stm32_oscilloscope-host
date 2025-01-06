@@ -22,7 +22,7 @@ RawValuesContainer DataAnalyzer::centerValuesOnTrigger(const RawValuesContainer 
     }
 
     std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
-    const int shiftCountForTriggerCenter{static_cast<int>(selectedTrigger - (X_SIZE / 2))};
+    const int shiftCountForTriggerCenter{static_cast<int>(selectedTrigger - (X_DISPLAY_RESOLUTION / 2))};
 
     RawValuesContainer valuesToDisplay;
     valuesToDisplay.resize(current_values.size());

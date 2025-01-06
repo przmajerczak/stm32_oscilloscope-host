@@ -25,8 +25,8 @@ void SettingsWindow::init()
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     gtk_window_set_title(GTK_WINDOW(window), "Settings");
-    gtk_window_move(GTK_WINDOW(window), X_POSITION + X_SIZE, Y_POSITION);
-    gtk_window_set_default_size(GTK_WINDOW(window), X_SIZE / 3, Y_SIZE);
+    gtk_window_move(GTK_WINDOW(window), X_INITIAL_WINDOW_POSITION + X_DISPLAY_RESOLUTION, Y_INITIAL_WINDOW_POSITION);
+    gtk_window_set_default_size(GTK_WINDOW(window), X_DISPLAY_RESOLUTION / 3, Y_DISPLAY_RESOLUTION);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
 
     grid = gtk_grid_new();
@@ -43,7 +43,7 @@ void SettingsWindow::init()
     gtk_grid_attach(GTK_GRID(grid), thresholdLabel, 0, 1, 2, 1);
 
     triggerThresholdSlider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
-                                                      0, INPUT_RESOLUTION, 1);
+                                                      0, INPUT_SIGNAL_RESOLUTION, 1);
     gtk_widget_set_hexpand(triggerThresholdSlider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(triggerThresholdSlider), TRUE);
     gtk_range_set_value(GTK_RANGE(triggerThresholdSlider),
