@@ -32,7 +32,7 @@ void DisplayHelper::display()
 
         glBegin(GL_LINES);
 
-        uint16_t x{0};
+        int x{marginCorrected(0)};
 
         auto value_it{rawValues.begin()};
 
@@ -42,13 +42,12 @@ void DisplayHelper::display()
             ++value_it;
         }
 
-        uint16_t y{scaleRawValueToScreenHeight(*value_it)};
+        uint16_t y{marginCorrected(scaleRawValueToDisplayHeight(*value_it))};
         ++value_it;
 
         glVertex2f(x, y);
 
-        for (value_it;
-             value_it != rawValues.end(); ++value_it)
+        for (value_it; value_it != rawValues.end(); ++value_it)
         {
 
             if (*value_it == INVALID_VALUE)
@@ -56,7 +55,7 @@ void DisplayHelper::display()
                 break;
             }
             x += X_LENGTH;
-            y = scaleRawValueToScreenHeight(*value_it);
+            y = marginCorrected(scaleRawValueToDisplayHeight(*value_it));
 
             glVertex2f(x, y);
             glVertex2f(x, y);
@@ -66,9 +65,10 @@ void DisplayHelper::display()
 
         glEnd();
 
-        drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
-                             scaleRawValueToScreenHeight(
-                                 SettingsWindow::getTriggerThresholdSliderValue()));
+        drawTriggerIndicator(
+            (X_DISPLAY_RESOLUTION / 2),
+            scaleRawValueToDisplayHeight(
+                SettingsWindow::getTriggerThresholdSliderValue()));
 
         glFlush();
 
@@ -82,7 +82,7 @@ void DisplayHelper::init(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(X_DISPLAY_RESOLUTION, Y_DISPLAY_RESOLUTION);
+    glutInitWindowSize(X_WINDOW_SIZE, Y_WINDOW_SIZE);
     glutInitWindowPosition(X_INITIAL_WINDOW_POSITION, Y_INITIAL_WINDOW_POSITION);
     glutCreateWindow("STM32 Oscilloscope");
 
@@ -90,7 +90,7 @@ void DisplayHelper::init(int argc, char **argv)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, X_DISPLAY_RESOLUTION, 0.0, Y_DISPLAY_RESOLUTION);
+    gluOrtho2D(0.0, X_WINDOW_SIZE, 0.0, Y_WINDOW_SIZE);
 }
 
 void DisplayHelper::run()

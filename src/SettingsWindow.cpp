@@ -25,8 +25,8 @@ void SettingsWindow::init()
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     gtk_window_set_title(GTK_WINDOW(window), "Settings");
-    gtk_window_move(GTK_WINDOW(window), X_INITIAL_WINDOW_POSITION + X_DISPLAY_RESOLUTION, Y_INITIAL_WINDOW_POSITION);
-    gtk_window_set_default_size(GTK_WINDOW(window), X_DISPLAY_RESOLUTION / 3, Y_DISPLAY_RESOLUTION);
+    gtk_window_move(GTK_WINDOW(window), X_INITIAL_WINDOW_POSITION + X_WINDOW_SIZE, Y_INITIAL_WINDOW_POSITION);
+    gtk_window_set_default_size(GTK_WINDOW(window), X_WINDOW_SIZE / 3, Y_WINDOW_SIZE);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
 
     grid = gtk_grid_new();

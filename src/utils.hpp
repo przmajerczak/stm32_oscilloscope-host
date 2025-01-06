@@ -5,9 +5,15 @@
 
 #include "constants.hpp"
 
-static uint16_t scaleRawValueToScreenHeight(const uint16_t value)
+static uint16_t scaleRawValueToDisplayHeight(const uint16_t value)
 {
     return (static_cast<double>(value) / INPUT_SIGNAL_RESOLUTION) * Y_DISPLAY_RESOLUTION;
+}
+
+template <typename T>
+static inline T marginCorrected(const T &value)
+{
+    return value + DISPLAY_MARGIN_WIDTH;
 }
 
 static void displayContainer(const std::string label, const auto &values)
