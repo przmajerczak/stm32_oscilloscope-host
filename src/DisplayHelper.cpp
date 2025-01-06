@@ -7,30 +7,19 @@
 
 namespace
 {
-    bool initial_display{true};
-    bool display_trigger_flag{false};
-    RawValuesContainer rawValues;
+    bool display_trigger_flag{true};
+    RawValuesContainer rawValues{0};
 } // namespace
 
 void DisplayHelper::triggerDisplay(const RawValuesContainer &values)
 {
-    rawValues = values;
+    rawValues = std::move(values);
     display_trigger_flag = true;
 }
 
 void DisplayHelper::display()
 {
-    if (initial_display)
-    {
-        drawGrid(10, 8);
-        drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
-                             scaleRawValueToScreenHeight(
-                                 SettingsWindow::getTriggerThresholdSliderValue()));
-
-        glFlush();
-        initial_display = false;
-    }
-    else if (display_trigger_flag)
+    if (display_trigger_flag)
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
