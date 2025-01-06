@@ -64,12 +64,12 @@ static void drawGrid(const int numOfVerticalLines, const int numOfHorizontalLine
 
 static void drawDisplayAreaBorder()
 {
-    constexpr float HALF_THICKNESS{2.0f};
     glColor3f(0.6, 0.6, 0.6);
-    glLineWidth(2 * HALF_THICKNESS);
+    glLineWidth(BOLD_THICKNESS);
 
     glBegin(GL_LINE_LOOP);
 
+    constexpr float HALF_THICKNESS{BOLD_THICKNESS / 2};
     glVertex2f(marginCorrected(0) - HALF_THICKNESS, marginCorrected(0) - HALF_THICKNESS);
     glVertex2f(marginCorrected(0) - HALF_THICKNESS, marginCorrected(Y_DISPLAY_RESOLUTION) + HALF_THICKNESS);
     glVertex2f(marginCorrected(X_DISPLAY_RESOLUTION) + HALF_THICKNESS, marginCorrected(Y_DISPLAY_RESOLUTION) + HALF_THICKNESS);
