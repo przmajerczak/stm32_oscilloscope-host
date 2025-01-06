@@ -69,6 +69,7 @@ void DisplayHelper::display()
             (X_DISPLAY_RESOLUTION / 2),
             scaleRawValueToDisplayHeight(
                 SettingsWindow::getTriggerThresholdSliderValue()));
+        drawDisplayAreaBorder();
 
         glFlush();
 
