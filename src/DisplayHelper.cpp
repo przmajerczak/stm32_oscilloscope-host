@@ -26,26 +26,20 @@ void DisplayHelper::display()
         drawGrid(10, 8);
 
         glPointSize(1.0);
-
         glColor3f(1.0, 1.0, 0.0);
         glLineWidth(2.0);
 
-        glBegin(GL_LINES);
+        glBegin(GL_LINE_STRIP);
 
         int x{marginCorrected(0)};
+        int y;
 
         auto value_it{rawValues.begin()};
-
         while (*value_it == INVALID_VALUE)
         {
             x += X_LENGTH;
             ++value_it;
         }
-
-        uint16_t y{marginCorrected(scaleRawValueToDisplayHeight(*value_it))};
-        ++value_it;
-
-        glVertex2f(x, y);
 
         for (value_it; value_it != rawValues.end(); ++value_it)
         {
@@ -54,14 +48,13 @@ void DisplayHelper::display()
             {
                 break;
             }
-            x += X_LENGTH;
+
             y = marginCorrected(scaleRawValueToDisplayHeight(*value_it));
 
             glVertex2f(x, y);
-            glVertex2f(x, y);
-        }
 
-        glVertex2f(x, y);
+            x += X_LENGTH;
+        }
 
         glEnd();
 
