@@ -3,6 +3,7 @@
 #include "constants.hpp"
 #include "utils.hpp"
 #include <GL/glut.h>
+#include <string>
 
 static void drawText(const float x, const float y, const char *text,
                      const float scale, const float boldness = 1.0,
@@ -33,6 +34,24 @@ static void drawTriggerIndicator(const int x, const int y)
     glVertex2f(marginCorrected(X_DISPLAY_RESOLUTION), marginCorrected(y));
 
     glEnd();
+
+    const int voltage_mV{static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
+                                          static_cast<float>(Y_DISPLAY_RESOLUTION))};
+    const std::string voltage_value{std::to_string(voltage_mV)};
+    const std::string voltage_unit{"mV"};
+
+    const int right_x{marginCorrected(X_DISPLAY_RESOLUTION) +
+                      static_cast<uint16_t>(2 * BOLD_THICKNESS)};
+    const int left_x{static_cast<uint16_t>(2 * BOLD_THICKNESS)};
+    const int upper_line_y{marginCorrected(y)};
+    const int lower_line_y{upper_line_y - 20}; // TODO: remove magic number
+
+    constexpr float FONT_SIZE{0.15f};
+
+    drawText(right_x, upper_line_y, voltage_value.c_str(), FONT_SIZE);
+    drawText(right_x, lower_line_y, voltage_unit.c_str(), FONT_SIZE);
+    drawText(left_x, upper_line_y, voltage_value.c_str(), FONT_SIZE);
+    drawText(left_x, lower_line_y, voltage_unit.c_str(), FONT_SIZE);
 }
 
 static void drawGrid(const int numOfVerticalLines, const int numOfHorizontalLines)

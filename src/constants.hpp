@@ -4,7 +4,7 @@
 
 constexpr uint16_t X_DISPLAY_RESOLUTION{800};
 constexpr uint16_t Y_DISPLAY_RESOLUTION{600};
-constexpr uint16_t DISPLAY_MARGIN_WIDTH{40};
+constexpr uint16_t DISPLAY_MARGIN_WIDTH{60};
 constexpr uint16_t X_WINDOW_SIZE{X_DISPLAY_RESOLUTION + (2 * DISPLAY_MARGIN_WIDTH)};
 constexpr uint16_t Y_WINDOW_SIZE{Y_DISPLAY_RESOLUTION + (2 * DISPLAY_MARGIN_WIDTH)};
 constexpr uint16_t X_INITIAL_WINDOW_POSITION{100};
@@ -16,3 +16,5 @@ constexpr uint16_t FREQUENCY_LABEL_TIMEOUT_MS{500};
 constexpr uint16_t DEFAULT_TRIGGER_THRESHOLD{(INPUT_SIGNAL_RESOLUTION / 2)};
 constexpr uint16_t INVALID_VALUE{0xffff};
 constexpr float BOLD_THICKNESS{4.0};
+constexpr float MAX_VOLTAGE_mV{3300};
+constexpr float MIN_VOLTAGE_mV{0};
