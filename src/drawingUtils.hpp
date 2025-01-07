@@ -114,10 +114,7 @@ static void drawVerticalLineWithLabels(const int x, const char *value_label, con
 
 static void drawTriggerIndicator(const int x, const int y)
 {
-    const int voltage_mV{
-        static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
-                         static_cast<float>(Y_DISPLAY_RESOLUTION))};
-    const std::string voltage_value{std::to_string(voltage_mV)};
+    const std::string voltage_value{std::to_string(scaleYToVoltage_mV(y))};
 
     glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
 

@@ -10,6 +10,11 @@ static uint16_t scaleRawValueToDisplayHeight(const uint16_t value)
     return (static_cast<double>(value) / INPUT_SIGNAL_RESOLUTION) * Y_DISPLAY_RESOLUTION;
 }
 
+static int scaleYToVoltage_mV(const uint16_t y)
+{
+    return static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION));
+}
+
 template <typename T>
 static inline T marginCorrected(const T &value)
 {
