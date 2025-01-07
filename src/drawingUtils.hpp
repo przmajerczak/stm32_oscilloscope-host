@@ -143,24 +143,30 @@ static void drawHorizontalGrid(const int numOfHorizontalLayers)
     }
 }
 
-static void drawVerticalGrid(const int numOfVerticalLines)
+static void drawVerticalGrid(const int numOfVerticalLayers)
 {
-    for (int i = 1; i <= numOfVerticalLines; ++i)
+    const int middle_x{X_DISPLAY_RESOLUTION / 2};
+
+    drawVerticalLineWithLabels(middle_x, "0", " us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+
+    const float delta_x{X_DISPLAY_RESOLUTION / (2 * numOfVerticalLayers)};
+    for (int i = 1; i <= numOfVerticalLayers; ++i)
     {
-        const int x{
-            static_cast<int>(X_DISPLAY_RESOLUTION *
-                             (static_cast<double>(i) / (numOfVerticalLines + 1)))};
-        drawVerticalLine(x, NEUTRAL, true);
+        const int right_x{middle_x + (i * delta_x)};
+        const int left_x{middle_x - (i * delta_x)};
+
+        drawVerticalLineWithLabels(right_x, nullptr, " us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+        drawVerticalLineWithLabels(left_x, nullptr, " us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
     }
 }
 
-static void drawGrid(const int numOfVerticalLines,
+static void drawGrid(const int numOfVerticalLayers,
                      const int numOfHorizontalLayers)
 {
     glColor3f(COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY);
 
     drawHorizontalGrid(numOfHorizontalLayers);
-    drawVerticalGrid(numOfVerticalLines);
+    drawVerticalGrid(numOfVerticalLayers);
 }
 
 static void drawDisplayAreaBorder()
