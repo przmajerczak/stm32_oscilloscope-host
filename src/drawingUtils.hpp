@@ -60,6 +60,24 @@ static void drawHorizontalLineWithLabels(const int y, const char *value_label, c
     drawText(left_x, lower_line_y, unit_label, FONT_SIZE);
 }
 
+static void drawVerticalLineWithLabels(const int x, const char *value_label, const char *unit_label)
+{
+    drawVerticalLine(x);
+
+    const int upper_unit_y{marginCorrected(Y_DISPLAY_RESOLUTION) +
+                           static_cast<uint16_t>(2 * BOLD_THICKNESS)};
+    const int upper_value_y{upper_unit_y + 20};
+    const int lower_value_y{marginCorrected(0) - static_cast<uint16_t>(2 * BOLD_THICKNESS) - 20};
+    const int lower_unit_y{lower_value_y - 20};
+
+    constexpr float FONT_SIZE{0.15f};
+
+    drawText(marginCorrected(x) - 20, upper_value_y, value_label, FONT_SIZE);
+    drawText(marginCorrected(x) - 10, upper_unit_y, unit_label, FONT_SIZE);
+    drawText(marginCorrected(x) - 20, lower_value_y, value_label, FONT_SIZE);
+    drawText(marginCorrected(x) - 10, lower_unit_y, unit_label, FONT_SIZE);
+}
+
 static void drawTriggerIndicator(const int x, const int y)
 {
     const int voltage_mV{static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
