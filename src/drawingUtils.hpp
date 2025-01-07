@@ -6,15 +6,14 @@
 #include <string>
 
 static void drawText(const float x, const float y, const char *text,
-                     const float scale, const float boldness = 1.0,
-                     const float color_r = 1.0f, const float color_g = 1.0f,
-                     const float color_b = 1.0f)
+                     const float font_size, const float color_rgb,
+                     const float boldness = 1.0)
 {
     glPushMatrix();
     glTranslatef(x, y, 0);
-    glColor3f(color_r, color_g, color_b);
+    glColor3f(color_rgb, color_rgb, color_rgb);
     glLineWidth(boldness);
-    glScalef(scale, scale, scale);
+    glScalef(font_size, font_size, font_size);
     for (const char *character = text; (*character) != 0; ++character)
     {
         glutStrokeCharacter(GLUT_STROKE_ROMAN, (*character));
@@ -42,7 +41,8 @@ static void drawVerticalLine(const int x)
     glEnd();
 }
 
-static void drawHorizontalLineWithLabels(const int y, const char *value_label, const char *unit_label)
+static void drawHorizontalLineWithLabels(const int y, const char *value_label, const char *unit_label,
+                                         const float font_size, const float color_rgb)
 {
     drawHorizontalLine(y);
 
@@ -52,48 +52,48 @@ static void drawHorizontalLineWithLabels(const int y, const char *value_label, c
     const int upper_line_y{marginCorrected(y)};
     const int lower_line_y{upper_line_y - 20}; // TODO: remove magic number
 
-    constexpr float FONT_SIZE{0.15f};
-
-    drawText(right_x, upper_line_y, value_label, FONT_SIZE);
-    drawText(right_x, lower_line_y, unit_label, FONT_SIZE);
-    drawText(left_x, upper_line_y, value_label, FONT_SIZE);
-    drawText(left_x, lower_line_y, unit_label, FONT_SIZE);
+    drawText(right_x, upper_line_y, value_label, font_size, color_rgb);
+    drawText(right_x, lower_line_y, unit_label, font_size, color_rgb);
+    drawText(left_x, upper_line_y, value_label, font_size, color_rgb);
+    drawText(left_x, lower_line_y, unit_label, font_size, color_rgb);
 }
 
-static void drawVerticalLineWithLabels(const int x, const char *value_label, const char *unit_label)
+static void drawVerticalLineWithLabels(const int x, const char *value_label, const char *unit_label,
+                                       const float font_size, const float color_rgb)
 {
     drawVerticalLine(x);
 
     const int upper_unit_y{marginCorrected(Y_DISPLAY_RESOLUTION) +
                            static_cast<uint16_t>(2 * BOLD_THICKNESS)};
     const int upper_value_y{upper_unit_y + 20};
-    const int lower_value_y{marginCorrected(0) - static_cast<uint16_t>(2 * BOLD_THICKNESS) - 20};
+    const int lower_value_y{marginCorrected(0) -
+                            static_cast<uint16_t>(2 * BOLD_THICKNESS) - 20};
     const int lower_unit_y{lower_value_y - 20};
 
-    constexpr float FONT_SIZE{0.15f};
-
-    drawText(marginCorrected(x) - 20, upper_value_y, value_label, FONT_SIZE);
-    drawText(marginCorrected(x) - 10, upper_unit_y, unit_label, FONT_SIZE);
-    drawText(marginCorrected(x) - 20, lower_value_y, value_label, FONT_SIZE);
-    drawText(marginCorrected(x) - 10, lower_unit_y, unit_label, FONT_SIZE);
+    drawText(marginCorrected(x) - 20, upper_value_y, value_label, font_size, color_rgb);
+    drawText(marginCorrected(x) - 10, upper_unit_y, unit_label, font_size, color_rgb);
+    drawText(marginCorrected(x) - 20, lower_value_y, value_label, font_size, color_rgb);
+    drawText(marginCorrected(x) - 10, lower_unit_y, unit_label, font_size, color_rgb);
 }
 
 static void drawTriggerIndicator(const int x, const int y)
 {
-    const int voltage_mV{static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
-                                          static_cast<float>(Y_DISPLAY_RESOLUTION))};
+    const int voltage_mV{
+        static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
+                         static_cast<float>(Y_DISPLAY_RESOLUTION))};
     const std::string voltage_value{std::to_string(voltage_mV)};
 
-    glColor3f(0.5, 0.5, 0.5);
+    glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
     glLineWidth(1.0);
 
-    drawHorizontalLineWithLabels(y, voltage_value.c_str(), "mV");
     drawVerticalLine(x);
+    drawHorizontalLineWithLabels(y, voltage_value.c_str(), "mV", FONT_SIZE_LARGE, COLOR_RGB_WHITE);
 }
 
-static void drawGrid(const int numOfVerticalLines, const int numOfHorizontalLines)
+static void drawGrid(const int numOfVerticalLines,
+                     const int numOfHorizontalLines)
 {
-    glColor3f(0.3, 0.3, 0.3);
+    glColor3f(COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY);
 
     glEnable(GL_LINE_STIPPLE);
     glLineStipple(1, 0x00FF);
@@ -101,13 +101,17 @@ static void drawGrid(const int numOfVerticalLines, const int numOfHorizontalLine
 
     for (int i = 1; i <= numOfVerticalLines; ++i)
     {
-        const int x{static_cast<int>(X_DISPLAY_RESOLUTION * (static_cast<double>(i) / (numOfVerticalLines + 1)))};
+        const int x{
+            static_cast<int>(X_DISPLAY_RESOLUTION *
+                             (static_cast<double>(i) / (numOfVerticalLines + 1)))};
         drawVerticalLine(x);
     }
 
     for (int i = 1; i <= numOfHorizontalLines; ++i)
     {
-        const int y{static_cast<int>(Y_DISPLAY_RESOLUTION * (static_cast<double>(i) / (numOfHorizontalLines + 1)))};
+        const int y{
+            static_cast<int>(Y_DISPLAY_RESOLUTION * (static_cast<double>(i) /
+                                                     (numOfHorizontalLines + 1)))};
         drawHorizontalLine(y);
     }
 
@@ -116,7 +120,7 @@ static void drawGrid(const int numOfVerticalLines, const int numOfHorizontalLine
 
 static void drawDisplayAreaBorder()
 {
-    glColor3f(0.6, 0.6, 0.6);
+    glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
     glLineWidth(BOLD_THICKNESS);
 
     constexpr float HALF_THICKNESS{BOLD_THICKNESS / 2};
