@@ -22,18 +22,33 @@ static void drawText(const float x, const float y, const char *text,
     glPopMatrix();
 }
 
-static void drawTriggerIndicator(const int x, const int y)
+static void drawHorizontalLine(const int y)
 {
-    glColor3f(0.5, 0.5, 0.5);
-    glLineWidth(1.0);
     glBegin(GL_LINES);
 
-    glVertex2f(marginCorrected(x), marginCorrected(0));
-    glVertex2f(marginCorrected(x), marginCorrected(Y_DISPLAY_RESOLUTION));
     glVertex2f(marginCorrected(0), marginCorrected(y));
     glVertex2f(marginCorrected(X_DISPLAY_RESOLUTION), marginCorrected(y));
 
     glEnd();
+}
+
+static void drawVerticalLine(const int x)
+{
+    glBegin(GL_LINES);
+
+    glVertex2f(marginCorrected(x), marginCorrected(0));
+    glVertex2f(marginCorrected(x), marginCorrected(Y_DISPLAY_RESOLUTION));
+
+    glEnd();
+}
+
+static void drawTriggerIndicator(const int x, const int y)
+{
+    glColor3f(0.5, 0.5, 0.5);
+    glLineWidth(1.0);
+
+    drawHorizontalLine(y);
+    drawVerticalLine(x);
 
     const int voltage_mV{static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
                                           static_cast<float>(Y_DISPLAY_RESOLUTION))};
@@ -61,23 +76,19 @@ static void drawGrid(const int numOfVerticalLines, const int numOfHorizontalLine
     glEnable(GL_LINE_STIPPLE);
     glLineStipple(1, 0x00FF);
     glLineWidth(1.0);
-    glBegin(GL_LINES);
 
     for (int i = 1; i <= numOfVerticalLines; ++i)
     {
         const int x{static_cast<int>(X_DISPLAY_RESOLUTION * (static_cast<double>(i) / (numOfVerticalLines + 1)))};
-        glVertex2f(marginCorrected(x), marginCorrected(0));
-        glVertex2f(marginCorrected(x), marginCorrected(Y_DISPLAY_RESOLUTION));
+        drawVerticalLine(x);
     }
 
     for (int i = 1; i <= numOfHorizontalLines; ++i)
     {
         const int y{static_cast<int>(Y_DISPLAY_RESOLUTION * (static_cast<double>(i) / (numOfHorizontalLines + 1)))};
-        glVertex2f(marginCorrected(0), marginCorrected(y));
-        glVertex2f(marginCorrected(X_DISPLAY_RESOLUTION), marginCorrected(y));
+        drawHorizontalLine(y);
     }
 
-    glEnd();
     glDisable(GL_LINE_STIPPLE);
 }
 
@@ -86,13 +97,10 @@ static void drawDisplayAreaBorder()
     glColor3f(0.6, 0.6, 0.6);
     glLineWidth(BOLD_THICKNESS);
 
-    glBegin(GL_LINE_LOOP);
-
     constexpr float HALF_THICKNESS{BOLD_THICKNESS / 2};
-    glVertex2f(marginCorrected(0) - HALF_THICKNESS, marginCorrected(0) - HALF_THICKNESS);
-    glVertex2f(marginCorrected(0) - HALF_THICKNESS, marginCorrected(Y_DISPLAY_RESOLUTION) + HALF_THICKNESS);
-    glVertex2f(marginCorrected(X_DISPLAY_RESOLUTION) + HALF_THICKNESS, marginCorrected(Y_DISPLAY_RESOLUTION) + HALF_THICKNESS);
-    glVertex2f(marginCorrected(X_DISPLAY_RESOLUTION) + HALF_THICKNESS, marginCorrected(0) - HALF_THICKNESS);
 
-    glEnd();
+    drawVerticalLine(-1 * HALF_THICKNESS);
+    drawVerticalLine(X_DISPLAY_RESOLUTION + HALF_THICKNESS);
+    drawHorizontalLine(-1 * HALF_THICKNESS);
+    drawHorizontalLine(Y_DISPLAY_RESOLUTION + HALF_THICKNESS);
 }
