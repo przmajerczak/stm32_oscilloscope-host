@@ -42,18 +42,9 @@ static void drawVerticalLine(const int x)
     glEnd();
 }
 
-static void drawTriggerIndicator(const int x, const int y)
+static void drawHorizontalLineWithLabels(const int y, const char *value_label, const char *unit_label)
 {
-    glColor3f(0.5, 0.5, 0.5);
-    glLineWidth(1.0);
-
     drawHorizontalLine(y);
-    drawVerticalLine(x);
-
-    const int voltage_mV{static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
-                                          static_cast<float>(Y_DISPLAY_RESOLUTION))};
-    const std::string voltage_value{std::to_string(voltage_mV)};
-    const std::string voltage_unit{"mV"};
 
     const int right_x{marginCorrected(X_DISPLAY_RESOLUTION) +
                       static_cast<uint16_t>(2 * BOLD_THICKNESS)};
@@ -63,10 +54,23 @@ static void drawTriggerIndicator(const int x, const int y)
 
     constexpr float FONT_SIZE{0.15f};
 
-    drawText(right_x, upper_line_y, voltage_value.c_str(), FONT_SIZE);
-    drawText(right_x, lower_line_y, voltage_unit.c_str(), FONT_SIZE);
-    drawText(left_x, upper_line_y, voltage_value.c_str(), FONT_SIZE);
-    drawText(left_x, lower_line_y, voltage_unit.c_str(), FONT_SIZE);
+    drawText(right_x, upper_line_y, value_label, FONT_SIZE);
+    drawText(right_x, lower_line_y, unit_label, FONT_SIZE);
+    drawText(left_x, upper_line_y, value_label, FONT_SIZE);
+    drawText(left_x, lower_line_y, unit_label, FONT_SIZE);
+}
+
+static void drawTriggerIndicator(const int x, const int y)
+{
+    const int voltage_mV{static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
+                                          static_cast<float>(Y_DISPLAY_RESOLUTION))};
+    const std::string voltage_value{std::to_string(voltage_mV)};
+
+    glColor3f(0.5, 0.5, 0.5);
+    glLineWidth(1.0);
+
+    drawHorizontalLineWithLabels(y, voltage_value.c_str(), "mV");
+    drawVerticalLine(x);
 }
 
 static void drawGrid(const int numOfVerticalLines, const int numOfHorizontalLines)
