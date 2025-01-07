@@ -122,21 +122,24 @@ static void drawTriggerIndicator(const int x, const int y)
     drawHorizontalLineWithLabels(y, voltage_value.c_str(), "mV", FONT_SIZE_LARGE, COLOR_RGB_WHITE, NEUTRAL, NEUTRAL);
 }
 
-static void drawHorizontalGrid(const int numOfHorizontalLines)
+static void drawHorizontalGrid(const int numOfHorizontalLayers)
 {
-    for (int i = 1; i <= numOfHorizontalLines; ++i)
+    const int middle_y{Y_DISPLAY_RESOLUTION / 2};
+    const std::string voltage_str{std::to_string(scaleYToVoltage_mV(middle_y))};
+
+    drawHorizontalLineWithLabels(middle_y, voltage_str.c_str(), " mV", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+
+    const float delta_y{Y_DISPLAY_RESOLUTION / (2 * numOfHorizontalLayers)};
+    for (int i = 1; i <= numOfHorizontalLayers; ++i)
     {
-        const int y{
-            static_cast<int>(Y_DISPLAY_RESOLUTION * (static_cast<double>(i) /
-                                                     (numOfHorizontalLines + 1)))};
+        const int upper_y{middle_y + (i * delta_y)};
+        const int lower_y{middle_y - (i * delta_y)};
 
-        const int voltage_mV{
-            static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) /
-                             static_cast<float>(Y_DISPLAY_RESOLUTION))};
+        const std::string upper_voltage_str{std::to_string(scaleYToVoltage_mV(upper_y))};
+        const std::string lower_voltage_str{std::to_string(scaleYToVoltage_mV(lower_y))};
 
-        const std::string voltage_str{std::to_string(voltage_mV)};
-
-        drawHorizontalLineWithLabels(y, voltage_str.c_str(), " mV", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+        drawHorizontalLineWithLabels(upper_y, upper_voltage_str.c_str(), " mV", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+        drawHorizontalLineWithLabels(lower_y, lower_voltage_str.c_str(), " mV", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
     }
 }
 
@@ -152,11 +155,11 @@ static void drawVerticalGrid(const int numOfVerticalLines)
 }
 
 static void drawGrid(const int numOfVerticalLines,
-                     const int numOfHorizontalLines)
+                     const int numOfHorizontalLayers)
 {
     glColor3f(COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY);
 
-    drawHorizontalGrid(numOfHorizontalLines);
+    drawHorizontalGrid(numOfHorizontalLayers);
     drawVerticalGrid(numOfVerticalLines);
 }
 

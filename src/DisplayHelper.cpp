@@ -23,7 +23,7 @@ void DisplayHelper::display()
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        drawGrid(10, 8);
+        drawGrid(10, 4);
 
         glPointSize(1.0);
         glColor3f(1.0, 1.0, 0.0);
