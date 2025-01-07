@@ -125,19 +125,8 @@ static void drawTriggerIndicator(const int x, const int y)
     drawHorizontalLineWithLabels(y, voltage_value.c_str(), "mV", FONT_SIZE_LARGE, COLOR_RGB_WHITE, NEUTRAL, NEUTRAL);
 }
 
-static void drawGrid(const int numOfVerticalLines,
-                     const int numOfHorizontalLines)
+static void drawHorizontalGrid(const int numOfHorizontalLines)
 {
-    glColor3f(COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY);
-
-    for (int i = 1; i <= numOfVerticalLines; ++i)
-    {
-        const int x{
-            static_cast<int>(X_DISPLAY_RESOLUTION *
-                             (static_cast<double>(i) / (numOfVerticalLines + 1)))};
-        drawVerticalLine(x, NEUTRAL, true);
-    }
-
     for (int i = 1; i <= numOfHorizontalLines; ++i)
     {
         const int y{
@@ -152,6 +141,26 @@ static void drawGrid(const int numOfVerticalLines,
 
         drawHorizontalLineWithLabels(y, voltage_str.c_str(), " mV", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
     }
+}
+
+static void drawVerticalGrid(const int numOfVerticalLines)
+{
+    for (int i = 1; i <= numOfVerticalLines; ++i)
+    {
+        const int x{
+            static_cast<int>(X_DISPLAY_RESOLUTION *
+                             (static_cast<double>(i) / (numOfVerticalLines + 1)))};
+        drawVerticalLine(x, NEUTRAL, true);
+    }
+}
+
+static void drawGrid(const int numOfVerticalLines,
+                     const int numOfHorizontalLines)
+{
+    glColor3f(COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY);
+
+    drawHorizontalGrid(numOfHorizontalLines);
+    drawVerticalGrid(numOfVerticalLines);
 }
 
 static void drawDisplayAreaBorder()
