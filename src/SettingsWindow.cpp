@@ -43,7 +43,7 @@ void SettingsWindow::init()
     gtk_grid_attach(GTK_GRID(grid), thresholdLabel, 0, 1, 2, 1);
 
     triggerThresholdSlider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
-                                                      0, INPUT_SIGNAL_RESOLUTION, 1);
+                                                      INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
     gtk_widget_set_hexpand(triggerThresholdSlider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(triggerThresholdSlider), TRUE);
     gtk_range_set_value(GTK_RANGE(triggerThresholdSlider),
