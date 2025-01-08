@@ -8,12 +8,12 @@
 namespace
 {
     bool display_trigger_flag{true};
-    RawValuesContainer rawValues{0};
+    AdcValues adcValues{0};
 } // namespace
 
-void DisplayHelper::triggerDisplay(const RawValuesContainer &values)
+void DisplayHelper::triggerDisplay(const AdcValues &values)
 {
-    rawValues = std::move(values);
+    adcValues = std::move(values);
     display_trigger_flag = true;
 }
 
@@ -34,14 +34,14 @@ void DisplayHelper::display()
         int x{marginCorrected(0)};
         int y;
 
-        auto value_it{rawValues.begin()};
+        auto value_it{adcValues.begin()};
         while (*value_it == INVALID_VALUE)
         {
             x += X_LENGTH;
             ++value_it;
         }
 
-        for (value_it; value_it != rawValues.end(); ++value_it)
+        for (value_it; value_it != adcValues.end(); ++value_it)
         {
 
             if (*value_it == INVALID_VALUE)
@@ -49,7 +49,7 @@ void DisplayHelper::display()
                 break;
             }
 
-            y = marginCorrected(scaleRawValueToDisplayHeight(*value_it));
+            y = marginCorrected(scaleAdcValueToDisplayHeight(*value_it));
 
             glVertex2f(x, y);
 
@@ -60,7 +60,7 @@ void DisplayHelper::display()
 
         drawTriggerIndicator(
             (X_DISPLAY_RESOLUTION / 2),
-            scaleRawValueToDisplayHeight(
+            scaleAdcValueToDisplayHeight(
                 SettingsWindow::getTriggerThresholdSliderValue()));
         drawDisplayAreaBorder();
 

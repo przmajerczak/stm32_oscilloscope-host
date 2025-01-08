@@ -4,15 +4,15 @@
 #include "constants.hpp"
 #include "types.hpp"
 
-void DataAnalyzer::handleData(const RawValuesContainer &current_values)
+void DataAnalyzer::handleData(const AdcValues &current_values)
 {
-    RawValuesContainer valuesToDisplay{centerValuesOnTrigger(current_values)};
+    AdcValues valuesToDisplay{centerValuesOnTrigger(current_values)};
 
     SettingsWindow::notifyAboutThresholdTrigger();
     DisplayHelper::triggerDisplay(valuesToDisplay);
 }
 
-RawValuesContainer DataAnalyzer::centerValuesOnTrigger(const RawValuesContainer &current_values)
+AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values)
 {
     const auto triggersIndexes{detectTriggers(current_values)};
 
@@ -24,7 +24,7 @@ RawValuesContainer DataAnalyzer::centerValuesOnTrigger(const RawValuesContainer 
     std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
     const int shiftCountForTriggerCenter{static_cast<int>(selectedTrigger - (X_DISPLAY_RESOLUTION / 2))};
 
-    RawValuesContainer valuesToDisplay;
+    AdcValues valuesToDisplay;
     valuesToDisplay.resize(current_values.size());
 
     for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
@@ -43,7 +43,7 @@ RawValuesContainer DataAnalyzer::centerValuesOnTrigger(const RawValuesContainer 
     return valuesToDisplay;
 }
 
-std::vector<std::size_t> DataAnalyzer::detectTriggers(const RawValuesContainer &current_values)
+std::vector<std::size_t> DataAnalyzer::detectTriggers(const AdcValues &current_values)
 {
     std::vector<std::size_t> triggersIndexes;
 

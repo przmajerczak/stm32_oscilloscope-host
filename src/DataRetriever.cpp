@@ -59,17 +59,17 @@ void DataRetriever::singleDataRetrieve()
     [[maybe__unused]] uint32_t measurement_period{
         pullMeasurementPeriodFromUndecodedRetrievedData(undecodedRetrievedData)};
 
-    RawValuesContainer retrieved_values{
-        convertRawDataToValues(undecodedRetrievedData)};
+    AdcValues retrieved_values{
+        decodeAdcValues(undecodedRetrievedData)};
     dataAnalyzer.handleData(retrieved_values);
 }
 
-std::list<uint8_t> DataRetriever::retrieveData()
+EncodedAdcValues DataRetriever::retrieveData()
 {
     uint8_t byte{0};
     uint8_t previous_byte{0};
 
-    std::list<uint8_t> data;
+    EncodedAdcValues data;
 
     while (not(byte == 0xff and previous_byte == '\n'))
     {
@@ -87,27 +87,25 @@ std::list<uint8_t> DataRetriever::retrieveData()
     return data;
 }
 
-RawValuesContainer DataRetriever::convertRawDataToValues(std::list<uint8_t> raw_data)
+AdcValues DataRetriever::decodeAdcValues(const EncodedAdcValues& encoded_values)
 {
-    RawValuesContainer values;
-    values.resize(raw_data.size() / 2);
+    AdcValues decoded_values;
+    decoded_values.resize(encoded_values.size() / 2);
 
-    auto values_it{values.begin()};
+    auto current_encoded_values{encoded_values.begin()};
+    auto next_encoded_values{std::next(current_encoded_values, 1)};
 
-    auto current_raw_data{raw_data.begin()};
-    auto next_raw_data{std::next(current_raw_data, 1)};
-
-    for (auto &value : values)
+    for (auto &decoded_value : decoded_values)
     {
-        value = *current_raw_data + (*next_raw_data << 8);
+        decoded_value = *current_encoded_values + (*next_encoded_values << 8);
 
-        ++current_raw_data;
-        ++current_raw_data;
-        ++next_raw_data;
-        ++next_raw_data;
+        ++current_encoded_values;
+        ++current_encoded_values;
+        ++next_encoded_values;
+        ++next_encoded_values;
     }
 
-    return values;
+    return decoded_values;
 }
 
 bool DataRetriever::configureTty(const int deviceFileDescriptor)
@@ -136,9 +134,8 @@ bool DataRetriever::configureTty(const int deviceFileDescriptor)
 }
 
 uint32_t DataRetriever::pullMeasurementPeriodFromUndecodedRetrievedData(
-    std::list<uint8_t> &undecodedRetrievedData)
+    EncodedAdcValues &undecodedRetrievedData)
 {
-
     uint32_t measurement_period{0};
 
     for (int i = 3; i >= 0; --i)

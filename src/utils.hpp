@@ -5,9 +5,9 @@
 
 #include "constants.hpp"
 
-static uint16_t scaleRawValueToDisplayHeight(const uint16_t value)
+static uint16_t scaleAdcValueToDisplayHeight(const uint16_t adc_value)
 {
-    return (static_cast<double>(value) / INPUT_SIGNAL_RESOLUTION) * Y_DISPLAY_RESOLUTION;
+    return (static_cast<double>(adc_value) / INPUT_SIGNAL_RESOLUTION) * Y_DISPLAY_RESOLUTION;
 }
 
 static int scaleYToVoltage_mV(const uint16_t y)

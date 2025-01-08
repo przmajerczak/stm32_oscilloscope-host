@@ -3,7 +3,7 @@
 #include "DataAnalyzer.hpp"
 #include <unistd.h>
 #include <fcntl.h>
-#include <list>
+#include "types.hpp"
 
 class DataRetriever
 {
@@ -17,10 +17,10 @@ public:
 
 private:
     void singleDataRetrieve();
-    std::list<uint8_t> retrieveData();
-    RawValuesContainer convertRawDataToValues(std::list<uint8_t> raw_data);
+    EncodedAdcValues retrieveData();
+    AdcValues decodeAdcValues(const EncodedAdcValues& encoded_values);
     bool configureTty(const int deviceFileDescriptor);
-    uint32_t pullMeasurementPeriodFromUndecodedRetrievedData(std::list<uint8_t> &undecodedRetrievedData);
+    uint32_t pullMeasurementPeriodFromUndecodedRetrievedData(EncodedAdcValues &undecodedRetrievedData);
 
     DataAnalyzer dataAnalyzer;
     int deviceFileDescriptor;
