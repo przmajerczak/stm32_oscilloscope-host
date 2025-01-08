@@ -147,7 +147,7 @@ static void drawVerticalGrid(const int numOfVerticalLayers)
 {
     const int middle_x{X_DISPLAY_RESOLUTION / 2};
 
-    drawVerticalLineWithLabels(middle_x, "0", " us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+    drawVerticalLineWithLabels(middle_x, "0", "us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
 
     const float delta_x{X_DISPLAY_RESOLUTION / (2 * numOfVerticalLayers)};
     for (int i = 1; i <= numOfVerticalLayers; ++i)
@@ -155,8 +155,8 @@ static void drawVerticalGrid(const int numOfVerticalLayers)
         const int right_x{middle_x + (i * delta_x)};
         const int left_x{middle_x - (i * delta_x)};
 
-        drawVerticalLineWithLabels(right_x, nullptr, " us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
-        drawVerticalLineWithLabels(left_x, nullptr, " us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+        drawVerticalLineWithLabels(right_x, nullptr, "us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+        drawVerticalLineWithLabels(left_x, nullptr, "us", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
     }
 }
 
