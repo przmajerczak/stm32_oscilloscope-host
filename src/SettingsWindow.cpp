@@ -11,11 +11,16 @@ namespace
     GtkWidget *grid = nullptr;
     GtkWidget *frequencyLabel = nullptr;
     GtkWidget *triggerThresholdSlider = nullptr;
+    GtkWidget *vertical_lower_bound_slider = nullptr;
+    GtkWidget *vertical_upper_bound_slider = nullptr;
 
     uint32_t thresholdTriggersSinceLastFreqLabelReset = 0;
 
     uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
     ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
+
+    float vertical_lower_bound_mV{MIN_VOLTAGE_mV};
+    float vertical_upper_bound_mV{MAX_VOLTAGE_mV};
 } // namespace
 
 void SettingsWindow::init()
@@ -67,6 +72,28 @@ void SettingsWindow::init()
                      G_CALLBACK(onTriggerFallingEdgeButtonClicked), NULL);
 
     gtk_grid_attach(GTK_GRID(grid), triggerFallingEdgeButton, 1, 4, 1, 1);
+
+    vertical_lower_bound_slider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
+                                                           INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
+    gtk_widget_set_hexpand(vertical_lower_bound_slider, TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(vertical_lower_bound_slider), TRUE);
+    gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider),
+                        INPUT_SIGNAL_MIN);
+    gtk_grid_attach(GTK_GRID(grid), vertical_lower_bound_slider, 0, 5, 2, 1);
+
+    g_signal_connect(vertical_lower_bound_slider, "value-changed",
+                     G_CALLBACK(verticalLowerBoundSliderOnChangeAction), nullptr);
+
+    vertical_upper_bound_slider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
+                                                           INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
+    gtk_widget_set_hexpand(vertical_upper_bound_slider, TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(vertical_upper_bound_slider), TRUE);
+    gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),
+                        INPUT_SIGNAL_MAX);
+    gtk_grid_attach(GTK_GRID(grid), vertical_upper_bound_slider, 0, 6, 2, 1);
+
+    g_signal_connect(vertical_upper_bound_slider, "value-changed",
+                     G_CALLBACK(verticalUpperBoundSliderOnChangeAction), nullptr);
 }
 
 void SettingsWindow::run()
@@ -144,3 +171,30 @@ void SettingsWindow::onTriggerFallingEdgeButtonClicked(GtkWidget *button,
 {
     thresholdTrigger = ThresholdTrigger::FALLING_EDGE;
 }
+
+void SettingsWindow::verticalLowerBoundSliderOnChangeAction(GtkRange *range)
+{
+    vertical_lower_bound_mV =
+        static_cast<uint16_t>(gtk_range_get_value(range));
+
+    if (vertical_lower_bound_mV > vertical_upper_bound_mV)
+    {
+        vertical_upper_bound_mV = vertical_lower_bound_mV;
+        gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider), vertical_upper_bound_mV);
+    }
+}
+
+void SettingsWindow::verticalUpperBoundSliderOnChangeAction(GtkRange *range)
+{
+    vertical_upper_bound_mV =
+        static_cast<uint16_t>(gtk_range_get_value(range));
+
+    if (vertical_upper_bound_mV < vertical_lower_bound_mV)
+    {
+        vertical_lower_bound_mV = vertical_upper_bound_mV;
+        gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider), vertical_lower_bound_mV);
+    }
+}
+
+float SettingsWindow::getVerticalLowerBoundValue() { return vertical_lower_bound_mV; }
+float SettingsWindow::getVerticalUpperBoundValue() { return vertical_upper_bound_mV; }
