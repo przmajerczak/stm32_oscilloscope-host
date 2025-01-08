@@ -49,7 +49,9 @@ void DisplayHelper::display()
                 break;
             }
 
-            y = marginCorrected(scaleAdcValueToY(*value_it));
+            y = marginCorrected(scaleAdcValueToY(*value_it,
+                                                 SettingsWindow::getVerticalLowerBoundValue(),
+                                                 SettingsWindow::getVerticalUpperBoundValue()));
 
             glVertex2f(x, y);
 
