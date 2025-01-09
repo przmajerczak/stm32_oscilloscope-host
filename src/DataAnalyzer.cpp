@@ -68,7 +68,7 @@ DataAnalyzer::detectTriggers(const AdcValues &current_values)
 bool DataAnalyzer::isTrigger(const uint16_t leftValue,
                              const uint16_t rightValue)
 {
-    const uint16_t threshold{scaleYToAdc(SettingsWindow::getTriggerThresholdY())};
+    const uint16_t threshold{scaleYToAdcWithinBounds(SettingsWindow::getTriggerThresholdY())};
     const ThresholdTrigger trigger{SettingsWindow::getThresholdTrigger()};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)

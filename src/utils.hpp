@@ -46,9 +46,13 @@ static int scaleYToVoltage_mV(const int y)
            SettingsWindow::getVerticalLowerBoundValue_mV();
 }
 
-static int scaleYToAdc(const int y)
+static uint16_t scaleYToAdcWithinBounds(const int y)
 {
-    return static_cast<int>(INPUT_SIGNAL_MAX * yAsPercentOfMaxY(y));
+    const float current_vertical_display_resolution{
+        SettingsWindow::getVerticalUpperBoundValue() -
+        SettingsWindow::getVerticalLowerBoundValue()};
+
+    return SettingsWindow::getVerticalLowerBoundValue() + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
 }
 
 static float scaleAdcTo_mV(const uint16_t adc_value)
