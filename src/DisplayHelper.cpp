@@ -62,8 +62,7 @@ void DisplayHelper::display()
 
         drawTriggerIndicator(
             (X_DISPLAY_RESOLUTION / 2),
-            scaleAdcValueToY(
-                SettingsWindow::getTriggerThresholdSliderValue()));
+                SettingsWindow::getTriggerThresholdY());
         drawDisplayAreaBorder();
 
         glFlush();

@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <sstream>
 #include <thread>
+#include "utils.hpp"
 
 namespace
 {
@@ -19,8 +20,8 @@ namespace
     uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
     ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
 
-    float vertical_lower_bound_mV{MIN_VOLTAGE_mV};
-    float vertical_upper_bound_mV{MAX_VOLTAGE_mV};
+    float vertical_lower_bound{INPUT_SIGNAL_MIN};
+    float vertical_upper_bound{INPUT_SIGNAL_MAX};
 } // namespace
 
 void SettingsWindow::init()
@@ -48,7 +49,7 @@ void SettingsWindow::init()
     gtk_grid_attach(GTK_GRID(grid), thresholdLabel, 0, 1, 2, 1);
 
     triggerThresholdSlider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
-                                                      INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
+                                                      0, Y_DISPLAY_RESOLUTION, 1);
     gtk_widget_set_hexpand(triggerThresholdSlider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(triggerThresholdSlider), TRUE);
     gtk_range_set_value(GTK_RANGE(triggerThresholdSlider),
@@ -151,7 +152,7 @@ void SettingsWindow::triggerThresholdSliderOnChangeAction(GtkRange *range)
         static_cast<uint16_t>(gtk_range_get_value(range));
 }
 
-uint16_t SettingsWindow::getTriggerThresholdSliderValue()
+uint16_t SettingsWindow::getTriggerThresholdY()
 {
     return triggerThresholdSliderValue;
 }
@@ -174,27 +175,27 @@ void SettingsWindow::onTriggerFallingEdgeButtonClicked(GtkWidget *button,
 
 void SettingsWindow::verticalLowerBoundSliderOnChangeAction(GtkRange *range)
 {
-    vertical_lower_bound_mV =
+    vertical_lower_bound =
         static_cast<uint16_t>(gtk_range_get_value(range));
 
-    if (vertical_lower_bound_mV > vertical_upper_bound_mV)
+    if (vertical_lower_bound > vertical_upper_bound)
     {
-        vertical_upper_bound_mV = vertical_lower_bound_mV;
-        gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider), vertical_upper_bound_mV);
+        vertical_upper_bound = vertical_lower_bound;
+        gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider), vertical_upper_bound);
     }
 }
 
 void SettingsWindow::verticalUpperBoundSliderOnChangeAction(GtkRange *range)
 {
-    vertical_upper_bound_mV =
+    vertical_upper_bound =
         static_cast<uint16_t>(gtk_range_get_value(range));
 
-    if (vertical_upper_bound_mV < vertical_lower_bound_mV)
+    if (vertical_upper_bound < vertical_lower_bound)
     {
-        vertical_lower_bound_mV = vertical_upper_bound_mV;
-        gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider), vertical_lower_bound_mV);
+        vertical_lower_bound = vertical_upper_bound;
+        gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider), vertical_lower_bound);
     }
 }
 
-float SettingsWindow::getVerticalLowerBoundValue() { return vertical_lower_bound_mV; }
-float SettingsWindow::getVerticalUpperBoundValue() { return vertical_upper_bound_mV; }
+float SettingsWindow::getVerticalLowerBoundValue() { return vertical_lower_bound; }
+float SettingsWindow::getVerticalUpperBoundValue() { return vertical_upper_bound; }

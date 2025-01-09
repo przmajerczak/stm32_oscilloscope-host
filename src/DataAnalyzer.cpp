@@ -3,6 +3,7 @@
 #include "SettingsWindow.hpp"
 #include "constants.hpp"
 #include "types.hpp"
+#include "utils.hpp"
 
 void DataAnalyzer::handleData(const AdcValues &current_values)
 {
@@ -63,7 +64,7 @@ std::vector<std::size_t> DataAnalyzer::detectTriggers(const AdcValues &current_v
 
 bool DataAnalyzer::isTrigger(const uint16_t leftValue, const uint16_t rightValue)
 {
-    const uint16_t threshold{SettingsWindow::getTriggerThresholdSliderValue()};
+    const uint16_t threshold{scaleYToAdc(SettingsWindow::getTriggerThresholdY())};
     const ThresholdTrigger trigger{SettingsWindow::getThresholdTrigger()};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)

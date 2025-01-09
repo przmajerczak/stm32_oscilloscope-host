@@ -144,8 +144,5 @@ uint32_t DataRetriever::pullMeasurementPeriodFromUndecodedRetrievedData(
         undecodedRetrievedData.pop_back();
     }
 
-    std::cout << "Measurement period: "
-              << static_cast<long long int>(measurement_period) << std::endl;
-
     return measurement_period;
 }

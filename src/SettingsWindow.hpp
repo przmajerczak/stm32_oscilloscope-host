@@ -9,7 +9,7 @@ class SettingsWindow
 public:
     static void run();
     static void notifyAboutThresholdTrigger();
-    static uint16_t getTriggerThresholdSliderValue();
+    static uint16_t getTriggerThresholdY();
     static ThresholdTrigger getThresholdTrigger();
     static float getVerticalLowerBoundValue();
     static float getVerticalUpperBoundValue();
