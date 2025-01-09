@@ -13,9 +13,13 @@ static float yAsPercentOfMaxY(const int y)
 
 static int scaleAdcValueToY(const uint16_t adc_value)
 {
-    const float current_vertical_display_resolution{SettingsWindow::getVerticalUpperBoundValue() - SettingsWindow::getVerticalLowerBoundValue()};
-    const float factor{INPUT_SIGNAL_RESOLUTION / current_vertical_display_resolution};
-    float scaled_adc_value{(adc_value - SettingsWindow::getVerticalLowerBoundValue()) * factor};
+    const float current_vertical_display_resolution{
+        SettingsWindow::getVerticalUpperBoundValue() -
+        SettingsWindow::getVerticalLowerBoundValue()};
+    const float factor{INPUT_SIGNAL_RESOLUTION /
+                       current_vertical_display_resolution};
+    float scaled_adc_value{
+        (adc_value - SettingsWindow::getVerticalLowerBoundValue()) * factor};
 
     // TODO: remove flat lines at the bounds
     if (scaled_adc_value > INPUT_SIGNAL_MAX)
@@ -27,15 +31,19 @@ static int scaleAdcValueToY(const uint16_t adc_value)
         scaled_adc_value = INPUT_SIGNAL_MIN;
     }
 
-    const int y{(scaled_adc_value / static_cast<float>(INPUT_SIGNAL_RESOLUTION)) * static_cast<float>(Y_DISPLAY_RESOLUTION)};
+    const int y{(scaled_adc_value / static_cast<float>(INPUT_SIGNAL_RESOLUTION)) *
+                static_cast<float>(Y_DISPLAY_RESOLUTION)};
     return y;
 }
 
 static int scaleYToVoltage_mV(const int y)
 {
-    const float current_vertical_display_resolution{SettingsWindow::getVerticalUpperBoundValue_mV() - SettingsWindow::getVerticalLowerBoundValue_mV()};
+    const float current_vertical_display_resolution{
+        SettingsWindow::getVerticalUpperBoundValue_mV() -
+        SettingsWindow::getVerticalLowerBoundValue_mV()};
 
-    return (yAsPercentOfMaxY(y) * current_vertical_display_resolution) + SettingsWindow::getVerticalLowerBoundValue_mV();
+    return (yAsPercentOfMaxY(y) * current_vertical_display_resolution) +
+           SettingsWindow::getVerticalLowerBoundValue_mV();
 }
 
 static int scaleYToAdc(const int y)
@@ -45,7 +53,10 @@ static int scaleYToAdc(const int y)
 
 static float scaleAdcTo_mV(const uint16_t adc_value)
 {
-    return static_cast<float>((ABSOULTE_VERTICAL_RESOLUTION_mV * static_cast<float>(adc_value) + MIN_VOLTAGE_mV) / static_cast<float>(INPUT_SIGNAL_MAX));
+    return static_cast<float>(
+        (ABSOULTE_VERTICAL_RESOLUTION_mV * static_cast<float>(adc_value) +
+         MIN_VOLTAGE_mV) /
+        static_cast<float>(INPUT_SIGNAL_MAX));
 }
 
 template <typename T>

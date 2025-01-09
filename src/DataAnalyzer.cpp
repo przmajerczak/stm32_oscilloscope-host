@@ -23,7 +23,8 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values)
     }
 
     std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
-    const int shiftCountForTriggerCenter{static_cast<int>(selectedTrigger - (X_DISPLAY_RESOLUTION / 2))};
+    const int shiftCountForTriggerCenter{
+        static_cast<int>(selectedTrigger - (X_DISPLAY_RESOLUTION / 2))};
 
     AdcValues valuesToDisplay;
     valuesToDisplay.resize(current_values.size());
@@ -31,7 +32,8 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values)
     for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
     {
         const std::size_t current_values_idx{idx + shiftCountForTriggerCenter + 2};
-        if (current_values_idx >= 0 and current_values_idx < current_values.size())
+        if (current_values_idx >= 0 and
+            current_values_idx < current_values.size())
         {
             valuesToDisplay.at(idx) = current_values.at(current_values_idx);
         }
@@ -44,7 +46,8 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values)
     return valuesToDisplay;
 }
 
-std::vector<std::size_t> DataAnalyzer::detectTriggers(const AdcValues &current_values)
+std::vector<std::size_t>
+DataAnalyzer::detectTriggers(const AdcValues &current_values)
 {
     std::vector<std::size_t> triggersIndexes;
 
@@ -62,7 +65,8 @@ std::vector<std::size_t> DataAnalyzer::detectTriggers(const AdcValues &current_v
     return triggersIndexes;
 }
 
-bool DataAnalyzer::isTrigger(const uint16_t leftValue, const uint16_t rightValue)
+bool DataAnalyzer::isTrigger(const uint16_t leftValue,
+                             const uint16_t rightValue)
 {
     const uint16_t threshold{scaleYToAdc(SettingsWindow::getTriggerThresholdY())};
     const ThresholdTrigger trigger{SettingsWindow::getThresholdTrigger()};

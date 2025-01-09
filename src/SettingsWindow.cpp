@@ -1,10 +1,10 @@
 #include "SettingsWindow.hpp"
 
 #include "constants.hpp"
+#include "utils.hpp"
 #include <iomanip>
 #include <sstream>
 #include <thread>
-#include "utils.hpp"
 
 namespace
 {
@@ -31,8 +31,10 @@ void SettingsWindow::init()
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     gtk_window_set_title(GTK_WINDOW(window), "Settings");
-    gtk_window_move(GTK_WINDOW(window), X_INITIAL_WINDOW_POSITION + X_WINDOW_SIZE, Y_INITIAL_WINDOW_POSITION);
-    gtk_window_set_default_size(GTK_WINDOW(window), X_WINDOW_SIZE / 3, Y_WINDOW_SIZE);
+    gtk_window_move(GTK_WINDOW(window), X_INITIAL_WINDOW_POSITION + X_WINDOW_SIZE,
+                    Y_INITIAL_WINDOW_POSITION);
+    gtk_window_set_default_size(GTK_WINDOW(window), X_WINDOW_SIZE / 3,
+                                Y_WINDOW_SIZE);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
 
     grid = gtk_grid_new();
@@ -74,23 +76,21 @@ void SettingsWindow::init()
 
     gtk_grid_attach(GTK_GRID(grid), triggerFallingEdgeButton, 1, 4, 1, 1);
 
-    vertical_lower_bound_slider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
-                                                           INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
+    vertical_lower_bound_slider = gtk_scale_new_with_range(
+        GTK_ORIENTATION_HORIZONTAL, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
     gtk_widget_set_hexpand(vertical_lower_bound_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(vertical_lower_bound_slider), TRUE);
-    gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider),
-                        INPUT_SIGNAL_MIN);
+    gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider), INPUT_SIGNAL_MIN);
     gtk_grid_attach(GTK_GRID(grid), vertical_lower_bound_slider, 0, 5, 2, 1);
 
     g_signal_connect(vertical_lower_bound_slider, "value-changed",
                      G_CALLBACK(verticalLowerBoundSliderOnChangeAction), nullptr);
 
-    vertical_upper_bound_slider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
-                                                           INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
+    vertical_upper_bound_slider = gtk_scale_new_with_range(
+        GTK_ORIENTATION_HORIZONTAL, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
     gtk_widget_set_hexpand(vertical_upper_bound_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(vertical_upper_bound_slider), TRUE);
-    gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),
-                        INPUT_SIGNAL_MAX);
+    gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider), INPUT_SIGNAL_MAX);
     gtk_grid_attach(GTK_GRID(grid), vertical_upper_bound_slider, 0, 6, 2, 1);
 
     g_signal_connect(vertical_upper_bound_slider, "value-changed",
@@ -100,10 +100,10 @@ void SettingsWindow::init()
 void SettingsWindow::run()
 {
     std::thread gtk_thread([&]()
-    {                  
+    {
         init();
         gtk_widget_show_all(window);
-        gtk_main(); 
+        gtk_main();
     });
 
     gtk_thread.detach();
@@ -175,30 +175,36 @@ void SettingsWindow::onTriggerFallingEdgeButtonClicked(GtkWidget *button,
 
 void SettingsWindow::verticalLowerBoundSliderOnChangeAction(GtkRange *range)
 {
-    vertical_lower_bound =
-        static_cast<uint16_t>(gtk_range_get_value(range));
+    vertical_lower_bound = static_cast<uint16_t>(gtk_range_get_value(range));
 
     if (vertical_lower_bound > vertical_upper_bound)
     {
         vertical_upper_bound = vertical_lower_bound;
-        gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider), vertical_upper_bound);
+        gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),
+                            vertical_upper_bound);
     }
 }
 
 void SettingsWindow::verticalUpperBoundSliderOnChangeAction(GtkRange *range)
 {
-    vertical_upper_bound =
-        static_cast<uint16_t>(gtk_range_get_value(range));
+    vertical_upper_bound = static_cast<uint16_t>(gtk_range_get_value(range));
 
     if (vertical_upper_bound < vertical_lower_bound)
     {
         vertical_lower_bound = vertical_upper_bound;
-        gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider), vertical_lower_bound);
+        gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider),
+                            vertical_lower_bound);
     }
 }
 
-float SettingsWindow::getVerticalLowerBoundValue() { return vertical_lower_bound; }
-float SettingsWindow::getVerticalUpperBoundValue() { return vertical_upper_bound; }
+float SettingsWindow::getVerticalLowerBoundValue()
+{
+    return vertical_lower_bound;
+}
+float SettingsWindow::getVerticalUpperBoundValue()
+{
+    return vertical_upper_bound;
+}
 
 float SettingsWindow::getVerticalLowerBoundValue_mV()
 {

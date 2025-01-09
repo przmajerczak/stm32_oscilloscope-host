@@ -1,9 +1,9 @@
 #include "DataRetriever.hpp"
 
-#include <thread>
 #include "utils.hpp"
 #include <iostream>
 #include <termios.h>
+#include <thread>
 
 extern int errno;
 
@@ -16,7 +16,8 @@ void DataRetriever::runContinuousDataRetrieve()
 
         while (deviceFileDescriptor == -1)
         {
-            std::cerr << "Error while trying to connect to the device. Retrying." << std::endl;
+            std::cerr << "Error while trying to connect to the device. Retrying."
+                      << std::endl;
 
             if (errno == EACCES) // permission denied
             {
@@ -29,7 +30,9 @@ void DataRetriever::runContinuousDataRetrieve()
 
         if (not configureTty(deviceFileDescriptor))
         {
-            std::cerr << "Warning: tty configuration error. Data decoding might be inaccurate." << std::endl;
+            std::cerr << "Warning: tty configuration error. Data decoding might be "
+                         "inaccurate."
+                      << std::endl;
         }
 
         while (1)
@@ -59,8 +62,7 @@ void DataRetriever::singleDataRetrieve()
     [[maybe__unused]] uint32_t measurement_period{
         pullMeasurementPeriodFromUndecodedRetrievedData(undecodedRetrievedData)};
 
-    AdcValues retrieved_values{
-        decodeAdcValues(undecodedRetrievedData)};
+    AdcValues retrieved_values{decodeAdcValues(undecodedRetrievedData)};
     dataAnalyzer.handleData(retrieved_values);
 }
 
@@ -87,7 +89,8 @@ EncodedAdcValues DataRetriever::retrieveData()
     return data;
 }
 
-AdcValues DataRetriever::decodeAdcValues(const EncodedAdcValues& encoded_values)
+AdcValues
+DataRetriever::decodeAdcValues(const EncodedAdcValues &encoded_values)
 {
     AdcValues decoded_values;
     decoded_values.resize(encoded_values.size() / 2);

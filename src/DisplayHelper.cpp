@@ -2,8 +2,8 @@
 #include "SettingsWindow.hpp"
 
 #include "constants.hpp"
-#include <GL/glut.h>
 #include "utils.hpp"
+#include <GL/glut.h>
 
 namespace
 {
@@ -58,9 +58,8 @@ void DisplayHelper::display()
 
         glEnd();
 
-        drawTriggerIndicator(
-            (X_DISPLAY_RESOLUTION / 2),
-            SettingsWindow::getTriggerThresholdY());
+        drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
+                             SettingsWindow::getTriggerThresholdY());
         drawDisplayAreaBorder();
 
         glFlush();

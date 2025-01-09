@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <vector>
 #include <list>
+#include <vector>
 
 using EncodedAdcValues = std::list<uint8_t>;
 using AdcValues = std::vector<uint16_t>;
