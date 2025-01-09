@@ -9,7 +9,6 @@ void DataAnalyzer::handleData(const AdcValues &current_values)
 {
     AdcValues valuesToDisplay{centerValuesOnTrigger(current_values)};
 
-    SettingsWindow::notifyAboutThresholdTrigger();
     DisplayHelper::triggerDisplay(valuesToDisplay);
 }
 
@@ -59,6 +58,7 @@ DataAnalyzer::detectTriggers(const AdcValues &current_values)
         if (isTrigger(currentValue, nextValue))
         {
             triggersIndexes.push_back(idx);
+            SettingsWindow::notifyAboutThresholdTrigger();
         }
     }
 
