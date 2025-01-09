@@ -8,16 +8,14 @@
 
 static float yAsPercentOfMaxY(const int y)
 {
-return static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION);
+    return static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION);
 }
 
-static int scaleAdcValueToY(const uint16_t adc_value,
-                            const int lower_display_bound = INPUT_SIGNAL_MIN,
-                            const int upper_display_bound = INPUT_SIGNAL_MAX)
+static int scaleAdcValueToY(const uint16_t adc_value)
 {
-    const float current_vertical_display_resolution{upper_display_bound - lower_display_bound};
+    const float current_vertical_display_resolution{SettingsWindow::getVerticalUpperBoundValue() - SettingsWindow::getVerticalLowerBoundValue()};
     const float factor{INPUT_SIGNAL_RESOLUTION / current_vertical_display_resolution};
-    float scaled_adc_value{(adc_value - lower_display_bound) * factor};
+    float scaled_adc_value{(adc_value - SettingsWindow::getVerticalLowerBoundValue()) * factor};
 
     // TODO: remove flat lines at the bounds
     if (scaled_adc_value > INPUT_SIGNAL_MAX)

@@ -49,9 +49,7 @@ void DisplayHelper::display()
                 break;
             }
 
-            y = marginCorrected(scaleAdcValueToY(*value_it,
-                                                 SettingsWindow::getVerticalLowerBoundValue(),
-                                                 SettingsWindow::getVerticalUpperBoundValue()));
+            y = marginCorrected(scaleAdcValueToY(*value_it));
 
             glVertex2f(x, y);
 
@@ -62,7 +60,7 @@ void DisplayHelper::display()
 
         drawTriggerIndicator(
             (X_DISPLAY_RESOLUTION / 2),
-                SettingsWindow::getTriggerThresholdY());
+            SettingsWindow::getTriggerThresholdY());
         drawDisplayAreaBorder();
 
         glFlush();
