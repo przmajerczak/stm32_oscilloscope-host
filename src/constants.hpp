@@ -22,6 +22,7 @@ constexpr float BOLD{1.5f};
 constexpr float NEUTRAL{1.0f};
 constexpr float MAX_VOLTAGE_mV{3300.0f};
 constexpr float MIN_VOLTAGE_mV{0.0f};
+constexpr float ABSOULTE_VERTICAL_RESOLUTION_mV{MAX_VOLTAGE_mV - MIN_VOLTAGE_mV};
 constexpr float FONT_SIZE_LARGE{0.16f};
 constexpr float FONT_SIZE_SMALL{0.12f};
 constexpr float COLOR_RGB_WHITE{1.0};

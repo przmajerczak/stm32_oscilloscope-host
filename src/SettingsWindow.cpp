@@ -199,3 +199,12 @@ void SettingsWindow::verticalUpperBoundSliderOnChangeAction(GtkRange *range)
 
 float SettingsWindow::getVerticalLowerBoundValue() { return vertical_lower_bound; }
 float SettingsWindow::getVerticalUpperBoundValue() { return vertical_upper_bound; }
+
+float SettingsWindow::getVerticalLowerBoundValue_mV()
+{
+    return scaleAdcTo_mV(vertical_lower_bound);
+}
+float SettingsWindow::getVerticalUpperBoundValue_mV()
+{
+    return scaleAdcTo_mV(vertical_upper_bound);
+}

@@ -37,6 +37,11 @@ static int scaleYToAdc(const int y)
     return static_cast<int>(INPUT_SIGNAL_MAX * static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION));
 }
 
+static float scaleAdcTo_mV(const uint16_t adc_value)
+{
+    return static_cast<float>((ABSOULTE_VERTICAL_RESOLUTION_mV * static_cast<float>(adc_value) + MIN_VOLTAGE_mV) / static_cast<float>(INPUT_SIGNAL_MAX));
+}
+
 template <typename T>
 static inline T marginCorrected(const T &value)
 {

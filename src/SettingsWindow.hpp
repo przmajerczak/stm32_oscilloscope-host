@@ -13,6 +13,8 @@ public:
     static ThresholdTrigger getThresholdTrigger();
     static float getVerticalLowerBoundValue();
     static float getVerticalUpperBoundValue();
+    static float getVerticalLowerBoundValue_mV();
+    static float getVerticalUpperBoundValue_mV();
 
 private:
     static void init();
