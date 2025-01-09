@@ -3,7 +3,13 @@
 #include <cstdint>
 #include <iostream>
 
+#include "SettingsWindow.hpp"
 #include "constants.hpp"
+
+static float yAsPercentOfMaxY(const int y)
+{
+return static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION);
+}
 
 static int scaleAdcValueToY(const uint16_t adc_value,
                             const int lower_display_bound = INPUT_SIGNAL_MIN,
@@ -29,12 +35,14 @@ static int scaleAdcValueToY(const uint16_t adc_value,
 
 static int scaleYToVoltage_mV(const int y)
 {
-    return static_cast<int>(MAX_VOLTAGE_mV * static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION));
+    const float current_vertical_display_resolution{SettingsWindow::getVerticalUpperBoundValue_mV() - SettingsWindow::getVerticalLowerBoundValue_mV()};
+
+    return (yAsPercentOfMaxY(y) * current_vertical_display_resolution) + SettingsWindow::getVerticalLowerBoundValue_mV();
 }
 
 static int scaleYToAdc(const int y)
 {
-    return static_cast<int>(INPUT_SIGNAL_MAX * static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION));
+    return static_cast<int>(INPUT_SIGNAL_MAX * yAsPercentOfMaxY(y));
 }
 
 static float scaleAdcTo_mV(const uint16_t adc_value)
