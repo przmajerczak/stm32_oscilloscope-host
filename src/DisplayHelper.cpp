@@ -4,6 +4,7 @@
 #include "constants.hpp"
 #include "utils.hpp"
 #include <GL/glut.h>
+#include "drawingUtils.hpp"
 
 namespace
 {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <iostream>
 
 #include "SettingsWindow.hpp"
 #include "constants.hpp"
@@ -67,14 +66,4 @@ template <typename T>
 static inline T marginCorrected(const T &value)
 {
     return value + DISPLAY_MARGIN_WIDTH;
-}
-
-static void displayContainer(const std::string label, const auto &values)
-{
-    std::cout << label;
-    for (const auto elem : values)
-    {
-        std::cout << elem << " ";
-    }
-    std::cout << std::endl;
 }

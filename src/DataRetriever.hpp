@@ -2,7 +2,6 @@
 
 #include "DataAnalyzer.hpp"
 #include "types.hpp"
-#include <fcntl.h>
 #include <unistd.h>
 
 class DataRetriever

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "drawingUtils.hpp"
 #include "types.hpp"
 
 class DisplayHelper

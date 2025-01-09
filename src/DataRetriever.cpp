@@ -1,6 +1,6 @@
 #include "DataRetriever.hpp"
 
-#include "utils.hpp"
+#include <fcntl.h>
 #include <iostream>
 #include <termios.h>
 #include <thread>
