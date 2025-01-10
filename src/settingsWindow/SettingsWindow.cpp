@@ -6,7 +6,7 @@
 #include <sstream>
 #include <thread>
 
-#include "VerticalBoundControls.hpp"
+#include "controls/VerticalBoundControls.hpp"
 #include "TriggerControls.hpp"
 
 namespace
