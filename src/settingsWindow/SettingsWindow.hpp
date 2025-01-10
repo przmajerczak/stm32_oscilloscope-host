@@ -6,8 +6,9 @@
 class SettingsWindow
 {
 public:
-    static void run();
+    static void runAsSeparateThread();
 
 private:
-    static void init();
+    static void configure();
+    static void fill();
 };

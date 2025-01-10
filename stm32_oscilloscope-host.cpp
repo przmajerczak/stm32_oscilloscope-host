@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     DataRetriever dataRetriever;
     dataRetriever.runContinuousDataRetrieve();
 
-    SettingsWindow::run();
+    SettingsWindow::runAsSeparateThread();
     DisplayHelper::run();
 
     return 0;

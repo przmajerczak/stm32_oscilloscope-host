@@ -1,7 +1,6 @@
 #include "SettingsWindow.hpp"
 
 #include "constants.hpp"
-#include "utils.hpp"
 #include <thread>
 
 #include "controls/VerticalBoundControls.hpp"
@@ -14,7 +13,7 @@ namespace
     GtkWidget *grid = nullptr;
 } // namespace
 
-void SettingsWindow::init()
+void SettingsWindow::configure()
 {
     gtk_init(nullptr, nullptr);
 
@@ -26,7 +25,10 @@ void SettingsWindow::init()
     gtk_window_set_default_size(GTK_WINDOW(window), X_WINDOW_SIZE / 3,
                                 Y_WINDOW_SIZE);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
+}
 
+void SettingsWindow::fill()
+{
     grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(window), grid);
 
@@ -48,11 +50,13 @@ void SettingsWindow::init()
     gtk_grid_attach(GTK_GRID(grid), VerticalBoundControls::verticalUpperBoundSlider(), 0, 6, 2, 1);
 }
 
-void SettingsWindow::run()
+void SettingsWindow::runAsSeparateThread()
 {
     std::thread gtk_thread([&]()
     {
-        init();
+        configure();
+        fill();
+
         gtk_widget_show_all(window);
         gtk_main();
     });
