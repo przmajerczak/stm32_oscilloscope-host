@@ -6,7 +6,7 @@
 
 #include "controls/VerticalBoundControls.hpp"
 #include "controls/TriggerControls.hpp"
-#include "controls/TemporaryFrequencyControl.hpp"
+#include "controls/TemporaryFrequencyControls.hpp"
 
 namespace
 {
@@ -30,9 +30,9 @@ void SettingsWindow::init()
     grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(window), grid);
 
-    TemporaryFrequencyControl::prepare();
+    TemporaryFrequencyControls::prepare();
 
-    gtk_grid_attach(GTK_GRID(grid), TemporaryFrequencyControl::getFrequencyLabel(), 0, 0, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), TemporaryFrequencyControls::getFrequencyLabel(), 0, 0, 2, 1);
 
     TriggerControls::prepare();
 
