@@ -1,6 +1,6 @@
 #include "src/DataRetriever.hpp"
 #include "src/DisplayHelper.hpp"
-#include "src/SettingsWindow.hpp"
+#include "src/settingsWindow/SettingsWindow.hpp"
 
 int main(int argc, char **argv)
 {

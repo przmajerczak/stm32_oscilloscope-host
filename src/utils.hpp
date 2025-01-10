@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "SettingsWindow.hpp"
+#include "settingsWindow/SettingsWindow.hpp"
 #include "constants.hpp"
 
 static float yAsPercentOfMaxY(const int y)

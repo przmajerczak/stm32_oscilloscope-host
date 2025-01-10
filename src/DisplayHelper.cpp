@@ -1,5 +1,5 @@
 #include "DisplayHelper.hpp"
-#include "SettingsWindow.hpp"
+#include "settingsWindow/SettingsWindow.hpp"
 
 #include "constants.hpp"
 #include "utils.hpp"

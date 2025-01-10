@@ -15,12 +15,13 @@ link_directories(${GTK_LIBRARY_DIRS})
 set(GLUT_INCLUDE_DIR /usr/include/)
 set(GLUT_LIBRARY /usr/lib/x86_64-linux-gnu/libglut.so)
 
+set(SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/stm32_oscilloscope-host.cpp)
+
 add_executable(stm32_oscilloscope-host ${SOURCE})
+
+target_include_directories(stm32_oscilloscope-host PRIVATE ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_libraries(stm32_oscilloscope-host ${GTK_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+
 add_subdirectory("src")
 
-set(SOURCE ${SOURCE} ${CMAKE_CURRENT_SOURCE_DIR}/stm32_oscilloscope-host.cpp)
-
 target_sources(stm32_oscilloscope-host PRIVATE ${SOURCE})
-
-target_include_directories(stm32_oscilloscope-host PRIVATE ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
-target_link_libraries(stm32_oscilloscope-host ${GTK_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
