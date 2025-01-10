@@ -102,9 +102,11 @@ gboolean SettingsWindow::frequencyLabelTimeoutAction(gpointer widgetPtr)
     return TRUE;
 }
 
+// TODO: remove.
+// totally unused, but trigger slider stops working when removed
 uint16_t SettingsWindow::getTriggerThresholdY()
 {
-    return TriggerControls::getTriggerThresholdSliderValue();
+    return TriggerControls::getTriggerThresholdY();
 }
 
 ThresholdTrigger SettingsWindow::getThresholdTrigger()

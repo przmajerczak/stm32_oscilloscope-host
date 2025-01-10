@@ -68,6 +68,6 @@ public:
     static GtkWidget *getTriggerRisingEdgeButton() { return triggerRisingEdgeButton; }
     static GtkWidget *getTriggerFallingEdgeButton() { return triggerFallingEdgeButton; }
 
-    static uint16_t getTriggerThresholdSliderValue() { return triggerThresholdSliderValue; }
+    static uint16_t getTriggerThresholdY() { return triggerThresholdSliderValue; }
     static ThresholdTrigger getThresholdTrigger() { return thresholdTrigger; }
 };

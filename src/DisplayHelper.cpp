@@ -1,5 +1,5 @@
 #include "DisplayHelper.hpp"
-#include "settingsWindow/SettingsWindow.hpp"
+#include "settingsWindow/TriggerControls.hpp"
 
 #include "constants.hpp"
 #include "utils.hpp"
@@ -60,7 +60,7 @@ void DisplayHelper::display()
         glEnd();
 
         drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
-                             SettingsWindow::getTriggerThresholdY());
+                             TriggerControls::getTriggerThresholdY());
         drawDisplayAreaBorder();
 
         glFlush();
