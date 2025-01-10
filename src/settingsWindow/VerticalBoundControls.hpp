@@ -47,7 +47,7 @@ public:
         return vertical_upper_bound_slider;
     }
 
-    static float verticalLowerBound()
+    static float getVerticalLowerBoundValue()
     {
         return vertical_lower_bound;
     }

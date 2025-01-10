@@ -112,10 +112,6 @@ ThresholdTrigger SettingsWindow::getThresholdTrigger()
     return TriggerControls::getThresholdTrigger();
 }
 
-float SettingsWindow::getVerticalLowerBoundValue()
-{
-    return VerticalBoundControls::verticalLowerBound();
-}
 float SettingsWindow::getVerticalUpperBoundValue()
 {
     return VerticalBoundControls::verticalUpperBound();
@@ -123,7 +119,7 @@ float SettingsWindow::getVerticalUpperBoundValue()
 
 float SettingsWindow::getVerticalLowerBoundValue_mV()
 {
-    return scaleAdcTo_mV(VerticalBoundControls::verticalLowerBound());
+    return scaleAdcTo_mV(VerticalBoundControls::getVerticalLowerBoundValue());
 }
 float SettingsWindow::getVerticalUpperBoundValue_mV()
 {

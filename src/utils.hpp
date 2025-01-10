@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include "settingsWindow/SettingsWindow.hpp"
+#include "settingsWindow/VerticalBoundControls.hpp"
 #include "constants.hpp"
 
 static float yAsPercentOfMaxY(const int y)
@@ -14,11 +15,11 @@ static int scaleAdcValueToY(const uint16_t adc_value)
 {
     const float current_vertical_display_resolution{
         SettingsWindow::getVerticalUpperBoundValue() -
-        SettingsWindow::getVerticalLowerBoundValue()};
+        VerticalBoundControls::getVerticalLowerBoundValue()};
     const float factor{INPUT_SIGNAL_RESOLUTION /
                        current_vertical_display_resolution};
     float scaled_adc_value{
-        (adc_value - SettingsWindow::getVerticalLowerBoundValue()) * factor};
+        (adc_value - VerticalBoundControls::getVerticalLowerBoundValue()) * factor};
 
     // TODO: remove flat lines at the bounds
     if (scaled_adc_value > INPUT_SIGNAL_MAX)
@@ -49,9 +50,9 @@ static uint16_t scaleYToAdcWithinBounds(const int y)
 {
     const float current_vertical_display_resolution{
         SettingsWindow::getVerticalUpperBoundValue() -
-        SettingsWindow::getVerticalLowerBoundValue()};
+        VerticalBoundControls::getVerticalLowerBoundValue()};
 
-    return SettingsWindow::getVerticalLowerBoundValue() + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
+    return VerticalBoundControls::getVerticalLowerBoundValue() + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
 }
 
 static float scaleAdcTo_mV(const uint16_t adc_value)
