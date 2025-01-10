@@ -14,7 +14,7 @@ static float yAsPercentOfMaxY(const int y)
 static int scaleAdcValueToY(const uint16_t adc_value)
 {
     const float current_vertical_display_resolution{
-        SettingsWindow::getVerticalUpperBoundValue() -
+        VerticalBoundControls::getVerticalUpperBoundValue() -
         VerticalBoundControls::getVerticalLowerBoundValue()};
     const float factor{INPUT_SIGNAL_RESOLUTION /
                        current_vertical_display_resolution};
@@ -49,7 +49,7 @@ static int scaleYToVoltage_mV(const int y)
 static uint16_t scaleYToAdcWithinBounds(const int y)
 {
     const float current_vertical_display_resolution{
-        SettingsWindow::getVerticalUpperBoundValue() -
+        VerticalBoundControls::getVerticalUpperBoundValue() -
         VerticalBoundControls::getVerticalLowerBoundValue()};
 
     return VerticalBoundControls::getVerticalLowerBoundValue() + yAsPercentOfMaxY(y) * current_vertical_display_resolution;

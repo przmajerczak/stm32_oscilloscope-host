@@ -52,7 +52,7 @@ public:
         return vertical_lower_bound;
     }
 
-    static float verticalUpperBound()
+    static float getVerticalUpperBoundValue()
     {
         return vertical_upper_bound;
     }
