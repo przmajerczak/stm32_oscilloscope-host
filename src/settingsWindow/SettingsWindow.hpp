@@ -5,7 +5,6 @@
 
 class SettingsWindow
 {
-
 public:
     static void run();
     static void notifyAboutThresholdTrigger();
@@ -15,9 +14,4 @@ public:
 private:
     static void init();
     static gboolean frequencyLabelTimeoutAction(gpointer widgetPtr);
-    static void triggerThresholdSliderOnChangeAction(GtkRange *range);
-    static void onTriggerRisingEdgeButtonClicked(GtkWidget *button, gpointer data);
-    static void onTriggerFallingEdgeButtonClicked(GtkWidget *button, gpointer data);
-    static void verticalLowerBoundSliderOnChangeAction(GtkRange *range);
-    static void verticalUpperBoundSliderOnChangeAction(GtkRange *range);
 };
