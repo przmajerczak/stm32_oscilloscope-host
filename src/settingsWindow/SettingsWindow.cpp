@@ -2,20 +2,16 @@
 
 #include "constants.hpp"
 #include "utils.hpp"
-#include <iomanip>
-#include <sstream>
 #include <thread>
 
 #include "controls/VerticalBoundControls.hpp"
 #include "controls/TriggerControls.hpp"
+#include "controls/TemporaryFrequencyControl.hpp"
 
 namespace
 {
     GtkWidget *window = nullptr;
     GtkWidget *grid = nullptr;
-    GtkWidget *frequencyLabel = nullptr;
-
-    uint32_t thresholdTriggersSinceLastFreqLabelReset = 0;
 } // namespace
 
 void SettingsWindow::init()
@@ -34,11 +30,10 @@ void SettingsWindow::init()
     grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(window), grid);
 
-    frequencyLabel = gtk_label_new("Signal frequency: --- Hz");
-    gtk_widget_set_hexpand(frequencyLabel, TRUE);
-    gtk_grid_attach(GTK_GRID(grid), frequencyLabel, 0, 0, 2, 1);
-    g_timeout_add(FREQUENCY_LABEL_TIMEOUT_MS, frequencyLabelTimeoutAction,
-                  frequencyLabel);
+    TemporaryFrequencyControl::prepare();
+
+    gtk_grid_attach(GTK_GRID(grid), TemporaryFrequencyControl::getFrequencyLabel(), 0, 0, 2, 1);
+
     TriggerControls::prepare();
 
     gtk_grid_attach(GTK_GRID(grid), TriggerControls::getThresholdLabel(), 0, 1, 2, 1);
@@ -63,43 +58,6 @@ void SettingsWindow::run()
     });
 
     gtk_thread.detach();
-}
-
-void SettingsWindow::notifyAboutThresholdTrigger()
-{
-    ++thresholdTriggersSinceLastFreqLabelReset;
-}
-
-gboolean SettingsWindow::frequencyLabelTimeoutAction(gpointer widgetPtr)
-{
-    static uint16_t timeoutsWithoutReset = 0;
-
-    GtkLabel *label = GTK_LABEL(widgetPtr);
-
-    constexpr uint32_t minReliableLimit{5};
-
-    if (thresholdTriggersSinceLastFreqLabelReset > minReliableLimit)
-    {
-        const double frequency_Hz =
-            1000.0 * static_cast<double>(thresholdTriggersSinceLastFreqLabelReset) /
-            static_cast<double>(FREQUENCY_LABEL_TIMEOUT_MS *
-                                (1 + timeoutsWithoutReset));
-
-        std::stringstream labelContent;
-        labelContent << "Signal frequency: " << std::fixed << std::setprecision(2)
-                     << frequency_Hz << " Hz";
-
-        gtk_label_set_text(label, labelContent.str().c_str());
-
-        thresholdTriggersSinceLastFreqLabelReset = 0;
-        timeoutsWithoutReset = 0;
-    }
-    else
-    {
-        ++timeoutsWithoutReset;
-    }
-
-    return TRUE;
 }
 
 // TODO: remove.
