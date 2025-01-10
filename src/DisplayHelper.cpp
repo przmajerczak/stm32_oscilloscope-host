@@ -1,5 +1,5 @@
 #include "DisplayHelper.hpp"
-#include "settingsWindow/TriggerControls.hpp"
+#include "settingsWindow/controls/TriggerControls.hpp"
 
 #include "constants.hpp"
 #include "utils.hpp"

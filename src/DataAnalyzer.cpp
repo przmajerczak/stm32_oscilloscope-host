@@ -1,7 +1,7 @@
 #include "DataAnalyzer.hpp"
 #include "DisplayHelper.hpp"
 #include "settingsWindow/SettingsWindow.hpp"
-#include "settingsWindow/TriggerControls.hpp"
+#include "settingsWindow/controls/TriggerControls.hpp"
 #include "constants.hpp"
 #include "types.hpp"
 #include "utils.hpp"

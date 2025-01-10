@@ -7,7 +7,7 @@
 #include <thread>
 
 #include "controls/VerticalBoundControls.hpp"
-#include "TriggerControls.hpp"
+#include "controls/TriggerControls.hpp"
 
 namespace
 {
