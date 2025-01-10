@@ -11,8 +11,6 @@ public:
     static void notifyAboutThresholdTrigger();
     static uint16_t getTriggerThresholdY();
     static ThresholdTrigger getThresholdTrigger();
-    static float getVerticalLowerBoundValue_mV();
-    static float getVerticalUpperBoundValue_mV();
 
 private:
     static void init();

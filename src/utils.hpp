@@ -2,7 +2,6 @@
 
 #include <cstdint>
 
-#include "settingsWindow/SettingsWindow.hpp"
 #include "settingsWindow/VerticalBoundControls.hpp"
 #include "constants.hpp"
 
@@ -39,11 +38,11 @@ static int scaleAdcValueToY(const uint16_t adc_value)
 static int scaleYToVoltage_mV(const int y)
 {
     const float current_vertical_display_resolution{
-        SettingsWindow::getVerticalUpperBoundValue_mV() -
-        SettingsWindow::getVerticalLowerBoundValue_mV()};
+        VerticalBoundControls::getVerticalUpperBoundValue_mV() -
+        VerticalBoundControls::getVerticalLowerBoundValue_mV()};
 
     return (yAsPercentOfMaxY(y) * current_vertical_display_resolution) +
-           SettingsWindow::getVerticalLowerBoundValue_mV();
+           VerticalBoundControls::getVerticalLowerBoundValue_mV();
 }
 
 static uint16_t scaleYToAdcWithinBounds(const int y)
@@ -53,14 +52,6 @@ static uint16_t scaleYToAdcWithinBounds(const int y)
         VerticalBoundControls::getVerticalLowerBoundValue()};
 
     return VerticalBoundControls::getVerticalLowerBoundValue() + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
-}
-
-static float scaleAdcTo_mV(const uint16_t adc_value)
-{
-    return static_cast<float>(
-        (ABSOULTE_VERTICAL_RESOLUTION_mV * static_cast<float>(adc_value) +
-         MIN_VOLTAGE_mV) /
-        static_cast<float>(INPUT_SIGNAL_MAX));
 }
 
 template <typename T>

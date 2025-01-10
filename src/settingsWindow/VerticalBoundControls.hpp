@@ -12,6 +12,15 @@ namespace
     float vertical_upper_bound{INPUT_SIGNAL_MAX};
 } // namespace
 
+// TODO: move back to utils.hpp
+static float scaleAdcTo_mV(const uint16_t adc_value)
+{
+    return static_cast<float>(
+        (ABSOULTE_VERTICAL_RESOLUTION_mV * static_cast<float>(adc_value) +
+         MIN_VOLTAGE_mV) /
+        static_cast<float>(INPUT_SIGNAL_MAX));
+}
+
 class VerticalBoundControls
 {
 public:
@@ -55,6 +64,16 @@ public:
     static float getVerticalUpperBoundValue()
     {
         return vertical_upper_bound;
+    }
+
+    static float getVerticalLowerBoundValue_mV()
+    {
+        return scaleAdcTo_mV(vertical_lower_bound);
+    }
+
+    static float getVerticalUpperBoundValue_mV()
+    {
+        return scaleAdcTo_mV(vertical_upper_bound);
     }
 
 private:

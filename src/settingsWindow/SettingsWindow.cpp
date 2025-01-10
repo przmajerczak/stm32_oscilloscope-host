@@ -111,12 +111,3 @@ ThresholdTrigger SettingsWindow::getThresholdTrigger()
 {
     return TriggerControls::getThresholdTrigger();
 }
-
-float SettingsWindow::getVerticalLowerBoundValue_mV()
-{
-    return scaleAdcTo_mV(VerticalBoundControls::getVerticalLowerBoundValue());
-}
-float SettingsWindow::getVerticalUpperBoundValue_mV()
-{
-    return scaleAdcTo_mV(VerticalBoundControls::getVerticalUpperBoundValue());
-}
