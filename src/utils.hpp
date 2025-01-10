@@ -30,8 +30,8 @@ static int scaleAdcValueToY(const uint16_t adc_value)
         scaled_adc_value = INPUT_SIGNAL_MIN;
     }
 
-    const int y{(scaled_adc_value / static_cast<float>(INPUT_SIGNAL_RESOLUTION)) *
-                static_cast<float>(Y_DISPLAY_RESOLUTION)};
+    const int y{static_cast<int>((scaled_adc_value / static_cast<float>(INPUT_SIGNAL_RESOLUTION)) *
+                static_cast<float>(Y_DISPLAY_RESOLUTION))};
     return y;
 }
 

@@ -59,7 +59,7 @@ void DataRetriever::singleDataRetrieve()
         return;
     }
 
-    [[maybe__unused]] uint32_t measurement_period{
+    uint32_t measurement_period{
         pullMeasurementPeriodFromUndecodedRetrievedData(undecodedRetrievedData)};
 
     AdcValues retrieved_values{decodeAdcValues(undecodedRetrievedData)};

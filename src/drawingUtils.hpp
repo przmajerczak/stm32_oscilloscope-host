@@ -148,11 +148,11 @@ static void drawHorizontalGrid(const int numOfHorizontalLayers)
                                  FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL,
                                  BOLD, true);
 
-    const float delta_y{Y_DISPLAY_RESOLUTION / (2 * numOfHorizontalLayers)};
+    const float delta_y{Y_DISPLAY_RESOLUTION / (2.0f * numOfHorizontalLayers)};
     for (int i = 1; i <= numOfHorizontalLayers; ++i)
     {
-        const int upper_y{middle_y + (i * delta_y)};
-        const int lower_y{middle_y - (i * delta_y)};
+        const int upper_y{middle_y + static_cast<int>(i * delta_y)};
+        const int lower_y{middle_y - static_cast<int>(i * delta_y)};
 
         const std::string upper_voltage_str{
             std::to_string(scaleYToVoltage_mV(upper_y))};
@@ -175,11 +175,11 @@ static void drawVerticalGrid(const int numOfVerticalLayers)
     drawVerticalLineWithLabels(middle_x, "0", "us", FONT_SIZE_SMALL,
                                COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
 
-    const float delta_x{X_DISPLAY_RESOLUTION / (2 * numOfVerticalLayers)};
+    const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) / (2.0f * numOfVerticalLayers)};
     for (int i = 1; i <= numOfVerticalLayers; ++i)
     {
-        const int right_x{middle_x + (i * delta_x)};
-        const int left_x{middle_x - (i * delta_x)};
+        const int right_x{middle_x + static_cast<int>(i * delta_x)};
+        const int left_x{middle_x - static_cast<int>(i * delta_x)};
 
         drawVerticalLineWithLabels(right_x, nullptr, "us", FONT_SIZE_SMALL,
                                    COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
