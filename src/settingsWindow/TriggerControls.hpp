@@ -2,6 +2,7 @@
 
 #include <gtk/gtk.h>
 #include "constants.hpp"
+#include "types.hpp"
 
 namespace
 {

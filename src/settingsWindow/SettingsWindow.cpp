@@ -109,6 +109,7 @@ uint16_t SettingsWindow::getTriggerThresholdY()
     return TriggerControls::getTriggerThresholdY();
 }
 
+// TODO: as above
 ThresholdTrigger SettingsWindow::getThresholdTrigger()
 {
     return TriggerControls::getThresholdTrigger();
