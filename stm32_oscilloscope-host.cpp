@@ -7,9 +7,10 @@ int main(int argc, char **argv)
     DisplayHelper::init(argc, argv);
 
     DataRetriever dataRetriever;
-    dataRetriever.runContinuousDataRetrieve();
+    SettingsWindow settingsWindow{};
 
-    SettingsWindow::runAsSeparateThread();
+    dataRetriever.runContinuousDataRetrieve();
+    settingsWindow.runAsSeparateThread();
     DisplayHelper::run();
 
     return 0;

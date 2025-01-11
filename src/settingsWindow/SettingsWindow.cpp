@@ -5,12 +5,6 @@
 
 #include "controls/VerticalBoundControls.hpp"
 #include "controls/TriggerControls.hpp"
-#include "controls/TemporaryFrequencyControls.hpp"
-
-namespace
-{
-    GtkWidget *window = nullptr;
-} // namespace
 
 void SettingsWindow::configure()
 {
@@ -28,7 +22,6 @@ void SettingsWindow::configure()
 
 void SettingsWindow::fill()
 {
-    TemporaryFrequencyControls temporaryFrequencyControls{};
     temporaryFrequencyControls.prepare();
     TriggerControls::prepare();
     VerticalBoundControls::prepare();

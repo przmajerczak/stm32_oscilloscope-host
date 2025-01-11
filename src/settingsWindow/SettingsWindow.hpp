@@ -1,14 +1,19 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include "types.hpp"
+
+#include "controls/TemporaryFrequencyControls.hpp"
 
 class SettingsWindow
 {
 public:
-    static void runAsSeparateThread();
+    void runAsSeparateThread();
 
 private:
-    static void configure();
-    static void fill();
+    void configure();
+    void fill();
+
+    GtkWidget *window;
+
+    TemporaryFrequencyControls temporaryFrequencyControls;
 };
