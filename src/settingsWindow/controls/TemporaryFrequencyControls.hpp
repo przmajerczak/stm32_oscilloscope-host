@@ -2,6 +2,11 @@
 
 #include <gtk/gtk.h>
 
+struct CallbackData
+{
+    GtkWidget *widget;
+};
+
 class TemporaryFrequencyControls
 {
 public:
@@ -10,4 +15,5 @@ public:
 
 private:
     GtkWidget *frequencyLabel;
+    CallbackData callbackData;
 };

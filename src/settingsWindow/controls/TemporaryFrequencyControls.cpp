@@ -6,11 +6,14 @@
 #include <iomanip>
 #include <sstream>
 
-gboolean frequencyLabelTimeoutAction(gpointer widgetPtr)
+gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 {
+    CallbackData* callbackData = (CallbackData*)_callbackData;
+    GtkWidget* frequencyLabel = callbackData->widget;
+
     uint16_t timeoutsWithoutReset = 0;
 
-    GtkLabel *label = GTK_LABEL(widgetPtr);
+    GtkLabel *label = GTK_LABEL(frequencyLabel);
 
     constexpr uint32_t minReliableLimit{5};
     auto &thresholdTriggersSinceLastFreqLabelReset{
@@ -43,8 +46,11 @@ void TemporaryFrequencyControls::prepare()
 {
     frequencyLabel = gtk_label_new("Signal frequency: --- Hz");
     gtk_widget_set_hexpand(frequencyLabel, TRUE);
+
+    callbackData.widget = frequencyLabel;
+ 
     g_timeout_add(FREQUENCY_LABEL_TIMEOUT_MS, frequencyLabelTimeoutAction,
-                  frequencyLabel);
+                  &callbackData);
 }
 
 GtkWidget *TemporaryFrequencyControls::getFrequencyControlsContainer()
