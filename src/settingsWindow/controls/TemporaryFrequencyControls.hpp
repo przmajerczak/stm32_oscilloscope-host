@@ -7,7 +7,7 @@ class TemporaryFrequencyControls
 public:
     static void prepare();
     static void notifyAboutThresholdTrigger();
-    static GtkWidget *getFrequencyLabel();
+    static GtkWidget *getFrequencyControlsContainer();
 
 private:
     static gboolean frequencyLabelTimeoutAction(gpointer widgetPtr);

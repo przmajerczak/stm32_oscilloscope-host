@@ -29,10 +29,6 @@ void SettingsWindow::configure()
 void SettingsWindow::fill()
 {
     TemporaryFrequencyControls::prepare();
-
-    GtkWidget *frequencyControlsGrid = gtk_grid_new();
-    gtk_grid_attach(GTK_GRID(frequencyControlsGrid), TemporaryFrequencyControls::getFrequencyLabel(), 0, 0, 2, 1);
-
     TriggerControls::prepare();
 
     GtkWidget *triggerControlsGrid = gtk_grid_new();
@@ -53,7 +49,7 @@ void SettingsWindow::fill()
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
     constexpr int padding{0};
-    gtk_box_pack_start(GTK_BOX(vbox), frequencyControlsGrid, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), TemporaryFrequencyControls::getFrequencyControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), triggerControlsGrid, FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), verticalBoundControlsGrid, FALSE, TRUE, padding);
 }

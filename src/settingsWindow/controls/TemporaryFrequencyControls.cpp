@@ -18,12 +18,18 @@ void TemporaryFrequencyControls::prepare()
                   frequencyLabel);
 }
 
+GtkWidget *TemporaryFrequencyControls::getFrequencyControlsContainer()
+{
+    GtkWidget *frequencyControlsGrid = gtk_grid_new();
+    gtk_grid_attach(GTK_GRID(frequencyControlsGrid), frequencyLabel, 0, 0, 2, 1);
+
+    return frequencyControlsGrid;
+}
+
 void TemporaryFrequencyControls::notifyAboutThresholdTrigger()
 {
     ++getThresholdTriggersSinceLastFreqLabelReset();
 }
-
-GtkWidget *TemporaryFrequencyControls::getFrequencyLabel() { return frequencyLabel; }
 
 gboolean TemporaryFrequencyControls::frequencyLabelTimeoutAction(gpointer widgetPtr)
 {
