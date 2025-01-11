@@ -21,7 +21,6 @@ float scaleAdcTo_mV(const uint16_t adc_value)
 
 void VerticalBoundControls::prepare()
 {
-
     vertical_lower_bound_slider = gtk_scale_new_with_range(
         GTK_ORIENTATION_HORIZONTAL, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
     gtk_widget_set_hexpand(vertical_lower_bound_slider, TRUE);
@@ -41,14 +40,13 @@ void VerticalBoundControls::prepare()
                      G_CALLBACK(verticalUpperBoundSliderOnChangeAction), nullptr);
 }
 
-GtkWidget *VerticalBoundControls::verticalLowerBoundSlider()
+GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
 {
-    return vertical_lower_bound_slider;
-}
+    GtkWidget *verticalBoundControlsGrid = gtk_grid_new();
+    gtk_grid_attach(GTK_GRID(verticalBoundControlsGrid), vertical_lower_bound_slider, 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(verticalBoundControlsGrid), vertical_upper_bound_slider, 0, 1, 1, 1);
 
-GtkWidget *VerticalBoundControls::verticalUpperBoundSlider()
-{
-    return vertical_upper_bound_slider;
+    return verticalBoundControlsGrid;
 }
 
 float VerticalBoundControls::getVerticalLowerBoundValue()

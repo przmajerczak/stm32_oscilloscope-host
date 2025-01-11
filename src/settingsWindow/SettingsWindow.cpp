@@ -32,10 +32,6 @@ void SettingsWindow::fill()
     TriggerControls::prepare();
     VerticalBoundControls::prepare();
 
-    GtkWidget *verticalBoundControlsGrid = gtk_grid_new();
-    gtk_grid_attach(GTK_GRID(verticalBoundControlsGrid), VerticalBoundControls::verticalLowerBoundSlider(), 0, 5, 2, 1);
-    gtk_grid_attach(GTK_GRID(verticalBoundControlsGrid), VerticalBoundControls::verticalUpperBoundSlider(), 0, 6, 2, 1);
-
     constexpr int spacing{0};
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
     gtk_container_add(GTK_CONTAINER(window), vbox);
@@ -43,7 +39,7 @@ void SettingsWindow::fill()
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(vbox), TemporaryFrequencyControls::getFrequencyControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), TriggerControls::getTriggerControlsContainer(), FALSE, TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(vbox), verticalBoundControlsGrid, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), VerticalBoundControls::getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
 }
 
 void SettingsWindow::runAsSeparateThread()

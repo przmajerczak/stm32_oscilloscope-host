@@ -6,8 +6,7 @@ class VerticalBoundControls
 {
 public:
     static void prepare();
-    static GtkWidget *verticalLowerBoundSlider();
-    static GtkWidget *verticalUpperBoundSlider();
+    static GtkWidget *getVerticalBoundControlsContainer();
     static float getVerticalLowerBoundValue();
     static float getVerticalUpperBoundValue();
     static float getVerticalLowerBoundValue_mV();
