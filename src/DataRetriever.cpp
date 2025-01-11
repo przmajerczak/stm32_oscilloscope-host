@@ -7,9 +7,9 @@
 
 extern int errno;
 
-void DataRetriever::runContinuousDataRetrieve()
+void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 {
-    std::thread t([this]()
+    std::thread t([&]()
     {
         // TODO: auto-detect correct path
         deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
@@ -37,13 +37,13 @@ void DataRetriever::runContinuousDataRetrieve()
 
         while (1)
         {
-            singleDataRetrieve();
+            singleDataRetrieve(dynamicData);
         }
     });
     t.detach();
 }
 
-void DataRetriever::singleDataRetrieve()
+void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
     auto undecodedRetrievedData{retrieveData()};
     constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_0{1604};
@@ -63,7 +63,7 @@ void DataRetriever::singleDataRetrieve()
         pullMeasurementPeriodFromUndecodedRetrievedData(undecodedRetrievedData)};
 
     AdcValues retrieved_values{decodeAdcValues(undecodedRetrievedData)};
-    dataAnalyzer.handleData(retrieved_values);
+    dataAnalyzer.handleData(retrieved_values, dynamicData);
 }
 
 EncodedAdcValues DataRetriever::retrieveData()

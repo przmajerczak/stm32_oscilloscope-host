@@ -20,9 +20,9 @@ void SettingsWindow::configure()
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
 }
 
-void SettingsWindow::fill()
+void SettingsWindow::fill(DynamicData &dynamicData)
 {
-    temporaryFrequencyControls.prepare();
+    temporaryFrequencyControls.prepare(dynamicData);
     TriggerControls::prepare();
     VerticalBoundControls::prepare();
 
@@ -36,12 +36,12 @@ void SettingsWindow::fill()
     gtk_box_pack_start(GTK_BOX(vbox), VerticalBoundControls::getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
 }
 
-void SettingsWindow::runAsSeparateThread()
+void SettingsWindow::runAsSeparateThread(DynamicData &dynamicData)
 {
     std::thread gtk_thread([&]()
     {
         configure();
-        fill();
+        fill(dynamicData);
 
         gtk_widget_show_all(window);
         gtk_main();

@@ -1,21 +1,22 @@
 #include "DataAnalyzer.hpp"
 #include "DisplayHelper.hpp"
-#include "sharedData/DynamicData.hpp"
 #include "settingsWindow/controls/TriggerControls.hpp"
 #include "constants.hpp"
 #include "types.hpp"
 #include "utils.hpp"
 
-void DataAnalyzer::handleData(const AdcValues &current_values)
+void DataAnalyzer::handleData(const AdcValues &current_values, DynamicData &dynamicData)
 {
-    AdcValues valuesToDisplay{centerValuesOnTrigger(current_values)};
+    AdcValues valuesToDisplay{centerValuesOnTrigger(current_values, dynamicData)};
 
     DisplayHelper::triggerDisplay(valuesToDisplay);
 }
 
-AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values)
+AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values, DynamicData &dynamicData)
 {
     const auto triggersIndexes{detectTriggers(current_values)};
+
+    dynamicData.thresholdTriggersSinceLastFreqLabelReset += triggersIndexes.size();
 
     if (triggersIndexes.size() == 0)
     {
@@ -59,7 +60,6 @@ DataAnalyzer::detectTriggers(const AdcValues &current_values)
         if (isTrigger(currentValue, nextValue))
         {
             triggersIndexes.push_back(idx);
-            ++(DynamicData::getThresholdTriggersSinceLastFreqLabelReset());
         }
     }
 

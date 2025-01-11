@@ -3,15 +3,16 @@
 #include <gtk/gtk.h>
 
 #include "controls/TemporaryFrequencyControls.hpp"
+#include "sharedData/DynamicData.hpp"
 
 class SettingsWindow
 {
 public:
-    void runAsSeparateThread();
+    void runAsSeparateThread(DynamicData &dynamicData);
 
 private:
     void configure();
-    void fill();
+    void fill(DynamicData &dynamicData);
 
     GtkWidget *window;
 

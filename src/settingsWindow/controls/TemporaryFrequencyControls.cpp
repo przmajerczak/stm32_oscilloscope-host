@@ -8,8 +8,9 @@
 
 gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 {
-    CallbackData* callbackData = (CallbackData*)_callbackData;
-    GtkWidget* frequencyLabel = callbackData->widget;
+    CallbackData *callbackData = (CallbackData *)_callbackData;
+    GtkWidget *frequencyLabel = callbackData->widget;
+    DynamicData *dynamicData = callbackData->dynamicData;
 
     uint16_t timeoutsWithoutReset = 0;
 
@@ -17,7 +18,7 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 
     constexpr uint32_t minReliableLimit{5};
     auto &thresholdTriggersSinceLastFreqLabelReset{
-        DynamicData::getThresholdTriggersSinceLastFreqLabelReset()};
+        dynamicData->thresholdTriggersSinceLastFreqLabelReset};
 
     if (thresholdTriggersSinceLastFreqLabelReset > minReliableLimit)
     {
@@ -42,13 +43,14 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
     return TRUE;
 }
 
-void TemporaryFrequencyControls::prepare()
+void TemporaryFrequencyControls::prepare(DynamicData &dynamicData)
 {
     frequencyLabel = gtk_label_new("Signal frequency: --- Hz");
     gtk_widget_set_hexpand(frequencyLabel, TRUE);
 
     callbackData.widget = frequencyLabel;
- 
+    callbackData.dynamicData = &dynamicData;
+
     g_timeout_add(FREQUENCY_LABEL_TIMEOUT_MS, frequencyLabelTimeoutAction,
                   &callbackData);
 }
