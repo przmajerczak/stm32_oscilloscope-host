@@ -30,14 +30,6 @@ void SettingsWindow::fill()
 {
     TemporaryFrequencyControls::prepare();
     TriggerControls::prepare();
-
-    GtkWidget *triggerControlsGrid = gtk_grid_new();
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), TriggerControls::getThresholdLabel(), 0, 1, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), TriggerControls::getTriggerThresholdSlider(), 0, 2, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), TriggerControls::getTriggerLabel(), 0, 3, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), TriggerControls::getTriggerRisingEdgeButton(), 0, 4, 1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), TriggerControls::getTriggerFallingEdgeButton(), 1, 4, 1, 1);
-
     VerticalBoundControls::prepare();
 
     GtkWidget *verticalBoundControlsGrid = gtk_grid_new();
@@ -50,7 +42,7 @@ void SettingsWindow::fill()
 
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(vbox), TemporaryFrequencyControls::getFrequencyControlsContainer(), FALSE, TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(vbox), triggerControlsGrid, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), TriggerControls::getTriggerControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), verticalBoundControlsGrid, FALSE, TRUE, padding);
 }
 
