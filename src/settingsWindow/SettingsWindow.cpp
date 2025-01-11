@@ -28,7 +28,8 @@ void SettingsWindow::configure()
 
 void SettingsWindow::fill()
 {
-    TemporaryFrequencyControls::prepare();
+    TemporaryFrequencyControls temporaryFrequencyControls{};
+    temporaryFrequencyControls.prepare();
     TriggerControls::prepare();
     VerticalBoundControls::prepare();
 
@@ -37,7 +38,7 @@ void SettingsWindow::fill()
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
     constexpr int padding{0};
-    gtk_box_pack_start(GTK_BOX(vbox), TemporaryFrequencyControls::getFrequencyControlsContainer(), FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), temporaryFrequencyControls.getFrequencyControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), TriggerControls::getTriggerControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), VerticalBoundControls::getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
 }

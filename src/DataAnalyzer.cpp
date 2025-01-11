@@ -1,6 +1,6 @@
 #include "DataAnalyzer.hpp"
 #include "DisplayHelper.hpp"
-#include "settingsWindow/controls/TemporaryFrequencyControls.hpp"
+#include "sharedData/DynamicData.hpp"
 #include "settingsWindow/controls/TriggerControls.hpp"
 #include "constants.hpp"
 #include "types.hpp"
@@ -59,7 +59,7 @@ DataAnalyzer::detectTriggers(const AdcValues &current_values)
         if (isTrigger(currentValue, nextValue))
         {
             triggersIndexes.push_back(idx);
-            TemporaryFrequencyControls::notifyAboutThresholdTrigger();
+            ++(DynamicData::getThresholdTriggersSinceLastFreqLabelReset());
         }
     }
 
