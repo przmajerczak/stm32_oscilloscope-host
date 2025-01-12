@@ -57,8 +57,11 @@ void TemporaryFrequencyControls::prepare(DynamicData &dynamicData)
 
 GtkWidget *TemporaryFrequencyControls::getFrequencyControlsContainer()
 {
-    GtkWidget *frequencyControlsGrid = gtk_grid_new();
-    gtk_grid_attach(GTK_GRID(frequencyControlsGrid), frequencyLabel, 0, 0, 2, 1);
+    constexpr int spacing{0};
+    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
 
-    return frequencyControlsGrid;
+    constexpr int padding{0};
+    gtk_box_pack_start(GTK_BOX(vbox), frequencyLabel, FALSE, TRUE, padding);
+
+    return vbox;
 }
