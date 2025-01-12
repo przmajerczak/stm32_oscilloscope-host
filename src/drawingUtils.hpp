@@ -136,30 +136,32 @@ static void drawTriggerIndicator(const int x, const int y)
     glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
 
     drawVerticalLine(x, NEUTRAL);
-    drawHorizontalLineWithLabels(y, "mV", FONT_SIZE_LARGE,
-                                 COLOR_RGB_WHITE, NEUTRAL, NEUTRAL);
+    drawHorizontalLineWithLabels(y, "mV", FONT_SIZE_LARGE, COLOR_RGB_WHITE,                                 NEUTRAL, NEUTRAL);
 }
 
 static void drawHorizontalGrid(const int numOfHorizontalLayers)
 {
     const int middle_y{Y_DISPLAY_RESOLUTION / 2};
 
-    drawHorizontalLineWithLabels(middle_y, " mV",
-                                 FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL,
-                                 BOLD, true);
+    drawHorizontalLineWithLabels(middle_y, " mV", FONT_SIZE_SMALL,
+                                 COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+
+    drawHorizontalLineWithLabels(0, " mV", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY,
+                                 NEUTRAL, BOLD, true);
+
+    drawHorizontalLineWithLabels(Y_DISPLAY_RESOLUTION, " mV", FONT_SIZE_SMALL,
+                                 COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
 
     const float delta_y{Y_DISPLAY_RESOLUTION / (2.0f * numOfHorizontalLayers)};
-    for (int i = 1; i <= numOfHorizontalLayers; ++i)
+    for (int i = 1; i < numOfHorizontalLayers; ++i)
     {
         const int upper_y{middle_y + static_cast<int>(i * delta_y)};
         const int lower_y{middle_y - static_cast<int>(i * delta_y)};
 
-        drawHorizontalLineWithLabels(upper_y, " mV",
-                                     FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL,
-                                     BOLD, true);
-        drawHorizontalLineWithLabels(lower_y, " mV",
-                                     FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL,
-                                     BOLD, true);
+        drawHorizontalLineWithLabels(upper_y, " mV", FONT_SIZE_SMALL,
+                                     COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+        drawHorizontalLineWithLabels(lower_y, " mV", FONT_SIZE_SMALL,
+                                     COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
     }
 }
 
