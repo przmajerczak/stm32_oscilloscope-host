@@ -32,7 +32,7 @@ void DisplayHelper::display()
 
         glBegin(GL_LINE_STRIP);
 
-        int x{marginCorrected(0)};
+        float x{static_cast<float>(marginCorrected(0))};
         int y;
 
         auto value_it{adcValues.begin()};
