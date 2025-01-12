@@ -3,8 +3,9 @@
 #include <gtk/gtk.h>
 #include "sharedData/DynamicData.hpp"
 
+template <typename T>
 struct CallbackData
 {
     GtkWidget *widget;
-    DynamicData *dynamicData;
+    T *data;
 };

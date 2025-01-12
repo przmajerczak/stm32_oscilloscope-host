@@ -3,6 +3,7 @@
 #include <gtk/gtk.h>
 
 #include "CallbackData.hpp"
+#include "sharedData/DynamicData.hpp"
 
 class TemporaryFrequencyControls
 {
@@ -12,5 +13,5 @@ public:
 
 private:
     GtkWidget *frequencyLabel;
-    CallbackData callbackData;
+    CallbackData<DynamicData> callbackData;
 };

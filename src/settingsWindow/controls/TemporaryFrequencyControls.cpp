@@ -1,16 +1,14 @@
 #include "TemporaryFrequencyControls.hpp"
 
-#include "sharedData/DynamicData.hpp"
-
 #include "constants.hpp"
 #include <iomanip>
 #include <sstream>
 
 gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 {
-    CallbackData *callbackData = (CallbackData *)_callbackData;
+    CallbackData<DynamicData> *callbackData = (CallbackData<DynamicData> *)_callbackData;
     GtkWidget *frequencyLabel = callbackData->widget;
-    DynamicData *dynamicData = callbackData->dynamicData;
+    DynamicData *dynamicData = callbackData->data;
 
     uint16_t timeoutsWithoutReset = 0;
 
@@ -49,7 +47,7 @@ void TemporaryFrequencyControls::prepare(DynamicData &dynamicData)
     gtk_widget_set_hexpand(frequencyLabel, TRUE);
 
     callbackData.widget = frequencyLabel;
-    callbackData.dynamicData = &dynamicData;
+    callbackData.data = &dynamicData;
 
     g_timeout_add(FREQUENCY_LABEL_TIMEOUT_MS, frequencyLabelTimeoutAction,
                   &callbackData);
