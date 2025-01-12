@@ -73,7 +73,7 @@ static void drawVerticalLine(const int x, const float boldness,
     }
 }
 
-static void drawHorizontalLineWithLabels(const int y, const char *value_label,
+static void drawHorizontalLineWithLabels(const int y,
                                          const char *unit_label,
                                          const float font_size,
                                          const float color_rgb,
@@ -90,16 +90,19 @@ static void drawHorizontalLineWithLabels(const int y, const char *value_label,
     const int upper_line_y{marginCorrected(y)};
     const int lower_line_y{upper_line_y - 20}; // TODO: remove magic number
 
-    drawText(right_x, upper_line_y, value_label, font_size, color_rgb,
+    const std::string voltage_value{std::to_string(scaleYToVoltage_mV(y))};
+
+    drawText(right_x, upper_line_y, voltage_value.c_str(), font_size, color_rgb,
              boldness_text);
     drawText(right_x, lower_line_y, unit_label, font_size, color_rgb,
              boldness_text);
-    drawText(left_x, upper_line_y, value_label, font_size, color_rgb,
+    drawText(left_x, upper_line_y, voltage_value.c_str(), font_size, color_rgb,
              boldness_text);
     drawText(left_x, lower_line_y, unit_label, font_size, color_rgb,
              boldness_text);
 }
 
+// TODO: move value_label generation inside
 static void drawVerticalLineWithLabels(const int x, const char *value_label,
                                        const char *unit_label,
                                        const float font_size,
@@ -130,21 +133,18 @@ static void drawVerticalLineWithLabels(const int x, const char *value_label,
 
 static void drawTriggerIndicator(const int x, const int y)
 {
-    const std::string voltage_value{std::to_string(scaleYToVoltage_mV(y))};
-
     glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
 
     drawVerticalLine(x, NEUTRAL);
-    drawHorizontalLineWithLabels(y, voltage_value.c_str(), "mV", FONT_SIZE_LARGE,
+    drawHorizontalLineWithLabels(y, "mV", FONT_SIZE_LARGE,
                                  COLOR_RGB_WHITE, NEUTRAL, NEUTRAL);
 }
 
 static void drawHorizontalGrid(const int numOfHorizontalLayers)
 {
     const int middle_y{Y_DISPLAY_RESOLUTION / 2};
-    const std::string voltage_str{std::to_string(scaleYToVoltage_mV(middle_y))};
 
-    drawHorizontalLineWithLabels(middle_y, voltage_str.c_str(), " mV",
+    drawHorizontalLineWithLabels(middle_y, " mV",
                                  FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL,
                                  BOLD, true);
 
@@ -154,15 +154,10 @@ static void drawHorizontalGrid(const int numOfHorizontalLayers)
         const int upper_y{middle_y + static_cast<int>(i * delta_y)};
         const int lower_y{middle_y - static_cast<int>(i * delta_y)};
 
-        const std::string upper_voltage_str{
-            std::to_string(scaleYToVoltage_mV(upper_y))};
-        const std::string lower_voltage_str{
-            std::to_string(scaleYToVoltage_mV(lower_y))};
-
-        drawHorizontalLineWithLabels(upper_y, upper_voltage_str.c_str(), " mV",
+        drawHorizontalLineWithLabels(upper_y, " mV",
                                      FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL,
                                      BOLD, true);
-        drawHorizontalLineWithLabels(lower_y, lower_voltage_str.c_str(), " mV",
+        drawHorizontalLineWithLabels(lower_y, " mV",
                                      FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL,
                                      BOLD, true);
     }
