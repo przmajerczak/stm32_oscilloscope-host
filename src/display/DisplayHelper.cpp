@@ -1,7 +1,7 @@
 #include "DisplayHelper.hpp"
 #include "settingsWindow/controls/TriggerControls.hpp"
 
-#include "constants.hpp"
+#include "sharedData/constants.hpp"
 #include "utils.hpp"
 #include <GL/glut.h>
 #include "utils/drawingUtils.hpp"

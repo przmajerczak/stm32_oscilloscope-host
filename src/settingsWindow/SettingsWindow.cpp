@@ -1,6 +1,6 @@
 #include "SettingsWindow.hpp"
 
-#include "constants.hpp"
+#include "sharedData/constants.hpp"
 #include <thread>
 
 #include "controls/VerticalBoundControls.hpp"

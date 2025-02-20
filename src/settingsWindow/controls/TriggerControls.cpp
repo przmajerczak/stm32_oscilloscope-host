@@ -1,6 +1,6 @@
 #include "TriggerControls.hpp"
 
-#include "constants.hpp"
+#include "sharedData/constants.hpp"
 
 namespace
 {

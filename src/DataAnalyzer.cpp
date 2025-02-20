@@ -1,8 +1,8 @@
 #include "DataAnalyzer.hpp"
 #include "display/DisplayHelper.hpp"
 #include "settingsWindow/controls/TriggerControls.hpp"
-#include "constants.hpp"
-#include "types.hpp"
+#include "sharedData/constants.hpp"
+#include "sharedData/types.hpp"
 #include "utils.hpp"
 
 void DataAnalyzer::handleData(const AdcValues &current_values, DynamicData &dynamicData)

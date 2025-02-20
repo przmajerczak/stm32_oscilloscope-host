@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include "settingsWindow/controls/VerticalBoundControls.hpp"
-#include "constants.hpp"
+#include "sharedData/constants.hpp"
 
 static float yAsPercentOfMaxY(const int y)
 {

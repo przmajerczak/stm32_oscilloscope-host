@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.hpp"
+#include "sharedData/types.hpp"
 #include <vector>
 
 #include "sharedData/DynamicData.hpp"

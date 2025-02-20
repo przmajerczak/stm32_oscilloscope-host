@@ -1,7 +1,7 @@
 #pragma once
 
 #include "display/utils/TextPrinter.hpp"
-#include "constants.hpp"
+#include "sharedData/constants.hpp"
 #include "utils.hpp"
 #include <GL/glut.h>
 #include <string>

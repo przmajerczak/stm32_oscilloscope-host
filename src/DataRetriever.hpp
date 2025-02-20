@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DataAnalyzer.hpp"
-#include "types.hpp"
+#include "sharedData/types.hpp"
 #include <unistd.h>
 
 #include "sharedData/DynamicData.hpp"

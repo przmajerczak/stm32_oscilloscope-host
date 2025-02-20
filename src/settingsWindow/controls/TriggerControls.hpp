@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include "types.hpp"
+#include "sharedData/types.hpp"
 
 class TriggerControls
 {

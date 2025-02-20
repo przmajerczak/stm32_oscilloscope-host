@@ -1,6 +1,6 @@
 #include "TextPrinter.hpp"
 
-#include "constants.hpp"
+#include "sharedData/constants.hpp"
 #include <GL/glut.h>
 
 TextPrinter::TextPrinter()
