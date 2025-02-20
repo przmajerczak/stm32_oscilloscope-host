@@ -1,10 +1,20 @@
 #pragma once
 
+#include "TextPrinter.hpp"
 #include "constants.hpp"
 #include "utils.hpp"
 #include <GL/glut.h>
 #include <string>
-#include "textUtils.hpp"
+
+/*
+    TODO:
+        - encapsulate contents as class
+        - create separate TextPrinters for different purposes
+*/
+namespace
+{
+    TextPrinter textPrinter;
+}
 
 static void drawHorizontalLine(const int y, const float boldness,
                                const bool stipple_line = false)
@@ -55,8 +65,7 @@ static void drawVerticalLine(const int x, const float boldness,
     }
 }
 
-static void drawHorizontalLineWithLabels(const int y,
-                                         const char *unit_label,
+static void drawHorizontalLineWithLabels(const int y, const char *unit_label,
                                          const float font_size,
                                          const float color_rgb,
                                          const float boldness_line = NEUTRAL,
@@ -74,14 +83,14 @@ static void drawHorizontalLineWithLabels(const int y,
 
     const std::string voltage_value{std::to_string(scaleYToVoltage_mV(y))};
 
-    drawText(right_x, upper_line_y, voltage_value.c_str(), font_size, color_rgb,
-             boldness_text);
-    drawText(right_x, lower_line_y, unit_label, font_size, color_rgb,
-             boldness_text);
-    drawText(left_x, upper_line_y, voltage_value.c_str(), font_size, color_rgb,
-             boldness_text);
-    drawText(left_x, lower_line_y, unit_label, font_size, color_rgb,
-             boldness_text);
+    textPrinter.drawText(right_x, upper_line_y, voltage_value.c_str(), font_size,
+                         color_rgb, boldness_text);
+    textPrinter.drawText(right_x, lower_line_y, unit_label, font_size, color_rgb,
+                         boldness_text);
+    textPrinter.drawText(left_x, upper_line_y, voltage_value.c_str(), font_size,
+                         color_rgb, boldness_text);
+    textPrinter.drawText(left_x, lower_line_y, unit_label, font_size, color_rgb,
+                         boldness_text);
 }
 
 // TODO: move value_label generation inside
@@ -103,14 +112,14 @@ static void drawVerticalLineWithLabels(const int x, const char *value_label,
                             static_cast<uint16_t>(2 * VERY_BOLD) - 20};
     const int lower_unit_y{lower_value_y - 20};
 
-    drawText(marginCorrected(x) - 20, upper_value_y, value_label, font_size,
-             color_rgb, boldness_text);
-    drawText(marginCorrected(x) - 10, upper_unit_y, unit_label, font_size,
-             color_rgb, boldness_text);
-    drawText(marginCorrected(x) - 20, lower_value_y, value_label, font_size,
-             color_rgb, boldness_text);
-    drawText(marginCorrected(x) - 10, lower_unit_y, unit_label, font_size,
-             color_rgb, boldness_text);
+    textPrinter.drawText(marginCorrected(x) - 20, upper_value_y, value_label,
+                         font_size, color_rgb, boldness_text);
+    textPrinter.drawText(marginCorrected(x) - 10, upper_unit_y, unit_label,
+                         font_size, color_rgb, boldness_text);
+    textPrinter.drawText(marginCorrected(x) - 20, lower_value_y, value_label,
+                         font_size, color_rgb, boldness_text);
+    textPrinter.drawText(marginCorrected(x) - 10, lower_unit_y, unit_label,
+                         font_size, color_rgb, boldness_text);
 }
 
 static void drawTriggerIndicator(const int x, const int y)
@@ -118,7 +127,8 @@ static void drawTriggerIndicator(const int x, const int y)
     glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
 
     drawVerticalLine(x, NEUTRAL);
-    drawHorizontalLineWithLabels(y, "mV", FONT_SIZE_LARGE, COLOR_RGB_WHITE,                                 NEUTRAL, NEUTRAL);
+    drawHorizontalLineWithLabels(y, "mV", FONT_SIZE_LARGE, COLOR_RGB_WHITE,
+                                 NEUTRAL, NEUTRAL);
 }
 
 static void drawHorizontalGrid(const int numOfHorizontalLayers)
@@ -154,7 +164,8 @@ static void drawVerticalGrid(const int numOfVerticalLayers)
     drawVerticalLineWithLabels(middle_x, "0", "us", FONT_SIZE_SMALL,
                                COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
 
-    const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) / (2.0f * numOfVerticalLayers)};
+    const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
+                        (2.0f * numOfVerticalLayers)};
     for (int i = 1; i <= numOfVerticalLayers; ++i)
     {
         const int right_x{middle_x + static_cast<int>(i * delta_x)};

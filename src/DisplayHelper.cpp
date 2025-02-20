@@ -5,7 +5,6 @@
 #include "utils.hpp"
 #include <GL/glut.h>
 #include "drawingUtils.hpp"
-#include "textUtils.hpp"
 
 namespace
 {
@@ -85,7 +84,6 @@ void DisplayHelper::init(int argc, char **argv)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0.0, X_WINDOW_SIZE, 0.0, Y_WINDOW_SIZE);
-    initFreeType();
 }
 
 void DisplayHelper::run()
