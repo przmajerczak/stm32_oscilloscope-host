@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TextPrinter.hpp"
+#include "display/utils/TextPrinter.hpp"
 #include "constants.hpp"
 #include "utils.hpp"
 #include <GL/glut.h>

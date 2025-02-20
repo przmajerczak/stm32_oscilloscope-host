@@ -1,7 +1,6 @@
 set(SOURCE 
     ${CMAKE_CURRENT_SOURCE_DIR}/DataRetriever.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/DataAnalyzer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/TextPrinter.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/DataAnalyzer.cpp)
 
 add_subdirectory("display")
 add_subdirectory("settingsWindow")
