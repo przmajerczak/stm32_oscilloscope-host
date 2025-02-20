@@ -18,6 +18,7 @@ public:
                   [[maybe_unused]] const float boldness);
 
 private:
+    float drawCharacterReturnWidth(const char character, const float x, const float y, const float color_rgb);
     void flipBitmap(FT_Bitmap *bitmap);
     void applyColor(FT_Bitmap *bitmap, const float color_rgb);
 

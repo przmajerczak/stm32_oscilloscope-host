@@ -30,21 +30,28 @@ void TextPrinter::drawText(const float x, const float y, const char *text,
         float character_x{x};
         for (const char *character = text; *character; ++character)
         {
-            FT_Load_Char(ftFace, *character, FT_LOAD_RENDER);
-
-            FT_GlyphSlot glyph = ftFace->glyph;
-            FT_Bitmap *bitmap = &glyph->bitmap;
-
-            flipBitmap(bitmap);
-            applyColor(bitmap, color_rgb);
-
-            glRasterPos2f(character_x + glyph->bitmap_left, y);
-            glDrawPixels(bitmap->width, bitmap->rows, GL_LUMINANCE, GL_UNSIGNED_BYTE,
-                         bitmap->buffer);
-
-            character_x += bitmap->width;
+            character_x += drawCharacterReturnWidth(*character, character_x, y, color_rgb);
         }
     }
+}
+
+float TextPrinter::drawCharacterReturnWidth(const char character, const float x,
+                                            const float y,
+                                            const float color_rgb)
+{
+    FT_Load_Char(ftFace, character, FT_LOAD_RENDER);
+
+    FT_GlyphSlot glyph = ftFace->glyph;
+    FT_Bitmap *bitmap = &glyph->bitmap;
+
+    flipBitmap(bitmap);
+    applyColor(bitmap, color_rgb);
+
+    glRasterPos2f(x + glyph->bitmap_left, y);
+    glDrawPixels(bitmap->width, bitmap->rows, GL_LUMINANCE, GL_UNSIGNED_BYTE,
+                 bitmap->buffer);
+
+    return bitmap->width;
 }
 
 void TextPrinter::flipBitmap(FT_Bitmap *bitmap)
