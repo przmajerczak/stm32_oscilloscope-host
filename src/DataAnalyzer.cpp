@@ -1,5 +1,5 @@
 #include "DataAnalyzer.hpp"
-#include "DisplayHelper.hpp"
+#include "display/DisplayHelper.hpp"
 #include "settingsWindow/controls/TriggerControls.hpp"
 #include "constants.hpp"
 #include "types.hpp"

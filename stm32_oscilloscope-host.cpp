@@ -1,5 +1,5 @@
 #include "src/DataRetriever.hpp"
-#include "src/DisplayHelper.hpp"
+#include "src/display/DisplayHelper.hpp"
 #include "src/settingsWindow/SettingsWindow.hpp"
 #include "src/sharedData/DynamicData.hpp"
 
