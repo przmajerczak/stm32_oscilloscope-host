@@ -3,10 +3,11 @@
 #include "sharedData/constants.hpp"
 #include <GL/glut.h>
 
-TextPrinter::TextPrinter()
+TextPrinter::TextPrinter(const float font_size, const float color_rgb, const float boldness) : color_rgb(color_rgb), boldness(boldness)
 {
     FT_Init_FreeType(&ftLibrary);
     FT_New_Face(ftLibrary, FONT_PATH, 0, &ftFace);
+    FT_Set_Pixel_Sizes(ftFace, font_size, font_size);
 }
 
 TextPrinter::~TextPrinter()
@@ -15,29 +16,23 @@ TextPrinter::~TextPrinter()
     FT_Done_FreeType(ftLibrary);
 }
 
-void TextPrinter::drawText(const float x, const float y, const char *text,
-                           const float font_size, const float color_rgb,
-                           const float boldness)
+void TextPrinter::drawText(const float x, const float y, const char *text) const
 {
     if (text != nullptr)
     {
-        FT_Set_Pixel_Sizes(ftFace, font_size, font_size);
-
         glDisable(GL_TEXTURE_2D);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glColor3f(color_rgb, color_rgb, color_rgb);
 
         float character_x{x};
         for (const char *character = text; *character; ++character)
         {
-            character_x += drawCharacterReturnWidth(*character, character_x, y, color_rgb);
+            character_x += drawCharacterReturnWidth(*character, character_x, y);
         }
     }
 }
 
 float TextPrinter::drawCharacterReturnWidth(const char character, const float x,
-                                            const float y,
-                                            const float color_rgb)
+                                            const float y) const
 {
     FT_Load_Char(ftFace, character, FT_LOAD_RENDER);
 
@@ -45,7 +40,7 @@ float TextPrinter::drawCharacterReturnWidth(const char character, const float x,
     FT_Bitmap *bitmap = &glyph->bitmap;
 
     flipBitmap(bitmap);
-    applyColor(bitmap, color_rgb);
+    applyColor(bitmap);
 
     glRasterPos2f(x + glyph->bitmap_left, y);
     glDrawPixels(bitmap->width, bitmap->rows, GL_LUMINANCE, GL_UNSIGNED_BYTE,
@@ -54,7 +49,7 @@ float TextPrinter::drawCharacterReturnWidth(const char character, const float x,
     return bitmap->width;
 }
 
-void TextPrinter::flipBitmap(FT_Bitmap *bitmap)
+void TextPrinter::flipBitmap(FT_Bitmap *bitmap) const
 {
     const int width = bitmap->width;
     const int height = bitmap->rows;
@@ -72,7 +67,7 @@ void TextPrinter::flipBitmap(FT_Bitmap *bitmap)
     }
 }
 
-void TextPrinter::applyColor(FT_Bitmap *bitmap, const float color_rgb)
+void TextPrinter::applyColor(FT_Bitmap *bitmap) const
 {
     const int width = bitmap->width;
     const int height = bitmap->rows;

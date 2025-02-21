@@ -9,12 +9,12 @@
 /*
     TODO:
         - encapsulate contents as class
-        - create separate TextPrinters for different purposes
 */
 namespace
 {
-    TextPrinter textPrinter;
-}
+    TextPrinter textPrinterForTriggerIndicator(FONT_SIZE_LARGE, COLOR_RGB_WHITE, NEUTRAL);
+    TextPrinter textPrinterForGrid(FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL);
+} // namespace
 
 static void drawHorizontalLine(const int y, const float boldness,
                                const bool stipple_line = false)
@@ -66,13 +66,10 @@ static void drawVerticalLine(const int x, const float boldness,
 }
 
 static void drawHorizontalLineWithLabels(const int y, const char *unit_label,
-                                         const float font_size,
-                                         const float color_rgb,
+                                         const TextPrinter &textPrinter,
                                          const float boldness_line = NEUTRAL,
-                                         const float boldness_text = NEUTRAL,
                                          const bool stipple_line = false)
 {
-
     drawHorizontalLine(y, boldness_line, stipple_line);
 
     const int right_x{marginCorrected(X_DISPLAY_RESOLUTION) +
@@ -83,26 +80,19 @@ static void drawHorizontalLineWithLabels(const int y, const char *unit_label,
 
     const std::string voltage_value{std::to_string(scaleYToVoltage_mV(y))};
 
-    textPrinter.drawText(right_x, upper_line_y, voltage_value.c_str(), font_size,
-                         color_rgb, boldness_text);
-    textPrinter.drawText(right_x, lower_line_y, unit_label, font_size, color_rgb,
-                         boldness_text);
-    textPrinter.drawText(left_x, upper_line_y, voltage_value.c_str(), font_size,
-                         color_rgb, boldness_text);
-    textPrinter.drawText(left_x, lower_line_y, unit_label, font_size, color_rgb,
-                         boldness_text);
+    textPrinter.drawText(right_x, upper_line_y, voltage_value.c_str());
+    textPrinter.drawText(right_x, lower_line_y, unit_label);
+    textPrinter.drawText(left_x, upper_line_y, voltage_value.c_str());
+    textPrinter.drawText(left_x, lower_line_y, unit_label);
 }
 
 // TODO: move value_label generation inside
 static void drawVerticalLineWithLabels(const int x, const char *value_label,
                                        const char *unit_label,
-                                       const float font_size,
-                                       const float color_rgb,
+                                       const TextPrinter &textPrinter,
                                        const float boldness_line = NEUTRAL,
-                                       const float boldness_text = NEUTRAL,
                                        const bool stipple_line = false)
 {
-
     drawVerticalLine(x, boldness_line, stipple_line);
 
     const int upper_unit_y{marginCorrected(Y_DISPLAY_RESOLUTION) +
@@ -112,14 +102,10 @@ static void drawVerticalLineWithLabels(const int x, const char *value_label,
                             static_cast<uint16_t>(2 * VERY_BOLD) - 20};
     const int lower_unit_y{lower_value_y - 20};
 
-    textPrinter.drawText(marginCorrected(x) - 20, upper_value_y, value_label,
-                         font_size, color_rgb, boldness_text);
-    textPrinter.drawText(marginCorrected(x) - 10, upper_unit_y, unit_label,
-                         font_size, color_rgb, boldness_text);
-    textPrinter.drawText(marginCorrected(x) - 20, lower_value_y, value_label,
-                         font_size, color_rgb, boldness_text);
-    textPrinter.drawText(marginCorrected(x) - 10, lower_unit_y, unit_label,
-                         font_size, color_rgb, boldness_text);
+    textPrinter.drawText(marginCorrected(x) - 20, upper_value_y, value_label);
+    textPrinter.drawText(marginCorrected(x) - 10, upper_unit_y, unit_label);
+    textPrinter.drawText(marginCorrected(x) - 20, lower_value_y, value_label);
+    textPrinter.drawText(marginCorrected(x) - 10, lower_unit_y, unit_label);
 }
 
 static void drawTriggerIndicator(const int x, const int y)
@@ -127,22 +113,18 @@ static void drawTriggerIndicator(const int x, const int y)
     glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
 
     drawVerticalLine(x, NEUTRAL);
-    drawHorizontalLineWithLabels(y, "mV", FONT_SIZE_LARGE, COLOR_RGB_WHITE,
-                                 NEUTRAL, NEUTRAL);
+    drawHorizontalLineWithLabels(y, "mV", textPrinterForTriggerIndicator,
+                                 NEUTRAL);
 }
 
 static void drawHorizontalGrid(const int numOfHorizontalLayers)
 {
     const int middle_y{Y_DISPLAY_RESOLUTION / 2};
 
-    drawHorizontalLineWithLabels(middle_y, " mV", FONT_SIZE_SMALL,
-                                 COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
-
-    drawHorizontalLineWithLabels(0, " mV", FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY,
-                                 NEUTRAL, BOLD, true);
-
-    drawHorizontalLineWithLabels(Y_DISPLAY_RESOLUTION, " mV", FONT_SIZE_SMALL,
-                                 COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+    drawHorizontalLineWithLabels(middle_y, " mV", textPrinterForGrid, NEUTRAL, true);
+    drawHorizontalLineWithLabels(0, " mV", textPrinterForGrid, NEUTRAL, true);
+    drawHorizontalLineWithLabels(Y_DISPLAY_RESOLUTION, " mV", textPrinterForGrid,
+                                 NEUTRAL, true);
 
     const float delta_y{Y_DISPLAY_RESOLUTION / (2.0f * numOfHorizontalLayers)};
     for (int i = 1; i < numOfHorizontalLayers; ++i)
@@ -150,10 +132,8 @@ static void drawHorizontalGrid(const int numOfHorizontalLayers)
         const int upper_y{middle_y + static_cast<int>(i * delta_y)};
         const int lower_y{middle_y - static_cast<int>(i * delta_y)};
 
-        drawHorizontalLineWithLabels(upper_y, " mV", FONT_SIZE_SMALL,
-                                     COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
-        drawHorizontalLineWithLabels(lower_y, " mV", FONT_SIZE_SMALL,
-                                     COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+        drawHorizontalLineWithLabels(upper_y, " mV", textPrinterForGrid, NEUTRAL, true);
+        drawHorizontalLineWithLabels(lower_y, " mV", textPrinterForGrid, NEUTRAL, true);
     }
 }
 
@@ -161,8 +141,7 @@ static void drawVerticalGrid(const int numOfVerticalLayers)
 {
     const int middle_x{X_DISPLAY_RESOLUTION / 2};
 
-    drawVerticalLineWithLabels(middle_x, "0", "us", FONT_SIZE_SMALL,
-                               COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+    drawVerticalLineWithLabels(middle_x, "0", "us", textPrinterForGrid, BOLD, true);
 
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
@@ -171,10 +150,8 @@ static void drawVerticalGrid(const int numOfVerticalLayers)
         const int right_x{middle_x + static_cast<int>(i * delta_x)};
         const int left_x{middle_x - static_cast<int>(i * delta_x)};
 
-        drawVerticalLineWithLabels(right_x, nullptr, "us", FONT_SIZE_SMALL,
-                                   COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
-        drawVerticalLineWithLabels(left_x, nullptr, "us", FONT_SIZE_SMALL,
-                                   COLOR_RGB_DARK_GRAY, NEUTRAL, BOLD, true);
+        drawVerticalLineWithLabels(right_x, nullptr, "us", textPrinterForGrid, NEUTRAL, true);
+        drawVerticalLineWithLabels(left_x, nullptr, "us", textPrinterForGrid, NEUTRAL, true);
     }
 }
 
