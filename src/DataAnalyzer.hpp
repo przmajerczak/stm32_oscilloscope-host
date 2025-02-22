@@ -14,6 +14,6 @@ public:
 
 private:
     AdcValues centerValuesOnTrigger(const AdcValues &current_values, DynamicData &dynamicData);
-    std::vector<std::size_t> detectTriggers(const AdcValues &current_values);
-    bool isTrigger(const uint16_t leftValue, const uint16_t rightValue);
+    std::vector<std::size_t> detectTriggers(const DynamicData &dynamicData, const AdcValues &current_values);
+    bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue, const uint16_t rightValue);
 };

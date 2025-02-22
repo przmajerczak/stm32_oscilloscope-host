@@ -4,7 +4,6 @@
 #include <thread>
 
 #include "controls/VerticalBoundControls.hpp"
-#include "controls/TriggerControls.hpp"
 
 void SettingsWindow::configure()
 {
@@ -23,7 +22,7 @@ void SettingsWindow::configure()
 void SettingsWindow::fill(DynamicData &dynamicData)
 {
     temporaryFrequencyControls.prepare(dynamicData);
-    TriggerControls::prepare();
+    triggerControls.prepare(dynamicData);
     VerticalBoundControls::prepare();
 
     constexpr int spacing{0};
@@ -32,7 +31,7 @@ void SettingsWindow::fill(DynamicData &dynamicData)
 
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(vbox), temporaryFrequencyControls.getFrequencyControlsContainer(), FALSE, TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(vbox), TriggerControls::getTriggerControlsContainer(), FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), triggerControls.getTriggerControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), VerticalBoundControls::getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
 }
 

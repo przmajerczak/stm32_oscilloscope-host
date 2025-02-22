@@ -3,6 +3,7 @@
 #include <gtk/gtk.h>
 
 #include "controls/TemporaryFrequencyControls.hpp"
+#include "controls/TriggerControls.hpp"
 #include "sharedData/DynamicData.hpp"
 
 class SettingsWindow
@@ -17,4 +18,5 @@ private:
     GtkWidget *window;
 
     TemporaryFrequencyControls temporaryFrequencyControls;
+    TriggerControls triggerControls;
 };

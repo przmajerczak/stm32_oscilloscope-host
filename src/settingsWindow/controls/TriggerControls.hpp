@@ -1,14 +1,18 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include "sharedData/types.hpp"
+#include "sharedData/DynamicData.hpp"
 
 class TriggerControls
 {
 public:
-    static void prepare();
-    static GtkWidget* getTriggerControlsContainer();
+    void prepare(DynamicData &dynamicData);
+    GtkWidget *getTriggerControlsContainer();
 
-    static uint16_t getTriggerThresholdY();
-    static ThresholdTrigger getThresholdTrigger();
+private:
+    GtkWidget *thresholdLabel = nullptr;
+    GtkWidget *triggerThresholdSlider = nullptr;
+    GtkWidget *triggerLabel = nullptr;
+    GtkWidget *triggerRisingEdgeButton = nullptr;
+    GtkWidget *triggerFallingEdgeButton = nullptr;
 };

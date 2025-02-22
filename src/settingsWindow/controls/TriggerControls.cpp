@@ -1,22 +1,11 @@
 #include "TriggerControls.hpp"
 
 #include "sharedData/constants.hpp"
-
-namespace
-{
-    GtkWidget *thresholdLabel = nullptr;
-    GtkWidget *triggerThresholdSlider = nullptr;
-    GtkWidget *triggerLabel = nullptr;
-    GtkWidget *triggerRisingEdgeButton = nullptr;
-    GtkWidget *triggerFallingEdgeButton = nullptr;
-
-    uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
-    ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
-} // namespace
+#include "sharedData/types.hpp"
 
 void triggerThresholdSliderOnChangeAction(GtkRange *range, gpointer data)
 {
-    uint16_t* triggerThresholdSliderValue_ptr = (uint16_t*)data;
+    uint16_t *triggerThresholdSliderValue_ptr = (uint16_t *)data;
     *triggerThresholdSliderValue_ptr =
         static_cast<uint16_t>(gtk_range_get_value(range));
 }
@@ -34,7 +23,7 @@ void onTriggerFallingEdgeButtonClicked(GtkWidget *button, gpointer data)
     *thresholdTrigger_ptr = ThresholdTrigger::FALLING_EDGE;
 }
 
-void TriggerControls::prepare()
+void TriggerControls::prepare(DynamicData &dynamicData)
 {
     thresholdLabel = gtk_label_new("Threshold trigger value:");
     gtk_widget_set_hexpand(thresholdLabel, TRUE);
@@ -47,31 +36,34 @@ void TriggerControls::prepare()
                         DEFAULT_TRIGGER_THRESHOLD);
 
     g_signal_connect(triggerThresholdSlider, "value-changed",
-                     G_CALLBACK(triggerThresholdSliderOnChangeAction), &triggerThresholdSliderValue);
+                     G_CALLBACK(triggerThresholdSliderOnChangeAction),
+                     &(dynamicData.triggerThresholdSliderValue));
 
     triggerLabel = gtk_label_new("Threshold trigger edge:");
     gtk_widget_set_hexpand(triggerLabel, TRUE);
 
     triggerRisingEdgeButton = gtk_button_new_with_label("__/‾‾");
     g_signal_connect(triggerRisingEdgeButton, "clicked",
-                     G_CALLBACK(onTriggerRisingEdgeButtonClicked), &thresholdTrigger);
+                     G_CALLBACK(onTriggerRisingEdgeButtonClicked),
+                     &(dynamicData.thresholdTrigger));
 
     triggerFallingEdgeButton = gtk_button_new_with_label("‾‾\\__");
     g_signal_connect(triggerFallingEdgeButton, "clicked",
-                     G_CALLBACK(onTriggerFallingEdgeButtonClicked), &thresholdTrigger);
+                     G_CALLBACK(onTriggerFallingEdgeButtonClicked),
+                     &(dynamicData.thresholdTrigger));
 }
 
 GtkWidget *TriggerControls::getTriggerControlsContainer()
 {
     GtkWidget *triggerControlsGrid = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), thresholdLabel, 0, 0, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerThresholdSlider, 0, 1, 2, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerThresholdSlider, 0, 1,
+                    2, 1);
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerLabel, 0, 2, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerRisingEdgeButton, 0, 3, 1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerFallingEdgeButton, 1, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerRisingEdgeButton, 0, 3,
+                    1, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerFallingEdgeButton, 1, 3,
+                    1, 1);
 
     return triggerControlsGrid;
 }
-
-uint16_t TriggerControls::getTriggerThresholdY() { return triggerThresholdSliderValue; }
-ThresholdTrigger TriggerControls::getThresholdTrigger() { return thresholdTrigger; }

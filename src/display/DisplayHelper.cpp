@@ -29,7 +29,7 @@ void DisplayHelper::display(DynamicData &dynamicData)
     drawWaveform(dynamicData);
 
     lineDrawer.drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
-                                    TriggerControls::getTriggerThresholdY());
+                                    dynamicData.triggerThresholdSliderValue);
     lineDrawer.drawDisplayAreaBorder();
 
     glFlush();

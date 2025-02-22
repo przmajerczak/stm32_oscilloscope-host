@@ -16,7 +16,7 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values,
                                               DynamicData &dynamicData) // TODO: change this name
 
 {
-    const auto triggersIndexes{detectTriggers(current_values)};
+    const auto triggersIndexes{detectTriggers(dynamicData, current_values)};
 
     dynamicData.thresholdTriggersSinceLastFreqLabelReset += triggersIndexes.size();
 
@@ -50,7 +50,7 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values,
 }
 
 std::vector<std::size_t>
-DataAnalyzer::detectTriggers(const AdcValues &current_values)
+DataAnalyzer::detectTriggers(const DynamicData &dynamicData, const AdcValues &current_values)
 {
     std::vector<std::size_t> triggersIndexes;
 
@@ -59,7 +59,7 @@ DataAnalyzer::detectTriggers(const AdcValues &current_values)
         const auto currentValue{current_values.at(idx)};
         const auto nextValue{current_values.at(idx + 1)};
 
-        if (isTrigger(currentValue, nextValue))
+        if (isTrigger(dynamicData, currentValue, nextValue))
         {
             triggersIndexes.push_back(idx);
         }
@@ -68,11 +68,11 @@ DataAnalyzer::detectTriggers(const AdcValues &current_values)
     return triggersIndexes;
 }
 
-bool DataAnalyzer::isTrigger(const uint16_t leftValue,
+bool DataAnalyzer::isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
                              const uint16_t rightValue)
 {
-    const uint16_t threshold{scaleYToAdcWithinBounds(TriggerControls::getTriggerThresholdY())};
-    const ThresholdTrigger trigger{TriggerControls::getThresholdTrigger()};
+    const uint16_t threshold{scaleYToAdcWithinBounds(dynamicData.triggerThresholdSliderValue)};
+    const ThresholdTrigger trigger{dynamicData.thresholdTrigger};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)
     {
