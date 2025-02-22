@@ -10,6 +10,12 @@ public:
     GtkWidget *getTriggerControlsContainer();
 
 private:
+    void prepareThresholdLabel(DynamicData &dynamicData);
+    void prepareTriggerThresholdSlider(DynamicData &dynamicData);
+    void prepareTriggerLabel(DynamicData &dynamicData);
+    void prepareTriggerRisingEdgeButton(DynamicData &dynamicData);
+    void prepareTriggerFallingEdgeButton(DynamicData &dynamicData);
+
     GtkWidget *thresholdLabel = nullptr;
     GtkWidget *triggerThresholdSlider = nullptr;
     GtkWidget *triggerLabel = nullptr;
