@@ -1,94 +1,85 @@
 #include "DisplayHelper.hpp"
 #include "settingsWindow/controls/TriggerControls.hpp"
-
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
-#include <GL/glut.h>
-#include "utils/LineDrawer.hpp"
 
-namespace
+void DisplayHelper::display(DynamicData &dynamicData)
 {
-    bool display_trigger_flag{true};
-    AdcValues adcValues{0};
-    LineDrawer lineDrawer;
-} // namespace
+    glClear(GL_COLOR_BUFFER_BIT);
 
-void DisplayHelper::triggerDisplay(const AdcValues &values)
-{
-    adcValues = std::move(values);
-    display_trigger_flag = true;
-}
+    lineDrawer.drawGrid(5, 4);
 
-void DisplayHelper::display()
-{
-    if (display_trigger_flag)
+    glPointSize(1.0);
+    glColor3f(1.0, 1.0, 0.0);
+    glLineWidth(2.0);
+
+    glBegin(GL_LINE_STRIP); // TODO: extract to method
+
+    float x{static_cast<float>(marginCorrected(0))};
+    int y;
+
+    auto value_it{dynamicData.adcValuesToDisplay.begin()};
+    while (*value_it == INVALID_VALUE)
     {
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        lineDrawer.drawGrid(5, 4);
-
-        glPointSize(1.0);
-        glColor3f(1.0, 1.0, 0.0);
-        glLineWidth(2.0);
-
-        glBegin(GL_LINE_STRIP);
-
-        float x{static_cast<float>(marginCorrected(0))};
-        int y;
-
-        auto value_it{adcValues.begin()};
-        while (*value_it == INVALID_VALUE)
-        {
-            x += X_LENGTH;
-            ++value_it;
-        }
-
-        for (value_it; value_it != adcValues.end(); ++value_it)
-        {
-
-            if (*value_it == INVALID_VALUE)
-            {
-                break;
-            }
-
-            y = marginCorrected(scaleAdcValueToY(*value_it));
-
-            glVertex2f(x, y);
-
-            x += X_LENGTH;
-        }
-
-        glEnd();
-
-        lineDrawer.drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
-                                        TriggerControls::getTriggerThresholdY());
-        lineDrawer.drawDisplayAreaBorder();
-
-        glFlush();
-
-        display_trigger_flag = false;
+        x += X_LENGTH;
+        ++value_it;
     }
 
-    glutPostRedisplay();
+    for (value_it; value_it != dynamicData.adcValuesToDisplay.end(); ++value_it)
+    {
+        if (*value_it == INVALID_VALUE)
+        {
+            break;
+        }
+
+        y = marginCorrected(scaleAdcValueToY(*value_it));
+        glVertex2f(x, y);
+        x += X_LENGTH;
+    }
+    glEnd();
+
+    lineDrawer.drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
+                                    TriggerControls::getTriggerThresholdY());
+    lineDrawer.drawDisplayAreaBorder();
+
+    glFlush();
 }
 
-void DisplayHelper::init(int argc, char **argv)
+void DisplayHelper::init()
 {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(X_WINDOW_SIZE, Y_WINDOW_SIZE);
-    glutInitWindowPosition(X_INITIAL_WINDOW_POSITION, Y_INITIAL_WINDOW_POSITION);
-    glutCreateWindow("STM32 Oscilloscope");
+    glfwInit();
+    window = glfwCreateWindow(X_WINDOW_SIZE, Y_WINDOW_SIZE, "STM32 Oscilloscope", nullptr, nullptr);
 
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glfwSetWindowPos(window, X_INITIAL_WINDOW_POSITION, Y_INITIAL_WINDOW_POSITION);
+    glfwMakeContextCurrent(window);
 
+    auto framebuffer_size_callback = [](GLFWwindow *window, int width, int height)
+    { glViewport(0, 0, width, height); };
+
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0.0, X_WINDOW_SIZE, 0.0, Y_WINDOW_SIZE);
 }
 
-void DisplayHelper::run()
+void DisplayHelper::run(DynamicData &dynamicData)
 {
-    glutDisplayFunc(display);
-    glutMainLoop();
+    constexpr double fps{100.0};
+    constexpr double frame_duration{1.0 / fps};
+    double last_frame_time{0.0};
+
+    while (!glfwWindowShouldClose(window))
+    {
+        const double current_time{glfwGetTime()};
+        const bool time_for_new_frame{(current_time - last_frame_time) >= frame_duration};
+        if (time_for_new_frame)
+        {
+            display(dynamicData);
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+
+            last_frame_time = current_time;
+        }
+    }
 }

@@ -1,5 +1,7 @@
 #include "LineDrawer.hpp"
 
+#include <GL/glew.h>
+
 void LineDrawer::drawTriggerIndicator(const int x, const int y)
 {
     glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);

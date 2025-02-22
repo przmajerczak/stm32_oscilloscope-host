@@ -7,14 +7,15 @@ int main(int argc, char **argv)
 {
     DynamicData dynamicData{};
 
-    DisplayHelper::init(argc, argv);
-
     DataRetriever dataRetriever{};
     SettingsWindow settingsWindow{};
+    DisplayHelper displayHelper{};
+
+    displayHelper.init(); // TODO: move init to constructor
 
     dataRetriever.runContinuousDataRetrieve(dynamicData);
     settingsWindow.runAsSeparateThread(dynamicData);
-    DisplayHelper::run();
+    displayHelper.run(dynamicData);
 
     return 0;
 }

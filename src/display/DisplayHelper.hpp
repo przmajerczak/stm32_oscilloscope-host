@@ -1,15 +1,19 @@
 #pragma once
 
+#include "sharedData/DynamicData.hpp"
 #include "sharedData/types.hpp"
+#include "utils/LineDrawer.hpp"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 class DisplayHelper
 {
 public:
-    static void init(int argc, char **argv);
-    static void run();
-
-    static void triggerDisplay(const AdcValues &values);
+    void init();
+    void run(DynamicData &dynamicData);
 
 private:
-    static void display();
+    void display(DynamicData &dynamicData);
+    LineDrawer lineDrawer;
+    GLFWwindow *window = nullptr;
 };

@@ -73,7 +73,7 @@ void VerticalBoundControls::verticalLowerBoundSliderOnChangeAction(GtkRange *ran
 {
     vertical_lower_bound = static_cast<uint16_t>(gtk_range_get_value(range));
 
-    if (vertical_lower_bound > vertical_upper_bound)
+    if (vertical_lower_bound > vertical_upper_bound) // TODO: ensure step difference, instead of equaling both sliders
     {
         vertical_upper_bound = vertical_lower_bound;
         gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),

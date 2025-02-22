@@ -5,14 +5,16 @@
 #include "sharedData/types.hpp"
 #include "utils.hpp"
 
-void DataAnalyzer::handleData(const AdcValues &current_values, DynamicData &dynamicData)
+void DataAnalyzer::handleData(const AdcValues &current_values,
+                              DynamicData &dynamicData)
 {
-    AdcValues valuesToDisplay{centerValuesOnTrigger(current_values, dynamicData)};
-
-    DisplayHelper::triggerDisplay(valuesToDisplay);
+    dynamicData.adcValuesToDisplay =
+        std::move(centerValuesOnTrigger(current_values, dynamicData));
 }
 
-AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values, DynamicData &dynamicData)
+AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values,
+                                              DynamicData &dynamicData) // TODO: change this name
+
 {
     const auto triggersIndexes{detectTriggers(current_values)};
 

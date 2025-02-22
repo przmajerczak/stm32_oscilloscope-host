@@ -1,7 +1,7 @@
 #include "TextPrinter.hpp"
 
 #include "sharedData/constants.hpp"
-#include <GL/glut.h>
+#include <GL/glew.h>
 
 TextPrinter::TextPrinter(const float font_size, const float color_rgb, const float boldness) : color_rgb(color_rgb), boldness(boldness)
 {
