@@ -1,23 +1,37 @@
-#pragma once
+#include "LineDrawer.hpp"
 
-#include "display/utils/TextPrinter.hpp"
-#include "sharedData/constants.hpp"
-#include "utils.hpp"
-#include <GL/glut.h>
-#include <string>
-
-/*
-    TODO:
-        - encapsulate contents as class
-*/
-namespace
+void LineDrawer::drawTriggerIndicator(const int x, const int y)
 {
-    TextPrinter textPrinterForTriggerIndicator(FONT_SIZE_LARGE, COLOR_RGB_WHITE, NEUTRAL);
-    TextPrinter textPrinterForGrid(FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL);
-} // namespace
+    glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
 
-static void drawHorizontalLine(const int y, const float boldness,
-                               const bool stipple_line = false)
+    drawVerticalLine(x, NEUTRAL);
+    drawHorizontalLineWithLabels(y, "mV", textPrinterForTriggerIndicator,
+                                 NEUTRAL);
+}
+
+void LineDrawer::drawGrid(const int numOfVerticalLayers,
+                          const int numOfHorizontalLayers)
+{
+    glColor3f(COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY);
+
+    drawHorizontalGrid(numOfHorizontalLayers);
+    drawVerticalGrid(numOfVerticalLayers);
+}
+
+void LineDrawer::drawDisplayAreaBorder()
+{
+    glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
+
+    constexpr float HALF_THICKNESS{VERY_BOLD / 2};
+
+    drawVerticalLine(-1 * HALF_THICKNESS, VERY_BOLD);
+    drawVerticalLine(X_DISPLAY_RESOLUTION + HALF_THICKNESS, VERY_BOLD);
+    drawHorizontalLine(-1 * HALF_THICKNESS, VERY_BOLD);
+    drawHorizontalLine(Y_DISPLAY_RESOLUTION + HALF_THICKNESS, VERY_BOLD);
+}
+
+void LineDrawer::drawHorizontalLine(const int y, const float boldness,
+                                    const bool stipple_line)
 {
     if (stipple_line)
     {
@@ -40,8 +54,8 @@ static void drawHorizontalLine(const int y, const float boldness,
     }
 }
 
-static void drawVerticalLine(const int x, const float boldness,
-                             const bool stipple_line = false)
+void LineDrawer::drawVerticalLine(const int x, const float boldness,
+                                  const bool stipple_line)
 {
 
     if (stipple_line)
@@ -65,10 +79,10 @@ static void drawVerticalLine(const int x, const float boldness,
     }
 }
 
-static void drawHorizontalLineWithLabels(const int y, const char *unit_label,
-                                         const TextPrinter &textPrinter,
-                                         const float boldness_line = NEUTRAL,
-                                         const bool stipple_line = false)
+void LineDrawer::drawHorizontalLineWithLabels(const int y, const char *unit_label,
+                                              const TextPrinter &textPrinter,
+                                              const float boldness_line,
+                                              const bool stipple_line)
 {
     drawHorizontalLine(y, boldness_line, stipple_line);
 
@@ -87,11 +101,11 @@ static void drawHorizontalLineWithLabels(const int y, const char *unit_label,
 }
 
 // TODO: move value_label generation inside
-static void drawVerticalLineWithLabels(const int x, const char *value_label,
-                                       const char *unit_label,
-                                       const TextPrinter &textPrinter,
-                                       const float boldness_line = NEUTRAL,
-                                       const bool stipple_line = false)
+void LineDrawer::drawVerticalLineWithLabels(const int x, const char *value_label,
+                                            const char *unit_label,
+                                            const TextPrinter &textPrinter,
+                                            const float boldness_line,
+                                            const bool stipple_line)
 {
     drawVerticalLine(x, boldness_line, stipple_line);
 
@@ -108,16 +122,7 @@ static void drawVerticalLineWithLabels(const int x, const char *value_label,
     textPrinter.drawText(marginCorrected(x) - 10, lower_unit_y, unit_label);
 }
 
-static void drawTriggerIndicator(const int x, const int y)
-{
-    glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
-
-    drawVerticalLine(x, NEUTRAL);
-    drawHorizontalLineWithLabels(y, "mV", textPrinterForTriggerIndicator,
-                                 NEUTRAL);
-}
-
-static void drawHorizontalGrid(const int numOfHorizontalLayers)
+void LineDrawer::drawHorizontalGrid(const int numOfHorizontalLayers)
 {
     const int middle_y{Y_DISPLAY_RESOLUTION / 2};
 
@@ -137,7 +142,7 @@ static void drawHorizontalGrid(const int numOfHorizontalLayers)
     }
 }
 
-static void drawVerticalGrid(const int numOfVerticalLayers)
+void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 {
     const int middle_x{X_DISPLAY_RESOLUTION / 2};
 
@@ -153,25 +158,4 @@ static void drawVerticalGrid(const int numOfVerticalLayers)
         drawVerticalLineWithLabels(right_x, nullptr, "us", textPrinterForGrid, NEUTRAL, true);
         drawVerticalLineWithLabels(left_x, nullptr, "us", textPrinterForGrid, NEUTRAL, true);
     }
-}
-
-static void drawGrid(const int numOfVerticalLayers,
-                     const int numOfHorizontalLayers)
-{
-    glColor3f(COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY);
-
-    drawHorizontalGrid(numOfHorizontalLayers);
-    drawVerticalGrid(numOfVerticalLayers);
-}
-
-static void drawDisplayAreaBorder()
-{
-    glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
-
-    constexpr float HALF_THICKNESS{VERY_BOLD / 2};
-
-    drawVerticalLine(-1 * HALF_THICKNESS, VERY_BOLD);
-    drawVerticalLine(X_DISPLAY_RESOLUTION + HALF_THICKNESS, VERY_BOLD);
-    drawHorizontalLine(-1 * HALF_THICKNESS, VERY_BOLD);
-    drawHorizontalLine(Y_DISPLAY_RESOLUTION + HALF_THICKNESS, VERY_BOLD);
 }

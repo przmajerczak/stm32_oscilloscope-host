@@ -4,12 +4,13 @@
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
 #include <GL/glut.h>
-#include "utils/drawingUtils.hpp"
+#include "utils/LineDrawer.hpp"
 
 namespace
 {
     bool display_trigger_flag{true};
     AdcValues adcValues{0};
+    LineDrawer lineDrawer;
 } // namespace
 
 void DisplayHelper::triggerDisplay(const AdcValues &values)
@@ -24,7 +25,7 @@ void DisplayHelper::display()
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        drawGrid(5, 4);
+        lineDrawer.drawGrid(5, 4);
 
         glPointSize(1.0);
         glColor3f(1.0, 1.0, 0.0);
@@ -59,9 +60,9 @@ void DisplayHelper::display()
 
         glEnd();
 
-        drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
-                             TriggerControls::getTriggerThresholdY());
-        drawDisplayAreaBorder();
+        lineDrawer.drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
+                                        TriggerControls::getTriggerThresholdY());
+        lineDrawer.drawDisplayAreaBorder();
 
         glFlush();
 
