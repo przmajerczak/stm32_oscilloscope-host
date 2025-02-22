@@ -3,17 +3,46 @@
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
 
+DisplayHelper::DisplayHelper()
+{
+    glfwInit();
+    window = glfwCreateWindow(X_WINDOW_SIZE, Y_WINDOW_SIZE, "STM32 Oscilloscope", nullptr, nullptr);
+
+    glfwSetWindowPos(window, X_INITIAL_WINDOW_POSITION, Y_INITIAL_WINDOW_POSITION);
+    glfwMakeContextCurrent(window);
+
+    auto framebuffer_size_callback = [](GLFWwindow *window, int width, int height)
+    { glViewport(0, 0, width, height); };
+
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0, X_WINDOW_SIZE, 0.0, Y_WINDOW_SIZE);
+}
+
 void DisplayHelper::display(DynamicData &dynamicData)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
     lineDrawer.drawGrid(5, 4);
 
+    drawWaveform(dynamicData);
+
+    lineDrawer.drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
+                                    TriggerControls::getTriggerThresholdY());
+    lineDrawer.drawDisplayAreaBorder();
+
+    glFlush();
+}
+
+void DisplayHelper::drawWaveform(DynamicData &dynamicData)
+{
+
     glPointSize(1.0);
     glColor3f(1.0, 1.0, 0.0);
     glLineWidth(2.0);
 
-    glBegin(GL_LINE_STRIP); // TODO: extract to method
+    glBegin(GL_LINE_STRIP);
 
     float x{static_cast<float>(marginCorrected(0))};
     int y;
@@ -37,29 +66,6 @@ void DisplayHelper::display(DynamicData &dynamicData)
         x += X_LENGTH;
     }
     glEnd();
-
-    lineDrawer.drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
-                                    TriggerControls::getTriggerThresholdY());
-    lineDrawer.drawDisplayAreaBorder();
-
-    glFlush();
-}
-
-void DisplayHelper::init()
-{
-    glfwInit();
-    window = glfwCreateWindow(X_WINDOW_SIZE, Y_WINDOW_SIZE, "STM32 Oscilloscope", nullptr, nullptr);
-
-    glfwSetWindowPos(window, X_INITIAL_WINDOW_POSITION, Y_INITIAL_WINDOW_POSITION);
-    glfwMakeContextCurrent(window);
-
-    auto framebuffer_size_callback = [](GLFWwindow *window, int width, int height)
-    { glViewport(0, 0, width, height); };
-
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0.0, X_WINDOW_SIZE, 0.0, Y_WINDOW_SIZE);
 }
 
 void DisplayHelper::run(DynamicData &dynamicData)

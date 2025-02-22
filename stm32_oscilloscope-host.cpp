@@ -11,8 +11,6 @@ int main(int argc, char **argv)
     SettingsWindow settingsWindow{};
     DisplayHelper displayHelper{};
 
-    displayHelper.init(); // TODO: move init to constructor
-
     dataRetriever.runContinuousDataRetrieve(dynamicData);
     settingsWindow.runAsSeparateThread(dynamicData);
     displayHelper.run(dynamicData);
