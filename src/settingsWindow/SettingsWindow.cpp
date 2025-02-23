@@ -19,18 +19,18 @@ void SettingsWindow::configure()
 
 void SettingsWindow::fill(DynamicData &dynamicData)
 {
-    temporaryFrequencyControls.prepare(dynamicData);
     triggerControls.prepare(dynamicData);
     verticalBoundControls.prepare(dynamicData);
+    measurementsControls.prepare(dynamicData);
 
     constexpr int spacing{0};
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
     constexpr int padding{0};
-    gtk_box_pack_start(GTK_BOX(vbox), temporaryFrequencyControls.getFrequencyControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), triggerControls.getTriggerControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), verticalBoundControls.getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), measurementsControls.getFrequencyControlsContainer(), FALSE, TRUE, padding);
 }
 
 void SettingsWindow::runAsSeparateThread(DynamicData &dynamicData)

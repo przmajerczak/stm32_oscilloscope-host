@@ -1,4 +1,4 @@
-#include "TemporaryFrequencyControls.hpp"
+#include "MeasurementsControls.hpp"
 
 #include "sharedData/constants.hpp"
 #include <iomanip>
@@ -41,7 +41,7 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
     return TRUE;
 }
 
-void TemporaryFrequencyControls::prepare(DynamicData &dynamicData)
+void MeasurementsControls::prepare(DynamicData &dynamicData)
 {
     frequencyLabel = gtk_label_new("Signal frequency: --- Hz");
     gtk_widget_set_hexpand(frequencyLabel, TRUE);
@@ -53,13 +53,13 @@ void TemporaryFrequencyControls::prepare(DynamicData &dynamicData)
                   &callbackData);
 }
 
-GtkWidget *TemporaryFrequencyControls::getFrequencyControlsContainer()
+GtkWidget *MeasurementsControls::getFrequencyControlsContainer()
 {
     constexpr int spacing{0};
-    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
+    GtkWidget *measurementsVerticalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
 
     constexpr int padding{0};
-    gtk_box_pack_start(GTK_BOX(vbox), frequencyLabel, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), frequencyLabel, FALSE, TRUE, padding);
 
-    return vbox;
+    return measurementsVerticalBox;
 }

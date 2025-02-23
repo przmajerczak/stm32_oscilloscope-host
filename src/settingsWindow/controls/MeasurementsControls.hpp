@@ -5,7 +5,7 @@
 #include "CallbackData.hpp"
 #include "sharedData/DynamicData.hpp"
 
-class TemporaryFrequencyControls
+class MeasurementsControls
 {
 public:
     void prepare(DynamicData &dynamicData);

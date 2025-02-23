@@ -2,7 +2,7 @@
 
 #include <gtk/gtk.h>
 
-#include "controls/TemporaryFrequencyControls.hpp"
+#include "controls/MeasurementsControls.hpp"
 #include "controls/TriggerControls.hpp"
 #include "controls/VerticalBoundControls.hpp"
 #include "sharedData/DynamicData.hpp"
@@ -18,7 +18,7 @@ private:
 
     GtkWidget *window;
 
-    TemporaryFrequencyControls temporaryFrequencyControls;
     TriggerControls triggerControls;
     VerticalBoundControls verticalBoundControls;
+    MeasurementsControls measurementsControls;
 };
