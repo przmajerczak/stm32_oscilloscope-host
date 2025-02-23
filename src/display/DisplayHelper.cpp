@@ -20,7 +20,7 @@ DisplayHelper::DisplayHelper()
     gluOrtho2D(0.0, X_WINDOW_SIZE, 0.0, Y_WINDOW_SIZE);
 }
 
-void DisplayHelper::display(DynamicData &dynamicData)
+void DisplayHelper::display(const DynamicData &dynamicData)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -35,8 +35,15 @@ void DisplayHelper::display(DynamicData &dynamicData)
     glFlush();
 }
 
-void DisplayHelper::drawWaveform(DynamicData &dynamicData)
+void DisplayHelper::drawWaveform(const DynamicData &dynamicData)
 {
+    auto adcValuesToDisplay{dynamicData.adcValuesToDisplay}; // TODO: handle multithreading better
+    auto value_it{adcValuesToDisplay.begin()};
+
+    if (value_it == adcValuesToDisplay.end())
+    {
+        return;
+    }
 
     glPointSize(1.0);
     glColor3f(1.0, 1.0, 0.0);
@@ -47,14 +54,13 @@ void DisplayHelper::drawWaveform(DynamicData &dynamicData)
     float x{static_cast<float>(marginCorrected(0))};
     int y;
 
-    auto value_it{dynamicData.adcValuesToDisplay.begin()};
     while (*value_it == INVALID_VALUE)
     {
         x += X_LENGTH;
         ++value_it;
     }
 
-    for (value_it; value_it != dynamicData.adcValuesToDisplay.end(); ++value_it)
+    for (value_it; value_it != adcValuesToDisplay.end(); ++value_it)
     {
         if (*value_it == INVALID_VALUE)
         {
@@ -68,7 +74,7 @@ void DisplayHelper::drawWaveform(DynamicData &dynamicData)
     glEnd();
 }
 
-void DisplayHelper::run(DynamicData &dynamicData)
+void DisplayHelper::run(const DynamicData &dynamicData)
 {
     constexpr double fps{100.0};
     constexpr double frame_duration{1.0 / fps};
