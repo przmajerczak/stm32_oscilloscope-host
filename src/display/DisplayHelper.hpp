@@ -17,6 +17,6 @@ private:
     void display();
     void drawWaveform();
     const DynamicData &dynamicData;
-    LineDrawer lineDrawer;
+    LineDrawer lineDrawer{dynamicData};
     GLFWwindow *window = nullptr;
 };

@@ -2,12 +2,15 @@
 
 #include "display/utils/TextPrinter.hpp"
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 #include "utils.hpp"
 #include <string>
 
 class LineDrawer
 {
 public:
+    LineDrawer(const DynamicData &dynamicData) : dynamicData(dynamicData) {}
+
     void drawTriggerIndicator(const int x, const int y);
     void drawGrid(const int numOfVerticalLayers,
                   const int numOfHorizontalLayers);
@@ -32,4 +35,6 @@ private:
 
     TextPrinter textPrinterForTriggerIndicator{FONT_SIZE_LARGE, COLOR_RGB_WHITE, NEUTRAL};
     TextPrinter textPrinterForGrid{FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL};
+
+    const DynamicData &dynamicData;
 };
