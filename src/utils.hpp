@@ -4,13 +4,14 @@
 
 #include "settingsWindow/controls/VerticalBoundControls.hpp"
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 
 static float yAsPercentOfMaxY(const int y)
 {
     return static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION);
 }
 
-static int scaleAdcValueToY(const uint16_t adc_value)
+static int scaleAdcValueToY([[maybe_unused]] const DynamicData &dynamicData, const uint16_t adc_value)
 {
     const float current_vertical_display_resolution{
         VerticalBoundControls::getVerticalUpperBoundValue() -
@@ -31,11 +32,11 @@ static int scaleAdcValueToY(const uint16_t adc_value)
     }
 
     const int y{static_cast<int>((scaled_adc_value / static_cast<float>(INPUT_SIGNAL_RESOLUTION)) *
-                static_cast<float>(Y_DISPLAY_RESOLUTION))};
+                                 static_cast<float>(Y_DISPLAY_RESOLUTION))};
     return y;
 }
 
-static int scaleYToVoltage_mV(const int y)
+static int scaleYToVoltage_mV([[maybe_unused]] const DynamicData &dynamicData, const int y)
 {
     const float current_vertical_display_resolution{
         VerticalBoundControls::getVerticalUpperBoundValue_mV() -
@@ -45,7 +46,7 @@ static int scaleYToVoltage_mV(const int y)
            VerticalBoundControls::getVerticalLowerBoundValue_mV();
 }
 
-static uint16_t scaleYToAdcWithinBounds(const int y)
+static uint16_t scaleYToAdcWithinBounds([[maybe_unused]] const DynamicData &dynamicData, const int y)
 {
     const float current_vertical_display_resolution{
         VerticalBoundControls::getVerticalUpperBoundValue() -

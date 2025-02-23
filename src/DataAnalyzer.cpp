@@ -71,7 +71,7 @@ DataAnalyzer::detectTriggers(const DynamicData &dynamicData, const AdcValues &cu
 bool DataAnalyzer::isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
                              const uint16_t rightValue)
 {
-    const uint16_t threshold{scaleYToAdcWithinBounds(dynamicData.triggerThresholdSliderValue)};
+    const uint16_t threshold{scaleYToAdcWithinBounds(dynamicData, dynamicData.triggerThresholdSliderValue)};
     const ThresholdTrigger trigger{dynamicData.thresholdTrigger};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)
