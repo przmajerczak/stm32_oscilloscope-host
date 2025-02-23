@@ -23,7 +23,7 @@ void SettingsWindow::fill(DynamicData &dynamicData)
 {
     temporaryFrequencyControls.prepare(dynamicData);
     triggerControls.prepare(dynamicData);
-    VerticalBoundControls::prepare();
+    VerticalBoundControls::prepare(dynamicData);
 
     constexpr int spacing{0};
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);

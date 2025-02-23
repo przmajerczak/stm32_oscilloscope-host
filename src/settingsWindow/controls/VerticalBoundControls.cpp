@@ -43,7 +43,7 @@ void verticalUpperBoundSliderOnChangeAction(GtkRange *range)
     }
 }
 
-void VerticalBoundControls::prepare()
+void VerticalBoundControls::prepare([[maybe_unused]] DynamicData &dynamicData)
 {
     vertical_lower_bound_slider = gtk_scale_new_with_range(
         GTK_ORIENTATION_HORIZONTAL, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
