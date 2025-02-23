@@ -11,15 +11,15 @@ static float yAsPercentOfMaxY(const int y)
     return static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION);
 }
 
-static int scaleAdcValueToY([[maybe_unused]] const DynamicData &dynamicData, const uint16_t adc_value)
+static int scaleAdcValueToY(const DynamicData &dynamicData, const uint16_t adc_value)
 {
     const float current_vertical_display_resolution{
-        VerticalBoundControls::getVerticalUpperBoundValue() -
-        VerticalBoundControls::getVerticalLowerBoundValue()};
+        dynamicData.verticalBoundsData.vertical_upper_bound -
+        dynamicData.verticalBoundsData.vertical_lower_bound};
     const float factor{INPUT_SIGNAL_RESOLUTION /
                        current_vertical_display_resolution};
     float scaled_adc_value{
-        (adc_value - VerticalBoundControls::getVerticalLowerBoundValue()) * factor};
+        (adc_value - dynamicData.verticalBoundsData.vertical_lower_bound) * factor};
 
     // TODO: remove flat lines at the bounds
     if (scaled_adc_value > INPUT_SIGNAL_MAX)
@@ -36,23 +36,23 @@ static int scaleAdcValueToY([[maybe_unused]] const DynamicData &dynamicData, con
     return y;
 }
 
-static int scaleYToVoltage_mV([[maybe_unused]] const DynamicData &dynamicData, const int y)
+static int scaleYToVoltage_mV(const DynamicData &dynamicData, const int y)
 {
     const float current_vertical_display_resolution{
-        VerticalBoundControls::getVerticalUpperBoundValue_mV() -
-        VerticalBoundControls::getVerticalLowerBoundValue_mV()};
+        dynamicData.verticalBoundsData.vertical_upper_bound_mV -
+        dynamicData.verticalBoundsData.vertical_lower_bound_mV};
 
     return (yAsPercentOfMaxY(y) * current_vertical_display_resolution) +
-           VerticalBoundControls::getVerticalLowerBoundValue_mV();
+           dynamicData.verticalBoundsData.vertical_lower_bound_mV;
 }
 
-static uint16_t scaleYToAdcWithinBounds([[maybe_unused]] const DynamicData &dynamicData, const int y)
+static uint16_t scaleYToAdcWithinBounds(const DynamicData &dynamicData, const int y)
 {
     const float current_vertical_display_resolution{
-        VerticalBoundControls::getVerticalUpperBoundValue() -
-        VerticalBoundControls::getVerticalLowerBoundValue()};
+        dynamicData.verticalBoundsData.vertical_upper_bound -
+        dynamicData.verticalBoundsData.vertical_lower_bound};
 
-    return VerticalBoundControls::getVerticalLowerBoundValue() + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
+    return dynamicData.verticalBoundsData.vertical_lower_bound + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
 }
 
 template <typename T>

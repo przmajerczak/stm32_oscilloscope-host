@@ -3,8 +3,6 @@
 #include "sharedData/constants.hpp"
 #include <thread>
 
-#include "controls/VerticalBoundControls.hpp"
-
 void SettingsWindow::configure()
 {
     gtk_init(nullptr, nullptr);
@@ -23,7 +21,7 @@ void SettingsWindow::fill(DynamicData &dynamicData)
 {
     temporaryFrequencyControls.prepare(dynamicData);
     triggerControls.prepare(dynamicData);
-    VerticalBoundControls::prepare(dynamicData);
+    verticalBoundControls.prepare(dynamicData);
 
     constexpr int spacing{0};
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
@@ -32,7 +30,7 @@ void SettingsWindow::fill(DynamicData &dynamicData)
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(vbox), temporaryFrequencyControls.getFrequencyControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), triggerControls.getTriggerControlsContainer(), FALSE, TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(vbox), VerticalBoundControls::getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), verticalBoundControls.getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
 }
 
 void SettingsWindow::runAsSeparateThread(DynamicData &dynamicData)

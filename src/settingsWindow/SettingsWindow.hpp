@@ -4,6 +4,7 @@
 
 #include "controls/TemporaryFrequencyControls.hpp"
 #include "controls/TriggerControls.hpp"
+#include "controls/VerticalBoundControls.hpp"
 #include "sharedData/DynamicData.hpp"
 
 class SettingsWindow
@@ -19,4 +20,5 @@ private:
 
     TemporaryFrequencyControls temporaryFrequencyControls;
     TriggerControls triggerControls;
+    VerticalBoundControls verticalBoundControls;
 };

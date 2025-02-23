@@ -1,15 +1,19 @@
 #pragma once
 
-#include <gtk/gtk.h>
+#include "settingsWindow/controls/CallbackData.hpp"
 #include "sharedData/DynamicData.hpp"
+#include <gtk/gtk.h>
 
 class VerticalBoundControls
 {
 public:
-    static void prepare(DynamicData &dynamicData);
-    static GtkWidget *getVerticalBoundControlsContainer();
-    static float getVerticalLowerBoundValue();
-    static float getVerticalUpperBoundValue();
-    static float getVerticalLowerBoundValue_mV();
-    static float getVerticalUpperBoundValue_mV();
+    void prepare(DynamicData &dynamicData);
+    GtkWidget *getVerticalBoundControlsContainer();
+
+private:
+    GtkWidget *vertical_lower_bound_slider = nullptr;
+    GtkWidget *vertical_upper_bound_slider = nullptr;
+
+    CallbackData<DynamicData> callbackDataForLowerBoundSlider;
+    CallbackData<DynamicData> callbackDataForUpperBoundSlider;
 };
