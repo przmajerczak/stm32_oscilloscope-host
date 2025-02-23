@@ -62,11 +62,15 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
 
 GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
 {
+    GtkWidget *verticalBoundControlsExpander = gtk_expander_new("Vertical bound controls");
+    gtk_expander_set_expanded(GTK_EXPANDER(verticalBoundControlsExpander), TRUE);
+
     GtkWidget *verticalBoundControlsGrid = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(verticalBoundControlsGrid),
                     vertical_lower_bound_slider, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(verticalBoundControlsGrid),
                     vertical_upper_bound_slider, 0, 1, 1, 1);
 
-    return verticalBoundControlsGrid;
+    gtk_container_add(GTK_CONTAINER(verticalBoundControlsExpander), verticalBoundControlsGrid);
+    return verticalBoundControlsExpander;
 }

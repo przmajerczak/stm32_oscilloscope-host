@@ -55,11 +55,15 @@ void MeasurementsControls::prepare(DynamicData &dynamicData)
 
 GtkWidget *MeasurementsControls::getFrequencyControlsContainer()
 {
+    GtkWidget *measurementsControlsExpander = gtk_expander_new("Measurements");
+    gtk_expander_set_expanded(GTK_EXPANDER(measurementsControlsExpander), TRUE);
+
     constexpr int spacing{0};
     GtkWidget *measurementsVerticalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
 
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), frequencyLabel, FALSE, TRUE, padding);
 
-    return measurementsVerticalBox;
+    gtk_container_add(GTK_CONTAINER(measurementsControlsExpander), measurementsVerticalBox);
+    return measurementsControlsExpander;
 }

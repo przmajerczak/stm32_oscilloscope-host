@@ -76,6 +76,9 @@ void TriggerControls::prepareTriggerFallingEdgeButton(DynamicData &dynamicData)
 
 GtkWidget *TriggerControls::getTriggerControlsContainer()
 {
+    GtkWidget *triggerControlsExpander = gtk_expander_new("Trigger controls");
+    gtk_expander_set_expanded(GTK_EXPANDER(triggerControlsExpander), TRUE);
+
     GtkWidget *triggerControlsGrid = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), thresholdLabel, 0, 0, 2, 1);
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerThresholdSlider, 0, 1,
@@ -86,5 +89,6 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerFallingEdgeButton, 1, 3,
                     1, 1);
 
-    return triggerControlsGrid;
+    gtk_container_add(GTK_CONTAINER(triggerControlsExpander), triggerControlsGrid);
+    return triggerControlsExpander;
 }
