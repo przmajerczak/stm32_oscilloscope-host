@@ -31,4 +31,4 @@ constexpr float FONT_SIZE_SMALL{20.0f};
 constexpr float COLOR_RGB_WHITE{1.0};
 constexpr float COLOR_RGB_LIGHT_GRAY{0.6};
 constexpr float COLOR_RGB_DARK_GRAY{0.3};
-constexpr const char* FONT_PATH{"/usr/share/fonts/truetype/ubuntu/UbuntuMono-R.ttf"}; // TODO: add the file to the repo
+constexpr const char* FONT_PATH{"resources/UbuntuMono-R.ttf"};
