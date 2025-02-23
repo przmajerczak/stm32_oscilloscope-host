@@ -19,6 +19,30 @@ float scaleAdcTo_mV(const uint16_t adc_value)
         static_cast<float>(INPUT_SIGNAL_MAX));
 }
 
+void verticalLowerBoundSliderOnChangeAction(GtkRange *range)
+{
+    vertical_lower_bound = static_cast<uint16_t>(gtk_range_get_value(range));
+
+    if (vertical_lower_bound > vertical_upper_bound) // TODO: ensure step difference, instead of equaling both sliders
+    {
+        vertical_upper_bound = vertical_lower_bound;
+        gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),
+                            vertical_upper_bound);
+    }
+}
+
+void verticalUpperBoundSliderOnChangeAction(GtkRange *range)
+{
+    vertical_upper_bound = static_cast<uint16_t>(gtk_range_get_value(range));
+
+    if (vertical_upper_bound < vertical_lower_bound)
+    {
+        vertical_lower_bound = vertical_upper_bound;
+        gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider),
+                            vertical_lower_bound);
+    }
+}
+
 void VerticalBoundControls::prepare()
 {
     vertical_lower_bound_slider = gtk_scale_new_with_range(
@@ -67,28 +91,4 @@ float VerticalBoundControls::getVerticalLowerBoundValue_mV()
 float VerticalBoundControls::getVerticalUpperBoundValue_mV()
 {
     return scaleAdcTo_mV(vertical_upper_bound);
-}
-
-void VerticalBoundControls::verticalLowerBoundSliderOnChangeAction(GtkRange *range)
-{
-    vertical_lower_bound = static_cast<uint16_t>(gtk_range_get_value(range));
-
-    if (vertical_lower_bound > vertical_upper_bound) // TODO: ensure step difference, instead of equaling both sliders
-    {
-        vertical_upper_bound = vertical_lower_bound;
-        gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),
-                            vertical_upper_bound);
-    }
-}
-
-void VerticalBoundControls::verticalUpperBoundSliderOnChangeAction(GtkRange *range)
-{
-    vertical_upper_bound = static_cast<uint16_t>(gtk_range_get_value(range));
-
-    if (vertical_upper_bound < vertical_lower_bound)
-    {
-        vertical_lower_bound = vertical_upper_bound;
-        gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider),
-                            vertical_lower_bound);
-    }
 }

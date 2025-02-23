@@ -11,8 +11,4 @@ public:
     static float getVerticalUpperBoundValue();
     static float getVerticalLowerBoundValue_mV();
     static float getVerticalUpperBoundValue_mV();
-
-private:
-    static void verticalLowerBoundSliderOnChangeAction(GtkRange *range);
-    static void verticalUpperBoundSliderOnChangeAction(GtkRange *range);
 };
