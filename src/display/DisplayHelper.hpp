@@ -9,13 +9,14 @@
 class DisplayHelper
 {
 public:
-    DisplayHelper();
+    DisplayHelper(const DynamicData &dynamicData);
 
-    void run(const DynamicData &dynamicData);
+    void run();
 
 private:
-    void display(const DynamicData &dynamicData);
-    void drawWaveform(const DynamicData &dynamicData);
+    void display();
+    void drawWaveform();
+    const DynamicData &dynamicData;
     LineDrawer lineDrawer;
     GLFWwindow *window = nullptr;
 };

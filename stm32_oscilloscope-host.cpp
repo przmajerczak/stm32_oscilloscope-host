@@ -9,11 +9,11 @@ int main(int argc, char **argv)
 
     DataRetriever dataRetriever{};
     SettingsWindow settingsWindow{};
-    DisplayHelper displayHelper{};
+    DisplayHelper displayHelper{dynamicData};
 
     dataRetriever.runContinuousDataRetrieve(dynamicData);
     settingsWindow.runAsSeparateThread(dynamicData);
-    displayHelper.run(dynamicData);
+    displayHelper.run();
 
     return 0;
 }

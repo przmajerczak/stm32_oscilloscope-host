@@ -3,7 +3,7 @@
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
 
-DisplayHelper::DisplayHelper()
+DisplayHelper::DisplayHelper(const DynamicData &dynamicData) : dynamicData(dynamicData)
 {
     glfwInit();
     window = glfwCreateWindow(X_WINDOW_SIZE, Y_WINDOW_SIZE, "STM32 Oscilloscope", nullptr, nullptr);
@@ -20,13 +20,13 @@ DisplayHelper::DisplayHelper()
     gluOrtho2D(0.0, X_WINDOW_SIZE, 0.0, Y_WINDOW_SIZE);
 }
 
-void DisplayHelper::display(const DynamicData &dynamicData)
+void DisplayHelper::display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
     lineDrawer.drawGrid(5, 4);
 
-    drawWaveform(dynamicData);
+    drawWaveform();
 
     lineDrawer.drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
                                     dynamicData.triggerThresholdSliderValue);
@@ -35,7 +35,7 @@ void DisplayHelper::display(const DynamicData &dynamicData)
     glFlush();
 }
 
-void DisplayHelper::drawWaveform(const DynamicData &dynamicData)
+void DisplayHelper::drawWaveform()
 {
     auto adcValuesToDisplay{dynamicData.adcValuesToDisplay}; // TODO: handle multithreading better
     auto value_it{adcValuesToDisplay.begin()};
@@ -74,7 +74,7 @@ void DisplayHelper::drawWaveform(const DynamicData &dynamicData)
     glEnd();
 }
 
-void DisplayHelper::run(const DynamicData &dynamicData)
+void DisplayHelper::run()
 {
     constexpr double fps{100.0};
     constexpr double frame_duration{1.0 / fps};
@@ -86,7 +86,7 @@ void DisplayHelper::run(const DynamicData &dynamicData)
         const bool time_for_new_frame{(current_time - last_frame_time) >= frame_duration};
         if (time_for_new_frame)
         {
-            display(dynamicData);
+            display();
 
             glfwSwapBuffers(window);
             glfwPollEvents();
