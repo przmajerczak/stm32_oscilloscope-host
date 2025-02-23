@@ -2,6 +2,7 @@
 
 #include "sharedData/constants.hpp"
 #include "sharedData/types.hpp"
+#include "sharedData/VerticalBoundsData.hpp"
 #include <cstdint>
 
 class DynamicData
@@ -11,5 +12,6 @@ public:
     uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
     ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
 
+    VerticalBoundsData verticalBoundsData;
     AdcValues adcValuesToDisplay{};
 };
