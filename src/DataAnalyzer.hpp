@@ -10,10 +10,15 @@ class DataAnalyzer
 public:
     DataAnalyzer() {}
 
-    void handleData(const AdcValues &current_values, DynamicData &dynamicData);
+    void handleData(const AdcValues &current_values,
+                    [[maybe_unused]] const double frame_duration_us,
+                    DynamicData &dynamicData);
 
 private:
-    AdcValues centerValuesOnTrigger(const AdcValues &current_values, DynamicData &dynamicData);
-    std::vector<std::size_t> detectTriggers(const DynamicData &dynamicData, const AdcValues &current_values);
-    bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue, const uint16_t rightValue);
+    AdcValues centerValuesOnTrigger(const AdcValues &current_values,
+                                    DynamicData &dynamicData);
+    std::vector<std::size_t> detectTriggers(const DynamicData &dynamicData,
+                                            const AdcValues &current_values);
+    bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
+                   const uint16_t rightValue);
 };

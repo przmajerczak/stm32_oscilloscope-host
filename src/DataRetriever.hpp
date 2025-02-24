@@ -18,7 +18,8 @@ private:
     EncodedAdcValues retrieveData();
     AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);
     bool configureTty(const int deviceFileDescriptor);
-    uint32_t pullMeasurementPeriodFromUndecodedRetrievedData(
+    double calculateFrameDuration_us(EncodedAdcValues &undecodedRetrievedData);
+    uint32_t pullFrameDurationFromUndecodedRetrievedData(
         EncodedAdcValues &undecodedRetrievedData);
 
     DataAnalyzer dataAnalyzer;

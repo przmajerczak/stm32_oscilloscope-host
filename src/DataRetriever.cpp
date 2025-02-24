@@ -4,6 +4,7 @@
 #include <iostream>
 #include <termios.h>
 #include <thread>
+#include "sharedData/constants.hpp"
 
 extern int errno;
 
@@ -59,11 +60,10 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
         return;
     }
 
-    uint32_t measurement_period{
-        pullMeasurementPeriodFromUndecodedRetrievedData(undecodedRetrievedData)};
+    const double frame_duration_us{calculateFrameDuration_us(undecodedRetrievedData)};
 
     AdcValues retrieved_values{decodeAdcValues(undecodedRetrievedData)};
-    dataAnalyzer.handleData(retrieved_values, dynamicData);
+    dataAnalyzer.handleData(retrieved_values, frame_duration_us, dynamicData);
 }
 
 EncodedAdcValues DataRetriever::retrieveData()
@@ -136,16 +136,26 @@ bool DataRetriever::configureTty(const int deviceFileDescriptor)
     return true;
 }
 
-uint32_t DataRetriever::pullMeasurementPeriodFromUndecodedRetrievedData(
+double DataRetriever::calculateFrameDuration_us(EncodedAdcValues &undecodedRetrievedData)
+{
+    uint32_t timer_doubleticks_per_frame{
+        pullFrameDurationFromUndecodedRetrievedData(undecodedRetrievedData)};
+
+    constexpr double TIMER_COUNTS_UPWARDS_EDGE_TICKS{2.0};
+
+    return timer_doubleticks_per_frame * DEVICE_TIMER_SINGLE_TICK_DURATION_US * TIMER_COUNTS_UPWARDS_EDGE_TICKS;
+}
+
+uint32_t DataRetriever::pullFrameDurationFromUndecodedRetrievedData(
     EncodedAdcValues &undecodedRetrievedData)
 {
-    uint32_t measurement_period{0};
+    uint32_t timer_doubleticks_per_frame{0};
 
     for (int i = 3; i >= 0; --i)
     {
-        measurement_period += (undecodedRetrievedData.back() << (i * 8));
+        timer_doubleticks_per_frame += (undecodedRetrievedData.back() << (i * 8));
         undecodedRetrievedData.pop_back();
     }
 
-    return measurement_period;
+    return timer_doubleticks_per_frame;
 }

@@ -14,4 +14,5 @@ public:
 
     VerticalBoundsData verticalBoundsData;
     AdcValues adcValuesToDisplay{};
+    double frame_duration_us;
 };
