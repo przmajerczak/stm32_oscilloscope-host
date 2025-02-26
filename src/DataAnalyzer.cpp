@@ -22,17 +22,18 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values,
 
     dynamicData.thresholdTriggersSinceLastFreqLabelReset += triggersIndexes.size();
 
+    AdcValues valuesToDisplay;
+    valuesToDisplay.resize(current_values.size());
+
     if (triggersIndexes.size() == 0)
     {
-        return current_values;
+        valuesToDisplay = current_values;
+        return valuesToDisplay;
     }
 
     std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
     const int shiftCountForTriggerCenter{
         static_cast<int>(selectedTrigger - (X_DISPLAY_RESOLUTION / 2))};
-
-    AdcValues valuesToDisplay;
-    valuesToDisplay.resize(current_values.size());
 
     for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
     {
