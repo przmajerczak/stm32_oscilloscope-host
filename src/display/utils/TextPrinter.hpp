@@ -16,13 +16,14 @@ public:
     void drawText(const float x, const float y, const char *text) const;
 
 private:
-    float drawCharacterReturnWidth(const char character, const float x, const float y) const;
+    float drawCharacterReturnWidth(const char character, const float x, float y) const;
     void flipBitmap(FT_Bitmap *bitmap) const;
     void applyColor(FT_Bitmap *bitmap) const;
 
     FT_Library ftLibrary;
     FT_Face ftFace;
 
+    const float font_size;
     const float color_rgb;
     const float boldness;
 };

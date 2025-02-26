@@ -3,7 +3,7 @@
 #include "sharedData/constants.hpp"
 #include <GL/glew.h>
 
-TextPrinter::TextPrinter(const float font_size, const float color_rgb, const float boldness) : color_rgb(color_rgb), boldness(boldness)
+TextPrinter::TextPrinter(const float font_size, const float color_rgb, const float boldness) : font_size(font_size), color_rgb(color_rgb), boldness(boldness)
 {
     FT_Init_FreeType(&ftLibrary);
     FT_New_Face(ftLibrary, FONT_PATH, 0, &ftFace);
@@ -32,7 +32,7 @@ void TextPrinter::drawText(const float x, const float y, const char *text) const
 }
 
 float TextPrinter::drawCharacterReturnWidth(const char character, const float x,
-                                            const float y) const
+                                            float y) const
 {
     FT_Load_Char(ftFace, character, FT_LOAD_RENDER);
 
@@ -41,6 +41,11 @@ float TextPrinter::drawCharacterReturnWidth(const char character, const float x,
 
     flipBitmap(bitmap);
     applyColor(bitmap);
+
+    if (character == '-')
+    {
+        y += font_size / 4; // TODO: make this workaround more elegant
+    }
 
     glRasterPos2f(x + glyph->bitmap_left, y);
     glDrawPixels(bitmap->width, bitmap->rows, GL_LUMINANCE, GL_UNSIGNED_BYTE,
