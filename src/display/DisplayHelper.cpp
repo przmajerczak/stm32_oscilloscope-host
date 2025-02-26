@@ -3,16 +3,22 @@
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
 
-DisplayHelper::DisplayHelper(const DynamicData &dynamicData) : dynamicData(dynamicData)
+DisplayHelper::DisplayHelper(const DynamicData &dynamicData)
+    : dynamicData(dynamicData)
 {
     glfwInit();
-    window = glfwCreateWindow(X_WINDOW_SIZE, Y_WINDOW_SIZE, "STM32 Oscilloscope", nullptr, nullptr);
+    window = glfwCreateWindow(X_WINDOW_SIZE, Y_WINDOW_SIZE, "STM32 Oscilloscope",
+                              nullptr, nullptr);
 
-    glfwSetWindowPos(window, X_INITIAL_WINDOW_POSITION, Y_INITIAL_WINDOW_POSITION);
+    glfwSetWindowPos(window, X_INITIAL_WINDOW_POSITION,
+                     Y_INITIAL_WINDOW_POSITION);
     glfwMakeContextCurrent(window);
 
-    auto framebuffer_size_callback = [](GLFWwindow *window, int width, int height)
-    { glViewport(0, 0, width, height); };
+    auto framebuffer_size_callback = [](GLFWwindow *window, int width,
+                                        int height)
+    {
+        glViewport(0, 0, width, height);
+    };
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glMatrixMode(GL_PROJECTION);
@@ -37,7 +43,8 @@ void DisplayHelper::display()
 
 void DisplayHelper::drawWaveform()
 {
-    auto adcValuesToDisplay{dynamicData.adcValuesToDisplay}; // TODO: handle multithreading better
+    auto adcValuesToDisplay{
+        dynamicData.adcValuesToDisplay}; // TODO: handle multithreading better
     auto value_it{adcValuesToDisplay.begin()};
 
     if (value_it == adcValuesToDisplay.end())
@@ -54,9 +61,13 @@ void DisplayHelper::drawWaveform()
     float x{static_cast<float>(marginCorrected(0))};
     int y;
 
+    const std::size_t values_to_display{adcValuesToDisplay.size()};
+    const double x_length{static_cast<double>(X_DISPLAY_RESOLUTION) /
+                          static_cast<double>(values_to_display)};
+
     while (*value_it == INVALID_VALUE)
     {
-        x += X_LENGTH;
+        x += x_length;
         ++value_it;
     }
 
@@ -69,7 +80,7 @@ void DisplayHelper::drawWaveform()
 
         y = marginCorrected(scaleAdcValueToY(dynamicData, *value_it));
         glVertex2f(x, y);
-        x += X_LENGTH;
+        x += x_length;
     }
     glEnd();
 }
@@ -83,7 +94,8 @@ void DisplayHelper::run()
     while (!glfwWindowShouldClose(window))
     {
         const double current_time{glfwGetTime()};
-        const bool time_for_new_frame{(current_time - last_frame_time) >= frame_duration};
+        const bool time_for_new_frame{(current_time - last_frame_time) >=
+                                      frame_duration};
         if (time_for_new_frame)
         {
             display();

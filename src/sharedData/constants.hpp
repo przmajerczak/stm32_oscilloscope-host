@@ -14,9 +14,6 @@ constexpr uint16_t Y_INITIAL_WINDOW_POSITION{100};
 constexpr uint16_t INPUT_SIGNAL_MAX{4096};
 constexpr uint16_t INPUT_SIGNAL_MIN{0};
 constexpr uint16_t INPUT_SIGNAL_RESOLUTION{INPUT_SIGNAL_MAX - INPUT_SIGNAL_MIN};
-constexpr uint16_t DISPLAY_BUFFER_SIZE{800};
-constexpr float X_LENGTH{static_cast<float>(X_DISPLAY_RESOLUTION) /
-                         DISPLAY_BUFFER_SIZE};
 constexpr double DEVICE_TIME_MEASUREMENT_TIMER_FREQ_MHZ{168.0};
 constexpr double MICROSECONDS_PER_MHZ{1.0};
 constexpr double DEVICE_TIMER_SINGLE_TICK_DURATION_US{
