@@ -8,4 +8,7 @@ class HorizontalResolutionControls
 public:
     void prepare(DynamicData &dynamicData);
     GtkWidget *getHorizontalResolutionControlsContainer();
+
+private:
+    GtkWidget *horizontal_resolution_slider = nullptr;
 };
