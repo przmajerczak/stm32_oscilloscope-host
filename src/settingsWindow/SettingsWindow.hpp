@@ -2,6 +2,7 @@
 
 #include <gtk/gtk.h>
 
+#include "controls/HorizontalResolutionControls.hpp"
 #include "controls/MeasurementsControls.hpp"
 #include "controls/TriggerControls.hpp"
 #include "controls/VerticalBoundControls.hpp"
@@ -18,6 +19,7 @@ private:
 
     GtkWidget *window;
 
+    HorizontalResolutionControls horizontalResolutionControls;
     TriggerControls triggerControls;
     VerticalBoundControls verticalBoundControls;
     MeasurementsControls measurementsControls;
