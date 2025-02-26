@@ -157,7 +157,7 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
         const int right_x{middle_x + static_cast<int>(i * delta_x)};
         const int left_x{middle_x - static_cast<int>(i * delta_x)};
 
-        const double microseconds_per_x{dynamicData.frame_duration_us / X_DISPLAY_RESOLUTION};
+        const double microseconds_per_x{dynamicData.horizontal_resolution_us / X_DISPLAY_RESOLUTION};
         const double microseconds_for_line{(right_x - middle_x) * microseconds_per_x};
 
         std::string left_time_value{std::to_string(static_cast<long long int>(-1 * microseconds_for_line))};

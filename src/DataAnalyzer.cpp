@@ -23,21 +23,38 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values,
     dynamicData.thresholdTriggersSinceLastFreqLabelReset += triggersIndexes.size();
 
     AdcValues valuesToDisplay;
-    valuesToDisplay.resize(current_values.size());
+    if (current_values.size() == 0)
+    {
+        return valuesToDisplay;
+    }
+    const double microseconds_per_sample{dynamicData.frame_duration_us / current_values.size()};
+    const uint32_t samples_to_display{dynamicData.horizontal_resolution_us / microseconds_per_sample};
 
+    valuesToDisplay.resize(samples_to_display);
     if (triggersIndexes.size() == 0)
     {
-        valuesToDisplay = current_values;
+        for (std::size_t idx = 0; idx < samples_to_display; ++idx)
+        {
+            // TODO: copy this better with STL
+            if (idx < current_values.size())
+            {
+                valuesToDisplay.at(idx) = current_values.at(idx);
+            }
+            else
+            {
+                valuesToDisplay.at(idx) = INVALID_VALUE;
+            }
+        }
         return valuesToDisplay;
     }
 
     std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
     const int shiftCountForTriggerCenter{
-        static_cast<int>(selectedTrigger - (X_DISPLAY_RESOLUTION / 2))};
+        static_cast<int>(selectedTrigger - (samples_to_display / 2))};
 
     for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
     {
-        const std::size_t current_values_idx{idx + shiftCountForTriggerCenter + 2};
+        const std::size_t current_values_idx{idx + shiftCountForTriggerCenter};
         if (current_values_idx >= 0 and
             current_values_idx < current_values.size())
         {
