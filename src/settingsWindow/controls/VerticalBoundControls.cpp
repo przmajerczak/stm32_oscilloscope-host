@@ -36,7 +36,7 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
     vertical_lower_bound_slider = gtk_scale_new_with_range(
         GTK_ORIENTATION_VERTICAL, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
     gtk_widget_set_hexpand(vertical_lower_bound_slider, TRUE);
-    gtk_scale_set_draw_value(GTK_SCALE(vertical_lower_bound_slider), TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(vertical_lower_bound_slider), FALSE);
     gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider), INPUT_SIGNAL_MIN);
     gtk_range_set_inverted(GTK_RANGE(vertical_lower_bound_slider), TRUE);
     gtk_widget_set_size_request(vertical_lower_bound_slider, 0, 300);
@@ -44,7 +44,7 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
     vertical_upper_bound_slider = gtk_scale_new_with_range(
         GTK_ORIENTATION_VERTICAL, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1);
     gtk_widget_set_hexpand(vertical_upper_bound_slider, TRUE);
-    gtk_scale_set_draw_value(GTK_SCALE(vertical_upper_bound_slider), TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(vertical_upper_bound_slider), FALSE);
     gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider), INPUT_SIGNAL_MAX);
     gtk_range_set_inverted(GTK_RANGE(vertical_upper_bound_slider), TRUE);
     gtk_widget_set_size_request(vertical_upper_bound_slider, 0, 300);

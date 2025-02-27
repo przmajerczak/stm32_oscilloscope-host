@@ -43,7 +43,7 @@ void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
     triggerThresholdSlider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
                                                       0, Y_DISPLAY_RESOLUTION, 1);
     gtk_widget_set_hexpand(triggerThresholdSlider, TRUE);
-    gtk_scale_set_draw_value(GTK_SCALE(triggerThresholdSlider), TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(triggerThresholdSlider), FALSE);
     gtk_range_set_value(GTK_RANGE(triggerThresholdSlider),
                         DEFAULT_TRIGGER_THRESHOLD);
 
