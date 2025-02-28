@@ -20,7 +20,7 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values,
 {
     const auto triggersIndexes{detectTriggers(dynamicData, current_values)};
 
-    dynamicData.thresholdTriggersSinceLastFreqLabelReset += triggersIndexes.size();
+    dynamicData.thresholdTriggersWithinFrame = triggersIndexes.size();
 
     AdcValues valuesToDisplay;
     if (current_values.size() == 0)

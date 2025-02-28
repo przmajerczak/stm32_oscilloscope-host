@@ -6,37 +6,31 @@
 
 gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 {
-    CallbackData<DynamicData> *callbackData = (CallbackData<DynamicData> *)_callbackData;
+    CallbackData<DynamicData> *callbackData =
+        (CallbackData<DynamicData> *)_callbackData;
     GtkWidget *frequencyLabel = callbackData->widget;
     DynamicData *dynamicData = callbackData->data;
 
-    uint16_t timeoutsWithoutReset = 0;
-
     GtkLabel *label = GTK_LABEL(frequencyLabel);
 
-    constexpr uint32_t minReliableLimit{5};
-    auto &thresholdTriggersSinceLastFreqLabelReset{
-        dynamicData->thresholdTriggersSinceLastFreqLabelReset};
+    std::stringstream labelContent;
 
-    if (thresholdTriggersSinceLastFreqLabelReset > minReliableLimit)
+    if (dynamicData->thresholdTriggersWithinFrame != 0)
     {
-        const double frequency_Hz =
-            1000.0 * static_cast<double>(thresholdTriggersSinceLastFreqLabelReset) /
-            static_cast<double>(FREQUENCY_LABEL_TIMEOUT_MS * (1 + timeoutsWithoutReset));
+        double microseconds_per_period{
+            dynamicData->frame_duration_us /
+            static_cast<double>(dynamicData->thresholdTriggersWithinFrame)};
+        double frequency_Hz{1000000 / microseconds_per_period};
 
-        std::stringstream labelContent;
         labelContent << "Signal frequency: " << std::fixed << std::setprecision(2)
                      << frequency_Hz << " Hz";
-
-        gtk_label_set_text(label, labelContent.str().c_str());
-
-        thresholdTriggersSinceLastFreqLabelReset = 0;
-        timeoutsWithoutReset = 0;
     }
     else
     {
-        ++timeoutsWithoutReset;
+        labelContent << "Signal frequency: --- Hz";
     }
+
+    gtk_label_set_text(label, labelContent.str().c_str());
 
     return TRUE;
 }
@@ -59,11 +53,14 @@ GtkWidget *MeasurementsControls::getFrequencyControlsContainer()
     gtk_expander_set_expanded(GTK_EXPANDER(measurementsControlsExpander), TRUE);
 
     constexpr int spacing{0};
-    GtkWidget *measurementsVerticalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
+    GtkWidget *measurementsVerticalBox =
+        gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
 
     constexpr int padding{0};
-    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), frequencyLabel, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), frequencyLabel, FALSE,
+                       TRUE, padding);
 
-    gtk_container_add(GTK_CONTAINER(measurementsControlsExpander), measurementsVerticalBox);
+    gtk_container_add(GTK_CONTAINER(measurementsControlsExpander),
+                      measurementsVerticalBox);
     return measurementsControlsExpander;
 }

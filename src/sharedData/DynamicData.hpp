@@ -8,7 +8,7 @@
 class DynamicData
 {
 public:
-    uint32_t thresholdTriggersSinceLastFreqLabelReset = 0;
+    uint32_t thresholdTriggersWithinFrame = 0;
     uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
     ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
 
