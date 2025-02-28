@@ -47,15 +47,14 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
     auto undecodedRetrievedData{retrieveData()};
-    constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_0{1604};
+    constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_2{1604};
     const std::size_t receivedBytes{undecodedRetrievedData.size()};
 
-    // TODO: fix shattered transmissions issue
-    if (receivedBytes != expectedReceivedDataSizeUnderInterfaceV2_0)
+    if (receivedBytes != expectedReceivedDataSizeUnderInterfaceV2_2)
     {
         std::cerr << "Received data transmission shorter than expected "
-                  << expectedReceivedDataSizeUnderInterfaceV2_0
-                  << ". Received bytes: " << receivedBytes << std::endl;
+                  << expectedReceivedDataSizeUnderInterfaceV2_2
+                  << " bytes. Received bytes: " << receivedBytes << std::endl;
 
         return;
     }
@@ -73,7 +72,7 @@ EncodedAdcValues DataRetriever::retrieveData()
 
     EncodedAdcValues data;
 
-    while (not(byte == 0xff and previous_byte == '\n'))
+    while (not(byte == 0xff and previous_byte == 0xff))
     {
         previous_byte = byte;
         long int bytes_received{read(deviceFileDescriptor, &byte, 1)};
