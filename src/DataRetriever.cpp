@@ -47,13 +47,13 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
     auto undecodedRetrievedData{retrieveData()};
-    constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_2{1604};
+    constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_3{20004};
     const std::size_t receivedBytes{undecodedRetrievedData.size()};
 
-    if (receivedBytes != expectedReceivedDataSizeUnderInterfaceV2_2)
+    if (receivedBytes != expectedReceivedDataSizeUnderInterfaceV2_3)
     {
         std::cerr << "Received data transmission shorter than expected "
-                  << expectedReceivedDataSizeUnderInterfaceV2_2
+                  << expectedReceivedDataSizeUnderInterfaceV2_3
                   << " bytes. Received bytes: " << receivedBytes << std::endl;
 
         return;
