@@ -81,7 +81,8 @@ void LineDrawer::drawVerticalLine(const int x, const float boldness,
     }
 }
 
-void LineDrawer::drawHorizontalLineWithLabels(const int y, const char *unit_label,
+void LineDrawer::drawHorizontalLineWithLabels(const int y,
+                                              const char *unit_label,
                                               const TextPrinter &textPrinter,
                                               const float boldness_line,
                                               const bool stipple_line)
@@ -94,7 +95,8 @@ void LineDrawer::drawHorizontalLineWithLabels(const int y, const char *unit_labe
     const int upper_line_y{marginCorrected(y)};
     const int lower_line_y{upper_line_y - 20}; // TODO: remove magic number
 
-    const std::string voltage_value{std::to_string(scaleYToVoltage_mV(dynamicData, y))};
+    const std::string voltage_value{
+        std::to_string(scaleYToVoltage_mV(dynamicData, y))};
 
     textPrinter.drawText(right_x, upper_line_y, voltage_value.c_str());
     textPrinter.drawText(right_x, lower_line_y, unit_label);
@@ -103,7 +105,8 @@ void LineDrawer::drawHorizontalLineWithLabels(const int y, const char *unit_labe
 }
 
 // TODO: move value_label generation inside
-void LineDrawer::drawVerticalLineWithLabels(const int x, const char *value_label,
+void LineDrawer::drawVerticalLineWithLabels(const int x,
+                                            const char *value_label,
                                             const char *unit_label,
                                             const TextPrinter &textPrinter,
                                             const float boldness_line,
@@ -128,7 +131,8 @@ void LineDrawer::drawHorizontalGrid(const int numOfHorizontalLayers)
 {
     const int middle_y{Y_DISPLAY_RESOLUTION / 2};
 
-    drawHorizontalLineWithLabels(middle_y, " mV", textPrinterForGrid, NEUTRAL, true);
+    drawHorizontalLineWithLabels(middle_y, " mV", textPrinterForGrid, NEUTRAL,
+                                 true);
     drawHorizontalLineWithLabels(0, " mV", textPrinterForGrid, NEUTRAL, true);
     drawHorizontalLineWithLabels(Y_DISPLAY_RESOLUTION, " mV", textPrinterForGrid,
                                  NEUTRAL, true);
@@ -139,8 +143,10 @@ void LineDrawer::drawHorizontalGrid(const int numOfHorizontalLayers)
         const int upper_y{middle_y + static_cast<int>(i * delta_y)};
         const int lower_y{middle_y - static_cast<int>(i * delta_y)};
 
-        drawHorizontalLineWithLabels(upper_y, " mV", textPrinterForGrid, NEUTRAL, true);
-        drawHorizontalLineWithLabels(lower_y, " mV", textPrinterForGrid, NEUTRAL, true);
+        drawHorizontalLineWithLabels(upper_y, " mV", textPrinterForGrid, NEUTRAL,
+                                     true);
+        drawHorizontalLineWithLabels(lower_y, " mV", textPrinterForGrid, NEUTRAL,
+                                     true);
     }
 }
 
@@ -148,7 +154,8 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 {
     const int middle_x{X_DISPLAY_RESOLUTION / 2};
 
-    drawVerticalLineWithLabels(middle_x, "0", "us", textPrinterForGrid, BOLD, true);
+    drawVerticalLineWithLabels(middle_x, "0", "us", textPrinterForGrid, BOLD,
+                               true);
 
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
@@ -157,13 +164,19 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
         const int right_x{middle_x + static_cast<int>(i * delta_x)};
         const int left_x{middle_x - static_cast<int>(i * delta_x)};
 
-        const double microseconds_per_x{dynamicData.horizontal_resolution_us / X_DISPLAY_RESOLUTION};
-        const double microseconds_for_line{(right_x - middle_x) * microseconds_per_x};
+        const double microseconds_per_x{dynamicData.horizontal_resolution_us /
+                                        static_cast<double>(X_DISPLAY_RESOLUTION)};
+        const double microseconds_for_line{(right_x - middle_x) *
+                                           microseconds_per_x};
 
-        std::string left_time_value{std::to_string(static_cast<long long int>(-1 * microseconds_for_line))};
-        std::string right_time_value{std::to_string(static_cast<long long int>(microseconds_for_line))};
+        std::string left_time_value{
+            std::to_string(static_cast<long long int>(-1 * microseconds_for_line))};
+        std::string right_time_value{
+            std::to_string(static_cast<long long int>(microseconds_for_line))};
 
-        drawVerticalLineWithLabels(left_x, left_time_value.c_str(), "us", textPrinterForGrid, NEUTRAL, true);
-        drawVerticalLineWithLabels(right_x, right_time_value.c_str(), "us", textPrinterForGrid, NEUTRAL, true);
+        drawVerticalLineWithLabels(left_x, left_time_value.c_str(), "us",
+                                   textPrinterForGrid, NEUTRAL, true);
+        drawVerticalLineWithLabels(right_x, right_time_value.c_str(), "us",
+                                   textPrinterForGrid, NEUTRAL, true);
     }
 }
