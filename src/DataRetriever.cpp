@@ -31,9 +31,8 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 
         if (not configureTty(deviceFileDescriptor))
         {
-            std::cerr << "Warning: tty configuration error. Data decoding might be "
-                         "inaccurate."
-                      << std::endl;
+            std::cerr << "Warning: tty configuration error. "
+                         "Data decoding might be inaccurate." << std::endl;
         }
 
         while (1)
@@ -47,13 +46,13 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
     auto undecodedRetrievedData{retrieveData()};
-    constexpr std::size_t expectedReceivedDataSizeUnderInterfaceV2_3{20004};
+    constexpr std::size_t expectedReceivedDataSize{20004};
     const std::size_t receivedBytes{undecodedRetrievedData.size()};
 
-    if (receivedBytes != expectedReceivedDataSizeUnderInterfaceV2_3)
+    if (receivedBytes != expectedReceivedDataSize)
     {
         std::cerr << "Received data transmission shorter than expected "
-                  << expectedReceivedDataSizeUnderInterfaceV2_3
+                  << expectedReceivedDataSize
                   << " bytes. Received bytes: " << receivedBytes << std::endl;
 
         return;
