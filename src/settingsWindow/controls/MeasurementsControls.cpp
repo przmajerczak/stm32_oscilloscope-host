@@ -35,16 +35,61 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
     return TRUE;
 }
 
+gboolean minVoltageLabelTimeoutAction(gpointer _callbackData) { return TRUE; }
+gboolean maxVoltageLabelTimeoutAction(gpointer _callbackData) { return TRUE; }
+gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData) { return TRUE; }
+
 void MeasurementsControls::prepare(DynamicData &dynamicData)
+{
+    prepareFrequencyLabel(dynamicData);
+    prepareMinVoltageLabel(dynamicData);
+    prepareMaxVoltageLabel(dynamicData);
+    prepareAvgVoltageLabel(dynamicData);
+}
+
+void MeasurementsControls::prepareFrequencyLabel(DynamicData &dynamicData)
 {
     frequencyLabel = gtk_label_new("Signal frequency: --- Hz");
     gtk_widget_set_hexpand(frequencyLabel, TRUE);
 
-    callbackData.widget = frequencyLabel;
-    callbackData.data = &dynamicData;
+    callbackDataForFrequencyLabel.widget = frequencyLabel;
+    callbackDataForFrequencyLabel.data = &dynamicData;
 
-    g_timeout_add(FREQUENCY_LABEL_TIMEOUT_MS, frequencyLabelTimeoutAction,
-                  &callbackData);
+    g_timeout_add(MEASUREMENTS_LABELS_REFRESH_RATE_MS, frequencyLabelTimeoutAction,
+                  &callbackDataForFrequencyLabel);
+}
+void MeasurementsControls::prepareMinVoltageLabel(DynamicData &dynamicData)
+{
+    minVoltageLabel = gtk_label_new("Minimal voltage: --- mV");
+    gtk_widget_set_hexpand(minVoltageLabel, TRUE);
+
+    callbackDataForMinVoltageLabel.widget = minVoltageLabel;
+    callbackDataForMinVoltageLabel.data = &dynamicData;
+
+    g_timeout_add(MEASUREMENTS_LABELS_REFRESH_RATE_MS, minVoltageLabelTimeoutAction,
+                  &callbackDataForMinVoltageLabel);
+}
+void MeasurementsControls::prepareMaxVoltageLabel(DynamicData &dynamicData)
+{
+    maxVoltageLabel = gtk_label_new("Maximal voltage: --- mV");
+    gtk_widget_set_hexpand(maxVoltageLabel, TRUE);
+
+    callbackDataForMaxVoltageLabel.widget = maxVoltageLabel;
+    callbackDataForMaxVoltageLabel.data = &dynamicData;
+
+    g_timeout_add(MEASUREMENTS_LABELS_REFRESH_RATE_MS, maxVoltageLabelTimeoutAction,
+                  &callbackDataForMaxVoltageLabel);
+}
+void MeasurementsControls::prepareAvgVoltageLabel(DynamicData &dynamicData)
+{
+    avgVoltageLabel = gtk_label_new("Average voltage: --- mV");
+    gtk_widget_set_hexpand(avgVoltageLabel, TRUE);
+
+    callbackDataForAvgVoltageLabel.widget = avgVoltageLabel;
+    callbackDataForAvgVoltageLabel.data = &dynamicData;
+
+    g_timeout_add(MEASUREMENTS_LABELS_REFRESH_RATE_MS, avgVoltageLabelTimeoutAction,
+                  &callbackDataForAvgVoltageLabel);
 }
 
 GtkWidget *MeasurementsControls::getFrequencyControlsContainer()
@@ -58,6 +103,12 @@ GtkWidget *MeasurementsControls::getFrequencyControlsContainer()
 
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), frequencyLabel, FALSE,
+                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), minVoltageLabel, FALSE,
+                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), maxVoltageLabel, FALSE,
+                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), avgVoltageLabel, FALSE,
                        TRUE, padding);
 
     gtk_container_add(GTK_CONTAINER(measurementsControlsExpander),

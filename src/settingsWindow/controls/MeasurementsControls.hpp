@@ -12,6 +12,18 @@ public:
     GtkWidget *getFrequencyControlsContainer();
 
 private:
+    void prepareFrequencyLabel(DynamicData &dynamicData);
+    void prepareMinVoltageLabel(DynamicData &dynamicData);
+    void prepareMaxVoltageLabel(DynamicData &dynamicData);
+    void prepareAvgVoltageLabel(DynamicData &dynamicData);
+
     GtkWidget *frequencyLabel;
-    CallbackData<DynamicData> callbackData;
+    GtkWidget *minVoltageLabel;
+    GtkWidget *maxVoltageLabel;
+    GtkWidget *avgVoltageLabel;
+
+    CallbackData<DynamicData> callbackDataForFrequencyLabel;
+    CallbackData<DynamicData> callbackDataForMinVoltageLabel;
+    CallbackData<DynamicData> callbackDataForMaxVoltageLabel;
+    CallbackData<DynamicData> callbackDataForAvgVoltageLabel;
 };
