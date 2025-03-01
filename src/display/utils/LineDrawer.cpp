@@ -159,13 +159,14 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
+    const double microseconds_per_x{dynamicData.horizontal_resolution_us /
+                                        static_cast<double>(X_DISPLAY_RESOLUTION)};
+
     for (int i = 1; i <= numOfVerticalLayers - 1; ++i)
     {
         const int right_x{middle_x + static_cast<int>(i * delta_x)};
         const int left_x{middle_x - static_cast<int>(i * delta_x)};
 
-        const double microseconds_per_x{dynamicData.horizontal_resolution_us /
-                                        static_cast<double>(X_DISPLAY_RESOLUTION)};
         const double microseconds_for_line{(right_x - middle_x) *
                                            microseconds_per_x};
 
