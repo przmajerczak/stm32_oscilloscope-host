@@ -1,9 +1,10 @@
 #include "DisplayHelper.hpp"
+#include "debug/Timemarker.hpp"
 #include "settingsWindow/controls/TriggerControls.hpp"
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
 
-DisplayHelper::DisplayHelper(const DynamicData &dynamicData)
+DisplayHelper::DisplayHelper(DynamicData &dynamicData)
     : dynamicData(dynamicData)
 {
     glfwInit();
@@ -28,6 +29,8 @@ DisplayHelper::DisplayHelper(const DynamicData &dynamicData)
 
 void DisplayHelper::display()
 {
+    Timemarker tmarker{dynamicData.timemarkersData.customNonLibraryFrameDisplayDuration};
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     lineDrawer.drawGrid(5, 4);
@@ -98,6 +101,7 @@ void DisplayHelper::run()
                                       frame_duration};
         if (time_for_new_frame)
         {
+            Timemarker tmarker{dynamicData.timemarkersData.totalFrameDisplayDuration};
             display();
 
             glfwSwapBuffers(window);

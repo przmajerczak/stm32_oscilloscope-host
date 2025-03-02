@@ -15,7 +15,7 @@ public:
 
 private:
     AdcValues singleDataRetrieve(DynamicData &dynamicData);
-    EncodedAdcValues retrieveData();
+    EncodedAdcValues retrieveData(DynamicData &dynamicData);
     AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);
     bool configureTty(const int deviceFileDescriptor);
     double calculateFrameDuration_us(EncodedAdcValues &undecodedRetrievedData);

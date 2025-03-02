@@ -1,5 +1,6 @@
 #include "DataRetriever.hpp"
 
+#include "debug/Timemarker.hpp"
 #include "sharedData/constants.hpp"
 #include <fcntl.h>
 #include <iostream>
@@ -46,9 +47,11 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 
 AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
+    Timemarker tmarker(dynamicData.timemarkersData.totalDataRetrievalAndDecodingDuration);
+
     constexpr std::size_t expectedReceivedDataSize{20004};
 
-    EncodedAdcValues undecodedRetrievedData{retrieveData()};
+    EncodedAdcValues undecodedRetrievedData{retrieveData(dynamicData)};
     std::size_t receivedBytes{undecodedRetrievedData.size()};
 
     while (receivedBytes != expectedReceivedDataSize)
@@ -57,7 +60,7 @@ AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
                   << expectedReceivedDataSize
                   << " bytes. Received bytes: " << receivedBytes << std::endl;
 
-        undecodedRetrievedData = retrieveData();
+        undecodedRetrievedData = retrieveData(dynamicData);
         receivedBytes = undecodedRetrievedData.size();
     }
 
@@ -67,8 +70,10 @@ AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
     return decodeAdcValues(undecodedRetrievedData);
 }
 
-EncodedAdcValues DataRetriever::retrieveData()
+EncodedAdcValues DataRetriever::retrieveData(DynamicData &dynamicData)
 {
+    Timemarker tmarker(dynamicData.timemarkersData.singleFrameDataRetrievalDuration);
+
     uint8_t byte{0};
     uint8_t previous_byte{0};
 

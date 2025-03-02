@@ -1,4 +1,5 @@
 #include "DataAnalyzer.hpp"
+#include "debug/Timemarker.hpp"
 #include "display/DisplayHelper.hpp"
 #include "settingsWindow/controls/TriggerControls.hpp"
 #include "sharedData/constants.hpp"
@@ -8,6 +9,8 @@
 void DataAnalyzer::handleData(const AdcValues &current_values,
                               DynamicData &dynamicData)
 {
+    Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
+
     dynamicData.adcValuesToDisplay =
         std::move(centerValuesOnTrigger(current_values, dynamicData));
 }
