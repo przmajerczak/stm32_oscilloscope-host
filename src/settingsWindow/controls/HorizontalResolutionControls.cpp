@@ -13,8 +13,8 @@ void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
 {
     // TODO: extract to constants.hpp
     // TODO set to 1-1000 and ad s/ms/us button
-    constexpr uint32_t TEMP_MIN_US{1000};
-    constexpr uint32_t TEMP_MAX_US{200000};
+    constexpr uint32_t TEMP_MIN_US{100};
+    constexpr uint32_t TEMP_MAX_US{110000};
 
     horizontal_resolution_slider = gtk_scale_new_with_range(
         GTK_ORIENTATION_HORIZONTAL, TEMP_MIN_US, TEMP_MAX_US, 1);

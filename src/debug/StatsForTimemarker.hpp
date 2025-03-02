@@ -14,5 +14,5 @@ public:
 private:
     std::list<uint16_t> durations_us;
 
-    const uint16_t number_of_measurements{100};
+    const uint16_t number_of_measurements{10};
 };
