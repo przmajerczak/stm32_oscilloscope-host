@@ -1,10 +1,10 @@
 #include "DataRetriever.hpp"
 
+#include "sharedData/constants.hpp"
 #include <fcntl.h>
 #include <iostream>
 #include <termios.h>
 #include <thread>
-#include "sharedData/constants.hpp"
 
 extern int errno;
 
@@ -37,31 +37,34 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 
         while (1)
         {
-            singleDataRetrieve(dynamicData);
+            AdcValues retrieved_values{singleDataRetrieve(dynamicData)};
+            dataAnalyzer.handleData(retrieved_values, dynamicData);
         }
     });
     t.detach();
 }
 
-void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
+AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
-    auto undecodedRetrievedData{retrieveData()};
     constexpr std::size_t expectedReceivedDataSize{20004};
-    const std::size_t receivedBytes{undecodedRetrievedData.size()};
 
-    if (receivedBytes != expectedReceivedDataSize)
+    EncodedAdcValues undecodedRetrievedData{retrieveData()};
+    std::size_t receivedBytes{undecodedRetrievedData.size()};
+
+    while (receivedBytes != expectedReceivedDataSize)
     {
         std::cerr << "Received data transmission shorter than expected "
                   << expectedReceivedDataSize
                   << " bytes. Received bytes: " << receivedBytes << std::endl;
 
-        return;
+        undecodedRetrievedData = retrieveData();
+        receivedBytes = undecodedRetrievedData.size();
     }
 
-    dynamicData.frame_duration_us = calculateFrameDuration_us(undecodedRetrievedData);
+    dynamicData.frame_duration_us =
+        calculateFrameDuration_us(undecodedRetrievedData);
 
-    AdcValues retrieved_values{decodeAdcValues(undecodedRetrievedData)};
-    dataAnalyzer.handleData(retrieved_values, dynamicData);
+    return decodeAdcValues(undecodedRetrievedData);
 }
 
 EncodedAdcValues DataRetriever::retrieveData()
