@@ -139,7 +139,7 @@ void MeasurementsControls::prepareFrequencyLabel(DynamicData &dynamicData)
     callbackDataForFrequencyLabel.widget = frequencyLabel;
     callbackDataForFrequencyLabel.data = &dynamicData;
 
-    g_timeout_add(MEASUREMENTS_LABELS_REFRESH_RATE_MS,
+    g_timeout_add(LABELS_REFRESH_RATE_MS,
                   frequencyLabelTimeoutAction, &callbackDataForFrequencyLabel);
 }
 void MeasurementsControls::prepareMinVoltageLabel(DynamicData &dynamicData)
@@ -150,7 +150,7 @@ void MeasurementsControls::prepareMinVoltageLabel(DynamicData &dynamicData)
     callbackDataForMinVoltageLabel.widget = minVoltageLabel;
     callbackDataForMinVoltageLabel.data = &dynamicData;
 
-    g_timeout_add(MEASUREMENTS_LABELS_REFRESH_RATE_MS,
+    g_timeout_add(LABELS_REFRESH_RATE_MS,
                   minVoltageLabelTimeoutAction, &callbackDataForMinVoltageLabel);
 }
 void MeasurementsControls::prepareMaxVoltageLabel(DynamicData &dynamicData)
@@ -161,7 +161,7 @@ void MeasurementsControls::prepareMaxVoltageLabel(DynamicData &dynamicData)
     callbackDataForMaxVoltageLabel.widget = maxVoltageLabel;
     callbackDataForMaxVoltageLabel.data = &dynamicData;
 
-    g_timeout_add(MEASUREMENTS_LABELS_REFRESH_RATE_MS,
+    g_timeout_add(LABELS_REFRESH_RATE_MS,
                   maxVoltageLabelTimeoutAction, &callbackDataForMaxVoltageLabel);
 }
 void MeasurementsControls::prepareAvgVoltageLabel(DynamicData &dynamicData)
@@ -172,7 +172,7 @@ void MeasurementsControls::prepareAvgVoltageLabel(DynamicData &dynamicData)
     callbackDataForAvgVoltageLabel.widget = avgVoltageLabel;
     callbackDataForAvgVoltageLabel.data = &dynamicData;
 
-    g_timeout_add(MEASUREMENTS_LABELS_REFRESH_RATE_MS,
+    g_timeout_add(LABELS_REFRESH_RATE_MS,
                   avgVoltageLabelTimeoutAction, &callbackDataForAvgVoltageLabel);
 }
 

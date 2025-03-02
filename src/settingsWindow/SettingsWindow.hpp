@@ -2,6 +2,7 @@
 
 #include <gtk/gtk.h>
 
+#include "controls/DebugDataControls.hpp"
 #include "controls/HorizontalResolutionControls.hpp"
 #include "controls/MeasurementsControls.hpp"
 #include "controls/TriggerControls.hpp"
@@ -23,4 +24,5 @@ private:
     TriggerControls triggerControls;
     VerticalBoundControls verticalBoundControls;
     MeasurementsControls measurementsControls;
+    DebugDataControls debugDataControls;
 };
