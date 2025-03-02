@@ -6,12 +6,10 @@
 #include "utils.hpp"
 
 void DataAnalyzer::handleData(const AdcValues &current_values,
-                              const double frame_duration_us,
                               DynamicData &dynamicData)
 {
     dynamicData.adcValuesToDisplay =
         std::move(centerValuesOnTrigger(current_values, dynamicData));
-    dynamicData.frame_duration_us = frame_duration_us;
 }
 
 AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values,

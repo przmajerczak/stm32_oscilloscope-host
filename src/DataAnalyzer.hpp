@@ -11,7 +11,6 @@ public:
     DataAnalyzer() {}
 
     void handleData(const AdcValues &current_values,
-                    [[maybe_unused]] const double frame_duration_us,
                     DynamicData &dynamicData);
 
 private:

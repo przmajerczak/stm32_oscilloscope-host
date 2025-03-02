@@ -58,10 +58,10 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
         return;
     }
 
-    const double frame_duration_us{calculateFrameDuration_us(undecodedRetrievedData)};
+    dynamicData.frame_duration_us = calculateFrameDuration_us(undecodedRetrievedData);
 
     AdcValues retrieved_values{decodeAdcValues(undecodedRetrievedData)};
-    dataAnalyzer.handleData(retrieved_values, frame_duration_us, dynamicData);
+    dataAnalyzer.handleData(retrieved_values, dynamicData);
 }
 
 EncodedAdcValues DataRetriever::retrieveData()
