@@ -1,7 +1,7 @@
 #pragma once
 
+#include "StatsForTimemarker.hpp"
 #include <chrono>
-#include <iostream>
 
 class Timemarker
 {
@@ -9,19 +9,17 @@ class Timemarker
     using microseconds = std::chrono::microseconds;
 
 public:
-    Timemarker(const char *label)
-        : label(label), creation_time(high_resolution_clock::now()) {}
+    Timemarker(StatsForTimemarker &statistics)
+        : statistics(statistics), creation_time(high_resolution_clock::now()) {}
 
     ~Timemarker()
     {
-        std::cout << "Timemarker " << label << " duration: "
-                  << duration_cast<microseconds>(high_resolution_clock::now() -
-                                                 creation_time)
-                         .count()
-                  << " microseconds." << std::endl;
+        statistics.logDuration_us(duration_cast<microseconds>(
+                                      high_resolution_clock::now() - creation_time)
+                                      .count());
     }
 
 private:
-    const char *label;
+    StatsForTimemarker &statistics;
     const std::chrono::high_resolution_clock::time_point creation_time;
 };
