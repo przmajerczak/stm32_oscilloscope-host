@@ -23,8 +23,18 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
             static_cast<double>(dynamicData->thresholdTriggersWithinFrame)};
         double frequency_Hz{1000000 / microseconds_per_period};
 
-        labelContent << "Signal frequency: " << std::fixed << std::setprecision(2)
-                     << frequency_Hz << " Hz";
+        labelContent << "Signal frequency: ";
+
+        if (frequency_Hz > 1000)
+        {
+            labelContent << std::fixed << std::setprecision(2)
+                         << frequency_Hz / 1000 << " kHz";
+        }
+        else
+        {
+            labelContent << std::fixed << std::setprecision(2)
+                         << frequency_Hz << " Hz";
+        }
     }
     else
     {
