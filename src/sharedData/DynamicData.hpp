@@ -16,6 +16,7 @@ public:
     VerticalBoundsData verticalBoundsData;
     AdcValues adcValuesToDisplay{};
     double frame_duration_ns;
+    double nanoseconds_per_sample;
     uint32_t horizontal_resolution_ns{DEFAULT_HORIZONTAL_RESOLUTION_NS};
     TimemarkersData timemarkersData;
 };

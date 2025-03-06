@@ -31,6 +31,8 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &current_values,
     const double nanoseconds_per_sample{dynamicData.frame_duration_ns / current_values.size()};
     const uint32_t samples_to_display{dynamicData.horizontal_resolution_ns / nanoseconds_per_sample};
 
+    dynamicData.nanoseconds_per_sample = nanoseconds_per_sample;
+
     valuesToDisplay.resize(samples_to_display);
     if (triggersIndexes.size() == 0)
     {
