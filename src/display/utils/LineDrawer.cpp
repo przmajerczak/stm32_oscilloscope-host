@@ -159,25 +159,25 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
-    const double microseconds_per_x{dynamicData.horizontal_resolution_ns /
-                                        (1000 * static_cast<double>(X_DISPLAY_RESOLUTION))};
+    const double nanoseconds_per_x{dynamicData.horizontal_resolution_ns /
+                                        static_cast<double>(X_DISPLAY_RESOLUTION)};
 
     for (int i = 1; i <= numOfVerticalLayers - 1; ++i)
     {
         const int right_x{middle_x + static_cast<int>(i * delta_x)};
         const int left_x{middle_x - static_cast<int>(i * delta_x)};
 
-        const double microseconds_for_line{(right_x - middle_x) *
-                                           microseconds_per_x};
+        const double nanoseconds_for_line{(right_x - middle_x) *
+                                           nanoseconds_per_x};
 
         std::string left_time_value{
-            std::to_string(static_cast<long long int>(-1 * microseconds_for_line))};
+            std::to_string(static_cast<long long int>(-1 * nanoseconds_for_line))};
         std::string right_time_value{
-            std::to_string(static_cast<long long int>(microseconds_for_line))};
+            std::to_string(static_cast<long long int>(nanoseconds_for_line))};
 
-        drawVerticalLineWithLabels(left_x, left_time_value.c_str(), "us",
+        drawVerticalLineWithLabels(left_x, left_time_value.c_str(), "ns",
                                    textPrinterForGrid, NEUTRAL, true);
-        drawVerticalLineWithLabels(right_x, right_time_value.c_str(), "us",
+        drawVerticalLineWithLabels(right_x, right_time_value.c_str(), "ns",
                                    textPrinterForGrid, NEUTRAL, true);
     }
 }
