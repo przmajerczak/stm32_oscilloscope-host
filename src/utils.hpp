@@ -56,7 +56,7 @@ static uint16_t scaleYToAdcWithinBounds(const DynamicData &dynamicData, const in
     return dynamicData.verticalBoundsData.vertical_lower_bound + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
 }
 
-static std::string doubleToFixedLengthString(const double value, const std::size_t len)
+static std::string doubleToFixedLengthString(const double value, std::size_t len)
 {
     std::string fixedLengthNumber{std::to_string(value)};
 
@@ -64,19 +64,18 @@ static std::string doubleToFixedLengthString(const double value, const std::size
     {
         return fixedLengthNumber;
     }
+    if (fixedLengthNumber.front() == '-')
+    {
+        ++len;
+    }
 
     const auto comma_pos{fixedLengthNumber.find(',')};
-
     if (comma_pos > len)
     {
         std::cerr << "doubleToFixedLengthString: integer part has more digits than given truncate length." << std::endl;
         return fixedLengthNumber;
     }
 
-    if (fixedLengthNumber.front() == '-')
-    {
-        return fixedLengthNumber.substr(0, len + 2);
-    }
     return fixedLengthNumber.substr(0, len + 1);
 }
 
