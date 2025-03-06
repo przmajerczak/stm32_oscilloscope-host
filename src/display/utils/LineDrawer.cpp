@@ -154,13 +154,14 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 {
     const int middle_x{X_DISPLAY_RESOLUTION / 2};
 
-    drawVerticalLineWithLabels(middle_x, "0", "us", textPrinterForGrid, BOLD,
-                               true);
-
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
     const double nanoseconds_per_x{dynamicData.horizontal_resolution_ns /
                                         static_cast<double>(X_DISPLAY_RESOLUTION)};
+    const char* unit_label = "ns";
+
+    drawVerticalLineWithLabels(middle_x, "0", unit_label, textPrinterForGrid, BOLD,
+                            true);
 
     for (int i = 1; i <= numOfVerticalLayers - 1; ++i)
     {
@@ -175,9 +176,9 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
         std::string right_time_value{
             std::to_string(static_cast<long long int>(nanoseconds_for_line))};
 
-        drawVerticalLineWithLabels(left_x, left_time_value.c_str(), "ns",
+        drawVerticalLineWithLabels(left_x, left_time_value.c_str(), unit_label,
                                    textPrinterForGrid, NEUTRAL, true);
-        drawVerticalLineWithLabels(right_x, right_time_value.c_str(), "ns",
+        drawVerticalLineWithLabels(right_x, right_time_value.c_str(), unit_label,
                                    textPrinterForGrid, NEUTRAL, true);
     }
 }
