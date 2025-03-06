@@ -18,7 +18,7 @@ private:
     EncodedAdcValues retrieveData(DynamicData &dynamicData);
     AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);
     bool configureTty(const int deviceFileDescriptor);
-    double calculateFrameDuration_us(EncodedAdcValues &undecodedRetrievedData);
+    double calculateFrameDuration_ns(EncodedAdcValues &undecodedRetrievedData);
     uint32_t pullFrameDurationFromUndecodedRetrievedData(
         EncodedAdcValues &undecodedRetrievedData);
 

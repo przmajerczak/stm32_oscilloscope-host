@@ -64,8 +64,8 @@ AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
         receivedBytes = undecodedRetrievedData.size();
     }
 
-    dynamicData.frame_duration_us =
-        calculateFrameDuration_us(undecodedRetrievedData);
+    dynamicData.frame_duration_ns =
+        calculateFrameDuration_ns(undecodedRetrievedData);
 
     return decodeAdcValues(undecodedRetrievedData);
 }
@@ -142,14 +142,14 @@ bool DataRetriever::configureTty(const int deviceFileDescriptor)
     return true;
 }
 
-double DataRetriever::calculateFrameDuration_us(EncodedAdcValues &undecodedRetrievedData)
+double DataRetriever::calculateFrameDuration_ns(EncodedAdcValues &undecodedRetrievedData)
 {
     uint32_t timer_doubleticks_per_frame{
         pullFrameDurationFromUndecodedRetrievedData(undecodedRetrievedData)};
 
     constexpr double TIMER_COUNTS_UPWARDS_EDGE_TICKS{2.0};
 
-    return timer_doubleticks_per_frame * DEVICE_TIMER_SINGLE_TICK_DURATION_US * TIMER_COUNTS_UPWARDS_EDGE_TICKS;
+    return timer_doubleticks_per_frame * DEVICE_TIMER_SINGLE_TICK_DURATION_NS * TIMER_COUNTS_UPWARDS_EDGE_TICKS;
 }
 
 uint32_t DataRetriever::pullFrameDurationFromUndecodedRetrievedData(

@@ -18,10 +18,10 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 
     if (dynamicData->thresholdTriggersWithinFrame != 0)
     {
-        double microseconds_per_period{
-            dynamicData->frame_duration_us /
+        double nanoseconds_per_period{
+            dynamicData->frame_duration_ns /
             static_cast<double>(dynamicData->thresholdTriggersWithinFrame)};
-        double frequency_Hz{1000000 / microseconds_per_period};
+        double frequency_Hz{1000000000 / nanoseconds_per_period};
 
         labelContent << "Signal frequency: ";
 
