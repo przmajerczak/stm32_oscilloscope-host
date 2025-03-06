@@ -157,11 +157,34 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
     const double nanoseconds_per_x{dynamicData.horizontal_resolution_ns /
-                                        static_cast<double>(X_DISPLAY_RESOLUTION)};
-    const char* unit_label = "ns";
+                                   static_cast<double>(X_DISPLAY_RESOLUTION)};
+
+    double time_multiplier;
+    const char *unit_label;
+
+    if (dynamicData.horizontal_resolution_ns >= 2000000000)
+    {
+        time_multiplier = 0.000000001;
+        unit_label = "s";
+    }
+    else if (dynamicData.horizontal_resolution_ns >= 2000000)
+    {
+        time_multiplier = 0.000001;
+        unit_label = "ms";
+    }
+    else if (dynamicData.horizontal_resolution_ns >= 20000)
+    {
+        time_multiplier = 0.001;
+        unit_label = "us";
+    }
+    else
+    {
+        time_multiplier = 1;
+        unit_label = "ns";
+    }
 
     drawVerticalLineWithLabels(middle_x, "0", unit_label, textPrinterForGrid, BOLD,
-                            true);
+                               true);
 
     for (int i = 1; i <= numOfVerticalLayers - 1; ++i)
     {
@@ -169,12 +192,12 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
         const int left_x{middle_x - static_cast<int>(i * delta_x)};
 
         const double nanoseconds_for_line{(right_x - middle_x) *
-                                           nanoseconds_per_x};
+                                          nanoseconds_per_x * time_multiplier};
 
         std::string left_time_value{
-            std::to_string(static_cast<long long int>(-1 * nanoseconds_for_line))};
+            doubleToFixedLengthString(-1.0 * nanoseconds_for_line, 4)};
         std::string right_time_value{
-            std::to_string(static_cast<long long int>(nanoseconds_for_line))};
+            doubleToFixedLengthString(nanoseconds_for_line, 4)};
 
         drawVerticalLineWithLabels(left_x, left_time_value.c_str(), unit_label,
                                    textPrinterForGrid, NEUTRAL, true);
