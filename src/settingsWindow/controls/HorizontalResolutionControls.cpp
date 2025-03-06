@@ -5,7 +5,7 @@ void horizontalResolutionSliderOnChangeAction(GtkRange *range,
 {
     DynamicData *dynamicData = (DynamicData *)_dynamicData;
 
-    dynamicData->horizontal_resolution_us =
+    dynamicData->horizontal_resolution_ns =
         static_cast<uint32_t>(gtk_range_get_value(range));
 }
 
@@ -13,15 +13,15 @@ void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
 {
     // TODO: extract to constants.hpp
     // TODO set to 1-1000 and ad s/ms/us button
-    constexpr uint32_t TEMP_MIN_US{100};
-    constexpr uint32_t TEMP_MAX_US{110000};
+    constexpr uint32_t TEMP_MIN_NS{100};
+    constexpr uint32_t TEMP_MAX_NS{110000000};
 
     horizontal_resolution_slider = gtk_scale_new_with_range(
-        GTK_ORIENTATION_HORIZONTAL, TEMP_MIN_US, TEMP_MAX_US, 1);
+        GTK_ORIENTATION_HORIZONTAL, TEMP_MIN_NS, TEMP_MAX_NS, 1);
     gtk_widget_set_hexpand(horizontal_resolution_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(horizontal_resolution_slider), TRUE);
     gtk_range_set_value(GTK_RANGE(horizontal_resolution_slider),
-                        DEFAULT_HORIZONTAL_RESOLUTION_US);
+                        DEFAULT_HORIZONTAL_RESOLUTION_NS);
 
     g_signal_connect(horizontal_resolution_slider, "value-changed",
                      G_CALLBACK(horizontalResolutionSliderOnChangeAction),
