@@ -18,5 +18,7 @@ public:
     double frame_duration_ns;
     double nanoseconds_per_sample;
     uint32_t horizontal_resolution_ns{DEFAULT_HORIZONTAL_RESOLUTION_NS};
+    uint16_t averaging_window_size{1};
+
     TimemarkersData timemarkersData;
 };

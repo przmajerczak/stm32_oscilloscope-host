@@ -2,6 +2,7 @@
 
 #include <gtk/gtk.h>
 
+#include "controls/AveragingControls.hpp"
 #include "controls/DebugDataControls.hpp"
 #include "controls/HorizontalResolutionControls.hpp"
 #include "controls/MeasurementsControls.hpp"
@@ -22,6 +23,7 @@ private:
 
     HorizontalResolutionControls horizontalResolutionControls;
     TriggerControls triggerControls;
+    AveragingControls averagingControls;
     VerticalBoundControls verticalBoundControls;
     MeasurementsControls measurementsControls;
     DebugDataControls debugDataControls;

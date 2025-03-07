@@ -20,7 +20,7 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
     DynamicData &dynamicData) // TODO: change this name
 
 {
-    const auto averagedValues{averageAdcValues(current_values)};
+    const auto averagedValues{averageAdcValues(dynamicData, current_values)};
     const auto triggersIndexes{detectTriggers(dynamicData, averagedValues)};
 
     dynamicData.thresholdTriggersWithinFrame = triggersIndexes.size();
@@ -76,16 +76,16 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
     return valuesToDisplay;
 }
 
-AdcValues DataAnalyzer::averageAdcValues(const AdcValues &current_values)
+AdcValues DataAnalyzer::averageAdcValues(const DynamicData &dynamicData, const AdcValues &current_values)
 {
-    constexpr uint16_t MOVING_AVERAGE_WINDOW_SIZE{1};
+    const uint16_t averaging_window_size{dynamicData.averaging_window_size};
 
-    if (MOVING_AVERAGE_WINDOW_SIZE < 2)
+    if (averaging_window_size < 2)
     {
         return std::move(current_values);
     }
 
-    if (MOVING_AVERAGE_WINDOW_SIZE > current_values.size())
+    if (averaging_window_size > current_values.size())
     {
         std::cerr << "Moving average window size exceeds number of samples per "
                      "frame - averaging not possible."
@@ -94,19 +94,22 @@ AdcValues DataAnalyzer::averageAdcValues(const AdcValues &current_values)
     }
 
     AdcValues averaged_values;
-    averaged_values.resize(current_values.size() - MOVING_AVERAGE_WINDOW_SIZE -
+    averaged_values.resize(current_values.size() - averaging_window_size -
                            1);
 
     auto moving_average_window_front{current_values.begin()};
     auto moving_average_window_back{
-        std::next(moving_average_window_front, MOVING_AVERAGE_WINDOW_SIZE)};
+        std::next(moving_average_window_front, averaging_window_size)};
 
+    // TODO: make this algorithm more optimal by using real movinf window
+    // with adding and subtracing front/back element at each iteration
+    // instead of accumulating every time
     for (auto &averaged_value : averaged_values)
     {
         averaged_value = static_cast<AdcValues::value_type>(
             static_cast<double>(std::accumulate(moving_average_window_front,
                                                 moving_average_window_back, 0)) /
-            static_cast<double>(MOVING_AVERAGE_WINDOW_SIZE));
+            static_cast<double>(averaging_window_size));
 
         moving_average_window_front++;
         moving_average_window_back++;

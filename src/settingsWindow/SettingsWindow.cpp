@@ -20,6 +20,7 @@ void SettingsWindow::configure()
 void SettingsWindow::fill(DynamicData &dynamicData)
 {
     triggerControls.prepare(dynamicData);
+    averagingControls.prepare(dynamicData);
     verticalBoundControls.prepare(dynamicData);
     horizontalResolutionControls.prepare(dynamicData);
     measurementsControls.prepare(dynamicData);
@@ -31,6 +32,7 @@ void SettingsWindow::fill(DynamicData &dynamicData)
 
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(vbox), triggerControls.getTriggerControlsContainer(), FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), averagingControls.getAveragingControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), verticalBoundControls.getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), horizontalResolutionControls.getHorizontalResolutionControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), measurementsControls.getFrequencyControlsContainer(), FALSE, TRUE, padding);
