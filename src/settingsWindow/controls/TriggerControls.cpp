@@ -40,12 +40,13 @@ void TriggerControls::prepareThresholdLabel(DynamicData &dynamicData)
 
 void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
 {
-    triggerThresholdSlider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
-                                                      0, Y_DISPLAY_RESOLUTION, 1);
+    GtkAdjustment *adjustment = gtk_adjustment_new(
+        DEFAULT_TRIGGER_THRESHOLD, 0, Y_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
+    triggerThresholdSlider =
+        gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
+
     gtk_widget_set_hexpand(triggerThresholdSlider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(triggerThresholdSlider), FALSE);
-    gtk_range_set_value(GTK_RANGE(triggerThresholdSlider),
-                        DEFAULT_TRIGGER_THRESHOLD);
 
     g_signal_connect(triggerThresholdSlider, "value-changed",
                      G_CALLBACK(triggerThresholdSliderOnChangeAction),
@@ -66,7 +67,8 @@ void TriggerControls::prepareTriggerRisingEdgeButton(DynamicData &dynamicData)
                      &(dynamicData.thresholdTrigger));
 }
 
-void TriggerControls::prepareTriggerFallingEdgeButton(DynamicData &dynamicData)
+void TriggerControls::prepareTriggerFallingEdgeButton(
+    DynamicData &dynamicData)
 {
     triggerFallingEdgeButton = gtk_button_new_with_label("‾‾\\__");
     g_signal_connect(triggerFallingEdgeButton, "clicked",
@@ -89,6 +91,7 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerFallingEdgeButton, 1, 3,
                     1, 1);
 
-    gtk_container_add(GTK_CONTAINER(triggerControlsExpander), triggerControlsGrid);
+    gtk_container_add(GTK_CONTAINER(triggerControlsExpander),
+                      triggerControlsGrid);
     return triggerControlsExpander;
 }
