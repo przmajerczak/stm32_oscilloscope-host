@@ -33,10 +33,11 @@ void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
 
 void VerticalBoundControls::prepare(DynamicData &dynamicData)
 {
+    // TODO: make this display value in mV, not in ys
     GtkAdjustment *lower_bound_slider_adjustment = gtk_adjustment_new(
         INPUT_SIGNAL_MIN, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1, 0.0, 0.0);
-    vertical_lower_bound_slider = gtk_scale_new(
-        GTK_ORIENTATION_VERTICAL, lower_bound_slider_adjustment);
+    vertical_lower_bound_slider =
+        gtk_scale_new(GTK_ORIENTATION_VERTICAL, lower_bound_slider_adjustment);
     gtk_widget_set_hexpand(vertical_lower_bound_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(vertical_lower_bound_slider), FALSE);
     gtk_range_set_inverted(GTK_RANGE(vertical_lower_bound_slider), TRUE);
@@ -44,8 +45,8 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
 
     GtkAdjustment *upper_bound_slider_adjustment = gtk_adjustment_new(
         INPUT_SIGNAL_MAX, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1, 0.0, 0.0);
-    vertical_upper_bound_slider = gtk_scale_new(
-        GTK_ORIENTATION_VERTICAL, upper_bound_slider_adjustment);
+    vertical_upper_bound_slider =
+        gtk_scale_new(GTK_ORIENTATION_VERTICAL, upper_bound_slider_adjustment);
     gtk_widget_set_hexpand(vertical_upper_bound_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(vertical_upper_bound_slider), FALSE);
     gtk_range_set_inverted(GTK_RANGE(vertical_upper_bound_slider), TRUE);
@@ -58,12 +59,18 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
                      G_CALLBACK(verticalLowerBoundSliderOnChangeAction),
                      &callbackDataForLowerBoundSlider);
 
+    vertical_lower_bound_spin_button =
+        gtk_spin_button_new(lower_bound_slider_adjustment, 1.0, 0);
+
     callbackDataForUpperBoundSlider.data = &dynamicData;
     callbackDataForUpperBoundSlider.widget = vertical_lower_bound_slider;
 
     g_signal_connect(vertical_upper_bound_slider, "value-changed",
                      G_CALLBACK(verticalUpperBoundSliderOnChangeAction),
                      &callbackDataForUpperBoundSlider);
+
+    vertical_upper_bound_spin_button =
+        gtk_spin_button_new(upper_bound_slider_adjustment, 1.0, 0);
 }
 
 GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
@@ -73,14 +80,33 @@ GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
     gtk_expander_set_expanded(GTK_EXPANDER(verticalBoundControlsExpander), TRUE);
 
     constexpr int spacing{0};
+    constexpr int padding{0};
+
+    GtkWidget *vertical_lower_bound_controls_vertical_box =
+        gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
+
+    gtk_box_pack_start(GTK_BOX(vertical_lower_bound_controls_vertical_box),
+                       vertical_lower_bound_spin_button, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vertical_lower_bound_controls_vertical_box),
+                       vertical_lower_bound_slider, FALSE, TRUE, padding);
+
+    GtkWidget *vertical_upper_bound_controls_vertical_box =
+        gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
+
+    gtk_box_pack_start(GTK_BOX(vertical_upper_bound_controls_vertical_box),
+                       vertical_upper_bound_spin_button, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vertical_upper_bound_controls_vertical_box),
+                       vertical_upper_bound_slider, FALSE, TRUE, padding);
+
     GtkWidget *verticalBoundControlsHorizontalBox =
         gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
 
-    constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(verticalBoundControlsHorizontalBox),
-                       vertical_lower_bound_slider, FALSE, TRUE, padding);
+                       vertical_lower_bound_controls_vertical_box, FALSE, TRUE,
+                       padding);
     gtk_box_pack_start(GTK_BOX(verticalBoundControlsHorizontalBox),
-                       vertical_upper_bound_slider, FALSE, TRUE, padding);
+                       vertical_upper_bound_controls_vertical_box, FALSE, TRUE,
+                       padding);
 
     gtk_container_add(GTK_CONTAINER(verticalBoundControlsExpander),
                       verticalBoundControlsHorizontalBox);

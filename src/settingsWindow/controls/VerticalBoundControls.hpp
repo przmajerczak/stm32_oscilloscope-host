@@ -13,6 +13,8 @@ public:
 private:
     GtkWidget *vertical_lower_bound_slider = nullptr;
     GtkWidget *vertical_upper_bound_slider = nullptr;
+    GtkWidget *vertical_lower_bound_spin_button = nullptr;
+    GtkWidget *vertical_upper_bound_spin_button = nullptr;
 
     CallbackData<DynamicData> callbackDataForLowerBoundSlider;
     CallbackData<DynamicData> callbackDataForUpperBoundSlider;
