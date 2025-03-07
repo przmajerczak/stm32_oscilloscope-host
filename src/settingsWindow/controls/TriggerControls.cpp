@@ -40,6 +40,7 @@ void TriggerControls::prepareThresholdLabel(DynamicData &dynamicData)
 
 void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
 {
+    // TODO: refactor to allow step=1mV instead of one y
     GtkAdjustment *adjustment = gtk_adjustment_new(
         DEFAULT_TRIGGER_THRESHOLD, 0, Y_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
     triggerThresholdSlider =
@@ -51,6 +52,9 @@ void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
     g_signal_connect(triggerThresholdSlider, "value-changed",
                      G_CALLBACK(triggerThresholdSliderOnChangeAction),
                      &(dynamicData.triggerThresholdSliderValue));
+
+    // TODO: refactor to display value in mV
+    trigger_spin_button = gtk_spin_button_new(adjustment, 1.0, 0);
 }
 
 void TriggerControls::prepareTriggerLabel(DynamicData &dynamicData)
@@ -84,7 +88,9 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
     GtkWidget *triggerControlsGrid = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), thresholdLabel, 0, 0, 2, 1);
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerThresholdSlider, 0, 1,
-                    2, 1);
+                    1, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), trigger_spin_button, 1, 1,
+                    1, 1);
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerLabel, 0, 2, 2, 1);
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerRisingEdgeButton, 0, 3,
                     1, 1);

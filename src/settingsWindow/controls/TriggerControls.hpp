@@ -21,4 +21,5 @@ private:
     GtkWidget *triggerLabel = nullptr;
     GtkWidget *triggerRisingEdgeButton = nullptr;
     GtkWidget *triggerFallingEdgeButton = nullptr;
+    GtkWidget *trigger_spin_button = nullptr;
 };
