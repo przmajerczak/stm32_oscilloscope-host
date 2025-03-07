@@ -23,11 +23,10 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
     const auto averagedValues{averageAdcValues(dynamicData, current_values)};
     const auto triggersIndexes{detectTriggers(dynamicData, averagedValues)};
 
-    dynamicData.frequency_Hz = calculateFrequency(dynamicData, triggersIndexes);
-
     AdcValues valuesToDisplay;
     if (averagedValues.size() == 0)
     {
+        dynamicData.frequency_Hz = 0.0;
         return valuesToDisplay;
     }
     const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
@@ -36,6 +35,8 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
                                       nanoseconds_per_sample};
 
     dynamicData.nanoseconds_per_sample = nanoseconds_per_sample;
+    dynamicData.frequency_Hz = calculateFrequency(
+        triggersIndexes, nanoseconds_per_sample, dynamicData.frame_duration_ns);
 
     valuesToDisplay.resize(samples_to_display);
     if (triggersIndexes.size() == 0)
@@ -160,20 +161,45 @@ bool DataAnalyzer::isTrigger(const DynamicData &dynamicData,
 }
 
 double DataAnalyzer::calculateFrequency(
-    DynamicData &dynamicData, const std::vector<std::size_t> &triggersIndexes)
+    const std::vector<std::size_t> &triggersIndexes,
+    const double nanoseconds_per_sample, const double frame_duration_ns)
 {
-    const uint16_t thresholdTriggersWithinFrame{triggersIndexes.size()};
-    if (thresholdTriggersWithinFrame != 0)
+    if (triggersIndexes.size() < 2)
     {
-        const double nanoseconds_per_period{
-            dynamicData.frame_duration_ns /
-            static_cast<double>(thresholdTriggersWithinFrame)};
-        const double frequency_Hz{1000000000 / nanoseconds_per_period};
+        return triggersIndexes.size() / frame_duration_ns;
+    }
 
-        return frequency_Hz;
+    std::vector<std::size_t> periods_between_triggers;
+    periods_between_triggers.resize(triggersIndexes.size() - 1);
+
+    for (std::size_t idx = 0; idx < periods_between_triggers.size(); ++idx)
+    {
+        periods_between_triggers.at(idx) =
+            triggersIndexes.at(idx + 1) - triggersIndexes.at(idx);
+    }
+
+    std::sort(periods_between_triggers.begin(), periods_between_triggers.end());
+
+    double median_signal_period;
+    const std::size_t middle_period_index{periods_between_triggers.size() / 2};
+    if (periods_between_triggers.size() & 0x01) // odd number of elements
+    {
+        median_signal_period = periods_between_triggers.at(middle_period_index);
     }
     else
     {
-        return 0.0;
+        const std::size_t lower_median_signal_period{
+            periods_between_triggers.at(middle_period_index - 1)};
+        const std::size_t upper_median_signal_period{
+            periods_between_triggers.at(middle_period_index)};
+
+        median_signal_period =
+            (lower_median_signal_period + upper_median_signal_period) / 2;
     }
+
+    double median_signal_period_ns =
+        median_signal_period * nanoseconds_per_sample;
+    constexpr double NANOSECONDS_PER_GHZ{1000000000.0};
+
+    return NANOSECONDS_PER_GHZ / median_signal_period_ns;
 }

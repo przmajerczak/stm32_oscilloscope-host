@@ -21,6 +21,7 @@ private:
                                             const AdcValues &averagedValues);
     bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
                    const uint16_t rightValue);
-    double calculateFrequency(DynamicData &dynamicData,
-                              const std::vector<std::size_t> &triggersIndexes);
+    double calculateFrequency(const std::vector<std::size_t> &triggersIndexes,
+                              const double nanoseconds_per_sample,
+                              const double frame_duration_ns);
 };
