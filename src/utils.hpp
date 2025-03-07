@@ -76,6 +76,10 @@ static std::string doubleToFixedLengthString(const double value, std::size_t len
         return fixedLengthNumber;
     }
 
+    if (fixedLengthNumber.at(len) == ',')
+    {
+        --len;
+    }
     return fixedLengthNumber.substr(0, len + 1);
 }
 
