@@ -23,7 +23,7 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
     const auto averagedValues{averageAdcValues(dynamicData, current_values)};
     const auto triggersIndexes{detectTriggers(dynamicData, averagedValues)};
 
-    dynamicData.thresholdTriggersWithinFrame = triggersIndexes.size();
+    dynamicData.frequency_Hz = calculateFrequency(dynamicData, triggersIndexes);
 
     AdcValues valuesToDisplay;
     if (averagedValues.size() == 0)
@@ -76,7 +76,8 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
     return valuesToDisplay;
 }
 
-AdcValues DataAnalyzer::averageAdcValues(const DynamicData &dynamicData, const AdcValues &current_values)
+AdcValues DataAnalyzer::averageAdcValues(const DynamicData &dynamicData,
+                                         const AdcValues &current_values)
 {
     const uint16_t averaging_window_size{dynamicData.averaging_window_size};
 
@@ -94,8 +95,7 @@ AdcValues DataAnalyzer::averageAdcValues(const DynamicData &dynamicData, const A
     }
 
     AdcValues averaged_values;
-    averaged_values.resize(current_values.size() - averaging_window_size -
-                           1);
+    averaged_values.resize(current_values.size() - averaging_window_size - 1);
 
     auto moving_average_window_front{current_values.begin()};
     auto moving_average_window_back{
@@ -157,4 +157,23 @@ bool DataAnalyzer::isTrigger(const DynamicData &dynamicData,
     }
 
     return false;
+}
+
+double DataAnalyzer::calculateFrequency(
+    DynamicData &dynamicData, const std::vector<std::size_t> &triggersIndexes)
+{
+    const uint16_t thresholdTriggersWithinFrame{triggersIndexes.size()};
+    if (thresholdTriggersWithinFrame != 0)
+    {
+        const double nanoseconds_per_period{
+            dynamicData.frame_duration_ns /
+            static_cast<double>(thresholdTriggersWithinFrame)};
+        const double frequency_Hz{1000000000 / nanoseconds_per_period};
+
+        return frequency_Hz;
+    }
+    else
+    {
+        return 0.0;
+    }
 }

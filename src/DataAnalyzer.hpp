@@ -10,15 +10,17 @@ class DataAnalyzer
 public:
     DataAnalyzer() {}
 
-    void handleData(const AdcValues &current_values,
-                    DynamicData &dynamicData);
+    void handleData(const AdcValues &current_values, DynamicData &dynamicData);
 
 private:
     AdcValues centerValuesOnTrigger(const AdcValues &averagedValues,
                                     DynamicData &dynamicData);
-    AdcValues averageAdcValues(const DynamicData &dynamicData, const AdcValues &current_values);
+    AdcValues averageAdcValues(const DynamicData &dynamicData,
+                               const AdcValues &current_values);
     std::vector<std::size_t> detectTriggers(const DynamicData &dynamicData,
                                             const AdcValues &averagedValues);
     bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
                    const uint16_t rightValue);
+    double calculateFrequency(DynamicData &dynamicData,
+                              const std::vector<std::size_t> &triggersIndexes);
 };

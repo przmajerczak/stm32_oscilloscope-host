@@ -15,30 +15,24 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 
     GtkLabel *label = GTK_LABEL(frequencyLabel);
     std::stringstream labelContent;
+    labelContent << "Signal frequency: ";
 
-    if (dynamicData->thresholdTriggersWithinFrame != 0)
+    const double frequency_Hz{dynamicData->frequency_Hz};
+    if (frequency_Hz > 1000000.0)
     {
-        double nanoseconds_per_period{
-            dynamicData->frame_duration_ns /
-            static_cast<double>(dynamicData->thresholdTriggersWithinFrame)};
-        double frequency_Hz{1000000000 / nanoseconds_per_period};
-
-        labelContent << "Signal frequency: ";
-
-        if (frequency_Hz > 1000)
-        {
-            labelContent << std::fixed << std::setprecision(2)
-                         << frequency_Hz / 1000 << " kHz";
-        }
-        else
-        {
-            labelContent << std::fixed << std::setprecision(2)
-                         << frequency_Hz << " Hz";
-        }
+        labelContent << std::fixed << std::setprecision(2)
+                     << frequency_Hz / 1000000.0 << " MHz";
+    }
+    else
+    if (frequency_Hz > 1000.0)
+    {
+        labelContent << std::fixed << std::setprecision(2)
+                     << frequency_Hz / 1000.0 << " kHz";
     }
     else
     {
-        labelContent << "Signal frequency: --- Hz";
+        labelContent << std::fixed << std::setprecision(2)
+                     << frequency_Hz << " Hz";
     }
 
     gtk_label_set_text(label, labelContent.str().c_str());
