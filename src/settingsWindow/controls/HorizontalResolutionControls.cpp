@@ -7,8 +7,7 @@ void horizontalResolutionSliderOnChangeAction(GtkRange *range,
 {
     DynamicData *dynamicData = (DynamicData *)_dynamicData;
 
-    dynamicData->horizontal_resolution_ns = pow(10,
-                                                gtk_range_get_value(range));
+    dynamicData->horizontal_resolution_ns = pow(10, gtk_range_get_value(range));
 }
 
 void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
@@ -20,19 +19,22 @@ void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
     constexpr uint8_t MAX_EXPONENT_OF_10{8};
     constexpr double STEP{0.01};
 
-    horizontal_resolution_slider = gtk_scale_new_with_range(
-        GTK_ORIENTATION_HORIZONTAL, MIN_EXPONENT_OF_10, MAX_EXPONENT_OF_10, STEP);
+    GtkAdjustment *adjustment =
+        gtk_adjustment_new(DEFAULT_EXPONENT_OF_10, MIN_EXPONENT_OF_10,
+                           MAX_EXPONENT_OF_10, STEP, 0.0, 0.0);
+    horizontal_resolution_slider =
+        gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
+    gtk_scale_set_digits(GTK_SCALE(horizontal_resolution_slider), 2);
     gtk_widget_set_hexpand(horizontal_resolution_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(horizontal_resolution_slider), TRUE);
-    gtk_range_set_value(GTK_RANGE(horizontal_resolution_slider),
-                        DEFAULT_EXPONENT_OF_10);
 
     g_signal_connect(horizontal_resolution_slider, "value-changed",
                      G_CALLBACK(horizontalResolutionSliderOnChangeAction),
                      &dynamicData);
 };
 
-GtkWidget *HorizontalResolutionControls::getHorizontalResolutionControlsContainer()
+GtkWidget *
+HorizontalResolutionControls::getHorizontalResolutionControlsContainer()
 {
     GtkWidget *horizontalResolutionControlsExpander =
         gtk_expander_new("Horizontal resolution controls");
