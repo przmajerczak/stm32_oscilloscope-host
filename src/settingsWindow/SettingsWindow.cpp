@@ -28,7 +28,11 @@ void SettingsWindow::fill(DynamicData &dynamicData)
 
     constexpr int spacing{0};
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
-    gtk_container_add(GTK_CONTAINER(window), vbox);
+    GtkWidget *scrolled_window = gtk_scrolled_window_new(nullptr, nullptr);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+
+    gtk_container_add(GTK_CONTAINER(scrolled_window), vbox);
+    gtk_container_add(GTK_CONTAINER(window), scrolled_window);
 
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(vbox), triggerControls.getTriggerControlsContainer(), FALSE, TRUE, padding);
