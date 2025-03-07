@@ -14,10 +14,11 @@ public:
                     DynamicData &dynamicData);
 
 private:
-    AdcValues centerValuesOnTrigger(const AdcValues &current_values,
+    AdcValues centerValuesOnTrigger(const AdcValues &averagedValues,
                                     DynamicData &dynamicData);
+    AdcValues averageAdcValues(const AdcValues &current_values);
     std::vector<std::size_t> detectTriggers(const DynamicData &dynamicData,
-                                            const AdcValues &current_values);
+                                            const AdcValues &averagedValues);
     bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
                    const uint16_t rightValue);
 };
