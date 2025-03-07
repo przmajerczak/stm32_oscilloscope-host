@@ -15,7 +15,7 @@ void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
     // TODO: extract to constants.hpp
     // TODO set to 1-1000 and ad s/ms/us button
     constexpr uint8_t MIN_EXPONENT_OF_10{3};
-    constexpr uint8_t DEFAULT_EXPONENT_OF_10{6};
+    constexpr uint8_t DEFAULT_EXPONENT_OF_10{7};
     constexpr uint8_t MAX_EXPONENT_OF_10{8};
     constexpr double STEP{0.01};
 
@@ -31,6 +31,8 @@ void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
     g_signal_connect(horizontal_resolution_slider, "value-changed",
                      G_CALLBACK(horizontalResolutionSliderOnChangeAction),
                      &dynamicData);
+
+    horizontal_resolution_spin_button = gtk_spin_button_new(adjustment, 1.0, 2);
 };
 
 GtkWidget *
@@ -48,6 +50,8 @@ HorizontalResolutionControls::getHorizontalResolutionControlsContainer()
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(horizontalResolutionHorizontalBox),
                        horizontal_resolution_slider, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(horizontalResolutionHorizontalBox),
+                       horizontal_resolution_spin_button, FALSE, TRUE, padding);
 
     gtk_container_add(GTK_CONTAINER(horizontalResolutionControlsExpander),
                       horizontalResolutionHorizontalBox);

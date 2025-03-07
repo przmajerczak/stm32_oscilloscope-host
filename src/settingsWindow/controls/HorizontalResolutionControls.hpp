@@ -11,4 +11,5 @@ public:
 
 private:
     GtkWidget *horizontal_resolution_slider = nullptr;
+    GtkWidget *horizontal_resolution_spin_button = nullptr;
 };
