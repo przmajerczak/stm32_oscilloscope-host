@@ -26,7 +26,7 @@ void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
         gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
     gtk_scale_set_digits(GTK_SCALE(horizontal_resolution_slider), 2);
     gtk_widget_set_hexpand(horizontal_resolution_slider, TRUE);
-    gtk_scale_set_draw_value(GTK_SCALE(horizontal_resolution_slider), TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(horizontal_resolution_slider), FALSE);
 
     g_signal_connect(horizontal_resolution_slider, "value-changed",
                      G_CALLBACK(horizontalResolutionSliderOnChangeAction),
