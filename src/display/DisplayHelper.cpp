@@ -84,7 +84,8 @@ void DisplayHelper::drawWaveform()
             break;
         }
 
-        y = marginCorrected(scaleAdcValueToY(dynamicData, *value_it));
+        y = marginCorrected(
+            scaleAdcValueToY(dynamicData.globalData.verticalBoundsData, *value_it));
         glVertex2f(x, y);
         x += x_length;
     }

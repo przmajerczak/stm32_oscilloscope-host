@@ -55,8 +55,10 @@ gboolean minVoltageLabelTimeoutAction(gpointer _callbackData)
     {
         labelContent << "Minimal voltage: "
                      << scaleYToVoltage_mV(
-                            *dynamicData,
-                            scaleAdcValueToY(*dynamicData, *min_voltage))
+                            dynamicData->globalData.verticalBoundsData,
+                            scaleAdcValueToY(
+                                dynamicData->globalData.verticalBoundsData,
+                                *min_voltage))
                      << " mV";
     }
     else
@@ -86,8 +88,10 @@ gboolean maxVoltageLabelTimeoutAction(gpointer _callbackData)
     {
         labelContent << "Maximal voltage: "
                      << scaleYToVoltage_mV(
-                            *dynamicData,
-                            scaleAdcValueToY(*dynamicData, *max_voltage))
+                            dynamicData->globalData.verticalBoundsData,
+                            scaleAdcValueToY(
+                                dynamicData->globalData.verticalBoundsData,
+                                *max_voltage))
                      << " mV";
     }
     else
@@ -123,8 +127,10 @@ gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData)
 
         labelContent << "Average voltage: "
                      << scaleYToVoltage_mV(
-                            *dynamicData,
-                            scaleAdcValueToY(*dynamicData, avg_voltage))
+                            dynamicData->globalData.verticalBoundsData,
+                            scaleAdcValueToY(
+                                dynamicData->globalData.verticalBoundsData,
+                                avg_voltage))
                      << " mV";
     }
 
