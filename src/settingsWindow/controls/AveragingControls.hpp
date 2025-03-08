@@ -1,12 +1,12 @@
 #pragma once
 
-#include "sharedData/DynamicData.hpp"
+#include "sharedData/ChannelData.hpp"
 #include <gtk/gtk.h>
 
 class AveragingControls
 {
 public:
-    void prepare(DynamicData &dynamicData);
+    void prepare(ChannelData &channelData);
     GtkWidget *getAveragingControlsContainer();
 
 private:

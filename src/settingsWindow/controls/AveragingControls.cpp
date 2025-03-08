@@ -1,15 +1,14 @@
 #include "AveragingControls.hpp"
 
 void averagingWindowSizeSpinButtonOnChangeAction(GtkSpinButton *spin_button,
-                                                 gpointer _dynamicData)
+                                                 gpointer _channelData)
 {
-    DynamicData *dynamicData = (DynamicData *)_dynamicData;
+    ChannelData *channelData = (ChannelData *)_channelData;
 
-    dynamicData->channelData.averaging_window_size =
-        gtk_spin_button_get_value(spin_button);
+    channelData->averaging_window_size = gtk_spin_button_get_value(spin_button);
 }
 
-void AveragingControls::prepare(DynamicData &dynamicData)
+void AveragingControls::prepare(ChannelData &channelData)
 {
     // TODO: replace with constant indicating frame size
     constexpr uint16_t AVERAGING_WINDOW_MAX_SIZE{10000};
@@ -22,7 +21,7 @@ void AveragingControls::prepare(DynamicData &dynamicData)
 
     g_signal_connect(averaging_window_size_spin_button, "value-changed",
                      G_CALLBACK(averagingWindowSizeSpinButtonOnChangeAction),
-                     &dynamicData);
+                     &channelData);
 };
 
 GtkWidget *AveragingControls::getAveragingControlsContainer()

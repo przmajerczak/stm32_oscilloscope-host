@@ -20,7 +20,7 @@ void SettingsWindow::configure()
 void SettingsWindow::fill(DynamicData &dynamicData)
 {
     triggerControls.prepare(dynamicData.channelData);
-    averagingControls.prepare(dynamicData);
+    averagingControls.prepare(dynamicData.channelData);
     verticalBoundControls.prepare(dynamicData.globalData.verticalBoundsData);
     horizontalResolutionControls.prepare(dynamicData.globalData);
     measurementsControls.prepare(dynamicData);
