@@ -37,7 +37,7 @@ void DisplayHelper::display()
 
     drawWaveform();
 
-    lineDrawer.drawTriggerIndicator((X_DISPLAY_RESOLUTION / 2),
+    lineDrawer.drawTriggerIndicator(dynamicData.trigger_horizontal_position,
                                     dynamicData.triggerThresholdSliderValue);
     lineDrawer.drawDisplayAreaBorder();
 

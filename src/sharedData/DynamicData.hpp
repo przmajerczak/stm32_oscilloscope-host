@@ -12,6 +12,7 @@ public:
     double frequency_Hz{0.0};
     uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
     ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
+    double trigger_horizontal_position{X_DISPLAY_RESOLUTION / 2};
 
     VerticalBoundsData verticalBoundsData;
     AdcValues adcValuesToDisplay{};
