@@ -1,22 +1,22 @@
 #pragma once
 
+#include "sharedData/ChannelData.hpp"
 #include <gtk/gtk.h>
-#include "sharedData/DynamicData.hpp"
 
 class TriggerControls
 {
 public:
-    void prepare(DynamicData &dynamicData);
+    void prepare(ChannelData &channelData);
     GtkWidget *getTriggerControlsContainer();
 
 private:
-    void prepareThresholdLabel(DynamicData &dynamicData);
-    void prepareTriggerThresholdSlider(DynamicData &dynamicData);
-    void prepareTriggerHorizontalPositionLabel(DynamicData &dynamicData);
-    void prepareTriggerHorizontalPositionSlider(DynamicData &dynamicData);
-    void prepareTriggerLabel(DynamicData &dynamicData);
-    void prepareTriggerRisingEdgeButton(DynamicData &dynamicData);
-    void prepareTriggerFallingEdgeButton(DynamicData &dynamicData);
+    void prepareThresholdLabel();
+    void prepareTriggerThresholdSlider(ChannelData &channelData);
+    void prepareTriggerHorizontalPositionLabel();
+    void prepareTriggerHorizontalPositionSlider(ChannelData &channelData);
+    void prepareTriggerLabel();
+    void prepareTriggerRisingEdgeButton(ChannelData &channelData);
+    void prepareTriggerFallingEdgeButton(ChannelData &channelData);
 
     GtkWidget *thresholdLabel = nullptr;
     GtkWidget *triggerThresholdSlider = nullptr;

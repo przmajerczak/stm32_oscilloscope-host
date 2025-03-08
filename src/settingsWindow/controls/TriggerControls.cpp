@@ -13,8 +13,8 @@ void triggerThresholdSliderOnChangeAction(GtkRange *range, gpointer data)
 void triggerHorizontalPositionSliderOnChangeAction(GtkRange *range,
                                                    gpointer data)
 {
-    DynamicData *dynamicData = (DynamicData *)data;
-    dynamicData->channelData.trigger_horizontal_position =
+    ChannelData *channelData = (ChannelData *)data;
+    channelData->trigger_horizontal_position =
         static_cast<uint16_t>(gtk_range_get_value(range));
 }
 
@@ -31,24 +31,24 @@ void onTriggerFallingEdgeButtonClicked(GtkWidget *button, gpointer data)
     *thresholdTrigger_ptr = ThresholdTrigger::FALLING_EDGE;
 }
 
-void TriggerControls::prepare(DynamicData &dynamicData)
+void TriggerControls::prepare(ChannelData &channelData)
 {
-    prepareThresholdLabel(dynamicData);
-    prepareTriggerThresholdSlider(dynamicData);
-    prepareTriggerHorizontalPositionLabel(dynamicData);
-    prepareTriggerHorizontalPositionSlider(dynamicData);
-    prepareTriggerLabel(dynamicData);
-    prepareTriggerRisingEdgeButton(dynamicData);
-    prepareTriggerFallingEdgeButton(dynamicData);
+    prepareThresholdLabel();
+    prepareTriggerThresholdSlider(channelData);
+    prepareTriggerHorizontalPositionLabel();
+    prepareTriggerHorizontalPositionSlider(channelData);
+    prepareTriggerLabel();
+    prepareTriggerRisingEdgeButton(channelData);
+    prepareTriggerFallingEdgeButton(channelData);
 }
 
-void TriggerControls::prepareThresholdLabel(DynamicData &dynamicData)
+void TriggerControls::prepareThresholdLabel()
 {
     thresholdLabel = gtk_label_new("Threshold trigger value:");
     gtk_widget_set_hexpand(thresholdLabel, TRUE);
 }
 
-void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
+void TriggerControls::prepareTriggerThresholdSlider(ChannelData &channelData)
 {
     // TODO: refactor to allow step=1mV instead of one y
     GtkAdjustment *adjustment = gtk_adjustment_new(
@@ -61,14 +61,13 @@ void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
 
     g_signal_connect(triggerThresholdSlider, "value-changed",
                      G_CALLBACK(triggerThresholdSliderOnChangeAction),
-                     &(dynamicData.channelData.triggerThresholdSliderValue));
+                     &(channelData.triggerThresholdSliderValue));
 
     // TODO: refactor to display value in mV
     trigger_spin_button = gtk_spin_button_new(adjustment, 1.0, 0);
 }
 
-void TriggerControls::prepareTriggerHorizontalPositionLabel(
-    DynamicData &dynamicData)
+void TriggerControls::prepareTriggerHorizontalPositionLabel()
 {
     triggerHorizontalPositionLabel =
         gtk_label_new("Trigger horizontal position:");
@@ -76,7 +75,7 @@ void TriggerControls::prepareTriggerHorizontalPositionLabel(
 }
 
 void TriggerControls::prepareTriggerHorizontalPositionSlider(
-    DynamicData &dynamicData)
+    ChannelData &channelData)
 {
     GtkAdjustment *adjustment =
         gtk_adjustment_new((X_DISPLAY_RESOLUTION / (NUMBER_OF_CHANNELS + 1)), 0,
@@ -89,33 +88,33 @@ void TriggerControls::prepareTriggerHorizontalPositionSlider(
 
     g_signal_connect(triggerHorizontalPositionSlider, "value-changed",
                      G_CALLBACK(triggerHorizontalPositionSliderOnChangeAction),
-                     &dynamicData);
+                     &channelData);
 
     trigger_horizontal_position_spin_button =
         gtk_spin_button_new(adjustment, 1.0, 0);
 }
 
-void TriggerControls::prepareTriggerLabel(DynamicData &dynamicData)
+void TriggerControls::prepareTriggerLabel()
 {
     triggerLabel = gtk_label_new("Threshold trigger edge:");
     gtk_widget_set_hexpand(triggerLabel, TRUE);
 }
 
-void TriggerControls::prepareTriggerRisingEdgeButton(DynamicData &dynamicData)
+void TriggerControls::prepareTriggerRisingEdgeButton(ChannelData &channelData)
 {
     triggerRisingEdgeButton = gtk_button_new_with_label("__/‾‾");
     g_signal_connect(triggerRisingEdgeButton, "clicked",
                      G_CALLBACK(onTriggerRisingEdgeButtonClicked),
-                     &(dynamicData.channelData.thresholdTrigger));
+                     &(channelData.thresholdTrigger));
 }
 
 void TriggerControls::prepareTriggerFallingEdgeButton(
-    DynamicData &dynamicData)
+    ChannelData &channelData)
 {
     triggerFallingEdgeButton = gtk_button_new_with_label("‾‾\\__");
     g_signal_connect(triggerFallingEdgeButton, "clicked",
                      G_CALLBACK(onTriggerFallingEdgeButtonClicked),
-                     &(dynamicData.channelData.thresholdTrigger));
+                     &(channelData.thresholdTrigger));
 }
 
 GtkWidget *TriggerControls::getTriggerControlsContainer()
