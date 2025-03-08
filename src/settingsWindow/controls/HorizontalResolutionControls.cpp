@@ -7,7 +7,8 @@ void horizontalResolutionSliderOnChangeAction(GtkRange *range,
 {
     DynamicData *dynamicData = (DynamicData *)_dynamicData;
 
-    dynamicData->horizontal_resolution_ns = pow(10, gtk_range_get_value(range));
+    dynamicData->globalData.horizontal_resolution_ns =
+        pow(10, gtk_range_get_value(range));
 }
 
 void HorizontalResolutionControls::prepare(DynamicData &dynamicData)

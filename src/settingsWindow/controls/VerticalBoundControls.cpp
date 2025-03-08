@@ -9,11 +9,12 @@ void verticalLowerBoundSliderOnChangeAction(GtkRange *range,
     GtkWidget *vertical_upper_bound_slider = callbackData->widget;
     DynamicData *dynamicData = callbackData->data;
 
-    dynamicData->verticalBoundsData.notifyAboutLowerBoundChange(
+    dynamicData->globalData.verticalBoundsData.notifyAboutLowerBoundChange(
         static_cast<uint16_t>(gtk_range_get_value(range)));
 
-    gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),
-                        dynamicData->verticalBoundsData.vertical_upper_bound);
+    gtk_range_set_value(
+        GTK_RANGE(vertical_upper_bound_slider),
+        dynamicData->globalData.verticalBoundsData.vertical_upper_bound);
 }
 
 void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
@@ -24,11 +25,12 @@ void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
     GtkWidget *vertical_lower_bound_slider = callbackData->widget;
     DynamicData *dynamicData = callbackData->data;
 
-    dynamicData->verticalBoundsData.notifyAboutUpperBoundChange(
+    dynamicData->globalData.verticalBoundsData.notifyAboutUpperBoundChange(
         static_cast<uint16_t>(gtk_range_get_value(range)));
 
-    gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider),
-                        dynamicData->verticalBoundsData.vertical_lower_bound);
+    gtk_range_set_value(
+        GTK_RANGE(vertical_lower_bound_slider),
+        dynamicData->globalData.verticalBoundsData.vertical_lower_bound);
 }
 
 void VerticalBoundControls::prepare(DynamicData &dynamicData)

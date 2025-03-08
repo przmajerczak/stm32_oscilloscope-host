@@ -12,42 +12,40 @@ extern int errno;
 void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 {
     std::thread t([&]()
-    {
-        // TODO: auto-detect correct path
-        deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+                  {
+    // TODO: auto-detect correct path
+    deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
 
-        while (deviceFileDescriptor == -1)
-        {
-            std::cerr << "Error while trying to connect to the device. Retrying."
-                      << std::endl;
+    while (deviceFileDescriptor == -1) {
+      std::cerr << "Error while trying to connect to the device. Retrying."
+                << std::endl;
 
-            if (errno == EACCES) // permission denied
-            {
-                std::cerr << "Read access permission needed." << std::endl;
-                system("sudo chmod +r /dev/ttyACM0");
-            }
+      if (errno == EACCES) // permission denied
+      {
+        std::cerr << "Read access permission needed." << std::endl;
+        system("sudo chmod +r /dev/ttyACM0");
+      }
 
-            deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
-        }
+      deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+    }
 
-        if (not configureTty(deviceFileDescriptor))
-        {
-            std::cerr << "Warning: tty configuration error. "
-                         "Data decoding might be inaccurate." << std::endl;
-        }
+    if (not configureTty(deviceFileDescriptor)) {
+      std::cerr << "Warning: tty configuration error. "
+                   "Data decoding might be inaccurate."
+                << std::endl;
+    }
 
-        while (1)
-        {
-            AdcValues retrieved_values{singleDataRetrieve(dynamicData)};
-            dataAnalyzer.handleData(retrieved_values, dynamicData);
-        }
-    });
+    while (1) {
+      AdcValues retrieved_values{singleDataRetrieve(dynamicData)};
+      dataAnalyzer.handleData(retrieved_values, dynamicData);
+    } });
     t.detach();
 }
 
 AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
-    Timemarker tmarker(dynamicData.timemarkersData.totalDataRetrievalAndDecodingDuration);
+    Timemarker tmarker(dynamicData.globalData.timemarkersData
+                           .totalDataRetrievalAndDecodingDuration);
 
     constexpr std::size_t expectedReceivedDataSize{20004};
 
@@ -64,7 +62,7 @@ AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
         receivedBytes = undecodedRetrievedData.size();
     }
 
-    dynamicData.frame_duration_ns =
+    dynamicData.globalData.frame_duration_ns =
         calculateFrameDuration_ns(undecodedRetrievedData);
 
     return decodeAdcValues(undecodedRetrievedData);
@@ -72,7 +70,8 @@ AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 
 EncodedAdcValues DataRetriever::retrieveData(DynamicData &dynamicData)
 {
-    Timemarker tmarker(dynamicData.timemarkersData.singleFrameDataRetrievalDuration);
+    Timemarker tmarker(
+        dynamicData.globalData.timemarkersData.singleFrameDataRetrievalDuration);
 
     uint8_t byte{0};
     uint8_t previous_byte{0};
@@ -142,14 +141,16 @@ bool DataRetriever::configureTty(const int deviceFileDescriptor)
     return true;
 }
 
-double DataRetriever::calculateFrameDuration_ns(EncodedAdcValues &undecodedRetrievedData)
+double DataRetriever::calculateFrameDuration_ns(
+    EncodedAdcValues &undecodedRetrievedData)
 {
     uint32_t timer_doubleticks_per_frame{
         pullFrameDurationFromUndecodedRetrievedData(undecodedRetrievedData)};
 
     constexpr double TIMER_COUNTS_UPWARDS_EDGE_TICKS{2.0};
 
-    return timer_doubleticks_per_frame * DEVICE_TIMER_SINGLE_TICK_DURATION_NS * TIMER_COUNTS_UPWARDS_EDGE_TICKS;
+    return timer_doubleticks_per_frame * DEVICE_TIMER_SINGLE_TICK_DURATION_NS *
+           TIMER_COUNTS_UPWARDS_EDGE_TICKS;
 }
 
 uint32_t DataRetriever::pullFrameDurationFromUndecodedRetrievedData(

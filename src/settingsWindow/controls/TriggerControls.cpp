@@ -14,7 +14,7 @@ void triggerHorizontalPositionSliderOnChangeAction(GtkRange *range,
                                                    gpointer data)
 {
     DynamicData *dynamicData = (DynamicData *)data;
-    dynamicData->trigger_horizontal_position =
+    dynamicData->channelData.trigger_horizontal_position =
         static_cast<uint16_t>(gtk_range_get_value(range));
 }
 
@@ -61,7 +61,7 @@ void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
 
     g_signal_connect(triggerThresholdSlider, "value-changed",
                      G_CALLBACK(triggerThresholdSliderOnChangeAction),
-                     &(dynamicData.triggerThresholdSliderValue));
+                     &(dynamicData.channelData.triggerThresholdSliderValue));
 
     // TODO: refactor to display value in mV
     trigger_spin_button = gtk_spin_button_new(adjustment, 1.0, 0);
@@ -106,7 +106,7 @@ void TriggerControls::prepareTriggerRisingEdgeButton(DynamicData &dynamicData)
     triggerRisingEdgeButton = gtk_button_new_with_label("__/‾‾");
     g_signal_connect(triggerRisingEdgeButton, "clicked",
                      G_CALLBACK(onTriggerRisingEdgeButtonClicked),
-                     &(dynamicData.thresholdTrigger));
+                     &(dynamicData.channelData.thresholdTrigger));
 }
 
 void TriggerControls::prepareTriggerFallingEdgeButton(
@@ -115,7 +115,7 @@ void TriggerControls::prepareTriggerFallingEdgeButton(
     triggerFallingEdgeButton = gtk_button_new_with_label("‾‾\\__");
     g_signal_connect(triggerFallingEdgeButton, "clicked",
                      G_CALLBACK(onTriggerFallingEdgeButtonClicked),
-                     &(dynamicData.thresholdTrigger));
+                     &(dynamicData.channelData.thresholdTrigger));
 }
 
 GtkWidget *TriggerControls::getTriggerControlsContainer()

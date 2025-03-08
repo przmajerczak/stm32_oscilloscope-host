@@ -9,9 +9,10 @@
 void DataAnalyzer::handleData(const AdcValues &current_values,
                               DynamicData &dynamicData)
 {
-    Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
+    Timemarker tmarker{
+        dynamicData.globalData.timemarkersData.totalDataAnalyzeDuration};
 
-    dynamicData.adcValuesToDisplay =
+    dynamicData.channelData.adcValuesToDisplay =
         std::move(centerValuesOnTrigger(current_values, dynamicData));
 }
 
@@ -26,17 +27,18 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
     AdcValues valuesToDisplay;
     if (averagedValues.size() == 0)
     {
-        dynamicData.frequency_Hz = 0.0;
+        dynamicData.channelData.frequency_Hz = 0.0;
         return valuesToDisplay;
     }
-    const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
+    const double nanoseconds_per_sample{dynamicData.globalData.frame_duration_ns /
                                         averagedValues.size()};
-    const uint32_t samples_to_display{dynamicData.horizontal_resolution_ns /
-                                      nanoseconds_per_sample};
+    const uint32_t samples_to_display{
+        dynamicData.globalData.horizontal_resolution_ns / nanoseconds_per_sample};
 
-    dynamicData.nanoseconds_per_sample = nanoseconds_per_sample;
-    dynamicData.frequency_Hz = calculateFrequency(
-        triggersIndexes, nanoseconds_per_sample, dynamicData.frame_duration_ns);
+    dynamicData.channelData.nanoseconds_per_sample = nanoseconds_per_sample;
+    dynamicData.channelData.frequency_Hz =
+        calculateFrequency(triggersIndexes, nanoseconds_per_sample,
+                           dynamicData.globalData.frame_duration_ns);
 
     valuesToDisplay.resize(samples_to_display);
     if (triggersIndexes.size() == 0)
@@ -58,9 +60,9 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
 
     std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
     const int shiftCountForTriggerCenter{static_cast<int>(
-        selectedTrigger -
-        (samples_to_display *
-         (dynamicData.trigger_horizontal_position / X_DISPLAY_RESOLUTION)))};
+        selectedTrigger - (samples_to_display *
+                           (dynamicData.channelData.trigger_horizontal_position /
+                            X_DISPLAY_RESOLUTION)))};
 
     for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
     {
@@ -82,7 +84,8 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
 AdcValues DataAnalyzer::averageAdcValues(const DynamicData &dynamicData,
                                          const AdcValues &current_values)
 {
-    const uint16_t averaging_window_size{dynamicData.averaging_window_size};
+    const uint16_t averaging_window_size{
+        dynamicData.channelData.averaging_window_size};
 
     if (averaging_window_size < 2)
     {
@@ -146,8 +149,8 @@ bool DataAnalyzer::isTrigger(const DynamicData &dynamicData,
                              const uint16_t rightValue)
 {
     const uint16_t threshold{scaleYToAdcWithinBounds(
-        dynamicData, dynamicData.triggerThresholdSliderValue)};
-    const ThresholdTrigger trigger{dynamicData.thresholdTrigger};
+        dynamicData, dynamicData.channelData.triggerThresholdSliderValue)};
+    const ThresholdTrigger trigger{dynamicData.channelData.thresholdTrigger};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)
     {

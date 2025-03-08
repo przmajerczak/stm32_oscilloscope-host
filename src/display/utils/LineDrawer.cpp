@@ -156,23 +156,24 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
-    const double nanoseconds_per_x{dynamicData.horizontal_resolution_ns /
-                                   static_cast<double>(X_DISPLAY_RESOLUTION)};
+    const double nanoseconds_per_x{
+        dynamicData.globalData.horizontal_resolution_ns /
+        static_cast<double>(X_DISPLAY_RESOLUTION)};
 
     double time_multiplier;
     const char *unit_label;
 
-    if (dynamicData.horizontal_resolution_ns >= 2000000000)
+    if (dynamicData.globalData.horizontal_resolution_ns >= 2000000000)
     {
         time_multiplier = 0.000000001;
         unit_label = "s";
     }
-    else if (dynamicData.horizontal_resolution_ns >= 2000000)
+    else if (dynamicData.globalData.horizontal_resolution_ns >= 2000000)
     {
         time_multiplier = 0.000001;
         unit_label = "ms";
     }
-    else if (dynamicData.horizontal_resolution_ns >= 20000)
+    else if (dynamicData.globalData.horizontal_resolution_ns >= 20000)
     {
         time_multiplier = 0.001;
         unit_label = "us";
@@ -183,16 +184,16 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
         unit_label = "ns";
     }
 
-    drawVerticalLineWithLabels(middle_x, "0", unit_label, textPrinterForGrid, BOLD,
-                               true);
+    drawVerticalLineWithLabels(middle_x, "0", unit_label, textPrinterForGrid,
+                               BOLD, true);
 
     for (int i = 1; i <= numOfVerticalLayers - 1; ++i)
     {
         const int right_x{middle_x + static_cast<int>(i * delta_x)};
         const int left_x{middle_x - static_cast<int>(i * delta_x)};
 
-        const double nanoseconds_for_line{(right_x - middle_x) *
-                                          nanoseconds_per_x * time_multiplier};
+        const double nanoseconds_for_line{(right_x - middle_x) * nanoseconds_per_x *
+                                          time_multiplier};
 
         std::string left_time_value{
             doubleToFixedLengthString(-1.0 * nanoseconds_for_line, 4)};

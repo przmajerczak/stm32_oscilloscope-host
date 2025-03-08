@@ -29,7 +29,8 @@ DisplayHelper::DisplayHelper(DynamicData &dynamicData)
 
 void DisplayHelper::display()
 {
-    Timemarker tmarker{dynamicData.timemarkersData.customNonLibraryFrameDisplayDuration};
+    Timemarker tmarker{dynamicData.globalData.timemarkersData
+                           .customNonLibraryFrameDisplayDuration};
 
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -37,8 +38,9 @@ void DisplayHelper::display()
 
     drawWaveform();
 
-    lineDrawer.drawTriggerIndicator(dynamicData.trigger_horizontal_position,
-                                    dynamicData.triggerThresholdSliderValue);
+    lineDrawer.drawTriggerIndicator(
+        dynamicData.channelData.trigger_horizontal_position,
+        dynamicData.channelData.triggerThresholdSliderValue);
     lineDrawer.drawDisplayAreaBorder();
 
     glFlush();
@@ -47,7 +49,8 @@ void DisplayHelper::display()
 void DisplayHelper::drawWaveform()
 {
     auto adcValuesToDisplay{
-        dynamicData.adcValuesToDisplay}; // TODO: handle multithreading better
+        dynamicData.channelData
+            .adcValuesToDisplay}; // TODO: handle multithreading better
     auto value_it{adcValuesToDisplay.begin()};
 
     if (value_it == adcValuesToDisplay.end())
@@ -101,7 +104,8 @@ void DisplayHelper::run()
                                       frame_duration};
         if (time_for_new_frame)
         {
-            Timemarker tmarker{dynamicData.timemarkersData.totalFrameDisplayDuration};
+            Timemarker tmarker{
+                dynamicData.globalData.timemarkersData.totalFrameDisplayDuration};
             display();
 
             glfwSwapBuffers(window);

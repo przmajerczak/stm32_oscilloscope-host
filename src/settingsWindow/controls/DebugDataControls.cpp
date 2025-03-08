@@ -16,12 +16,12 @@ timemarkerDataForDataRetrievalDataLabelTimeoutAction(gpointer _callbackData)
 
     labelContent
         << "Average total data retrieval and decoding duration: "
-        << dynamicData->timemarkersData.totalDataRetrievalAndDecodingDuration
-               .getAverageDuration_us()
+        << dynamicData->globalData.timemarkersData
+               .totalDataRetrievalAndDecodingDuration.getAverageDuration_us()
         << " us. " << std::endl
         << "("
-        << dynamicData->timemarkersData.singleFrameDataRetrievalDuration
-               .getAverageDuration_us()
+        << dynamicData->globalData.timemarkersData
+               .singleFrameDataRetrievalDuration.getAverageDuration_us()
         << " of that is single frame data retrieval duration.)" << std::endl;
 
     gtk_label_set_text(label, labelContent.str().c_str());
@@ -41,8 +41,8 @@ timemarkerDataForDataAnalysisDataLabelTimeoutAction(gpointer _callbackData)
     std::stringstream labelContent;
 
     labelContent << "Average total data analyzing duration: "
-                 << dynamicData->timemarkersData.totalDataAnalyzeDuration
-                        .getAverageDuration_us()
+                 << dynamicData->globalData.timemarkersData
+                        .totalDataAnalyzeDuration.getAverageDuration_us()
                  << " us." << std::endl;
 
     gtk_label_set_text(label, labelContent.str().c_str());
@@ -63,21 +63,21 @@ timemarkerDataForFrameDisplayDataLabelTimeoutAction(gpointer _callbackData)
 
     labelContent
         << "Average total frame display duration: "
-        << dynamicData->timemarkersData.totalFrameDisplayDuration
+        << dynamicData->globalData.timemarkersData.totalFrameDisplayDuration
                .getAverageDuration_us()
         << " us. " << std::endl
         << "("
-        << dynamicData->timemarkersData.customNonLibraryFrameDisplayDuration
-               .getAverageDuration_us()
-        << " of that is \"our own\" display duration, the rest is library calls.)";
+        << dynamicData->globalData.timemarkersData
+               .customNonLibraryFrameDisplayDuration.getAverageDuration_us()
+        << " of that is \"our own\" display duration, the rest is library "
+           "calls.)";
 
     gtk_label_set_text(label, labelContent.str().c_str());
 
     return TRUE;
 }
 
-gboolean
-nanosecondsPerSampleLabelTimeoutAction(gpointer _callbackData)
+gboolean nanosecondsPerSampleLabelTimeoutAction(gpointer _callbackData)
 {
     CallbackData<DynamicData> *callbackData =
         (CallbackData<DynamicData> *)_callbackData;
@@ -87,10 +87,8 @@ nanosecondsPerSampleLabelTimeoutAction(gpointer _callbackData)
     GtkLabel *label = GTK_LABEL(nanosecondsPerSampleLabel);
     std::stringstream labelContent;
 
-    labelContent
-        << "Nanoseconds per sample: "
-        << dynamicData->nanoseconds_per_sample
-        << " ns";
+    labelContent << "Nanoseconds per sample: "
+                 << dynamicData->channelData.nanoseconds_per_sample << " ns";
 
     gtk_label_set_text(label, labelContent.str().c_str());
 
@@ -156,16 +154,13 @@ void DebugDataControls::prepareTimemarkerDataForFrameDisplayDataLabel(
 void DebugDataControls::prepareNanosecondsPerSampleLabel(
     DynamicData &dynamicData)
 {
-    nanosecondsPerSampleLabel =
-        gtk_label_new("Nanoseconds per sample: --- ns");
+    nanosecondsPerSampleLabel = gtk_label_new("Nanoseconds per sample: --- ns");
     gtk_widget_set_hexpand(nanosecondsPerSampleLabel, TRUE);
 
-    callbackDataForNanosecondsPerSample.widget =
-        nanosecondsPerSampleLabel;
+    callbackDataForNanosecondsPerSample.widget = nanosecondsPerSampleLabel;
     callbackDataForNanosecondsPerSample.data = &dynamicData;
 
-    g_timeout_add(LABELS_REFRESH_RATE_MS,
-                  nanosecondsPerSampleLabelTimeoutAction,
+    g_timeout_add(LABELS_REFRESH_RATE_MS, nanosecondsPerSampleLabelTimeoutAction,
                   &callbackDataForNanosecondsPerSample);
 }
 
@@ -189,8 +184,7 @@ GtkWidget *DebugDataControls::getDebugDataControlsContainer()
                        timemarkerDataForFrameDisplayDataLabel, FALSE, TRUE,
                        padding);
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox),
-                       nanosecondsPerSampleLabel, FALSE, TRUE,
-                       padding);
+                       nanosecondsPerSampleLabel, FALSE, TRUE, padding);
 
     gtk_container_add(GTK_CONTAINER(debugDataControlsExpander),
                       measurementsVerticalBox);
