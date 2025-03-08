@@ -95,8 +95,8 @@ void LineDrawer::drawHorizontalLineWithLabels(const int y,
     const int upper_line_y{marginCorrected(y)};
     const int lower_line_y{upper_line_y - 20}; // TODO: remove magic number
 
-    const std::string voltage_value{std::to_string(
-        scaleYToVoltage_mV(dynamicData.globalData.verticalBoundsData, y))};
+    const std::string voltage_value{
+        std::to_string(scaleYToVoltage_mV(globalData.verticalBoundsData, y))};
 
     textPrinter.drawText(right_x, upper_line_y, voltage_value.c_str());
     textPrinter.drawText(right_x, lower_line_y, unit_label);
@@ -156,24 +156,23 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
-    const double nanoseconds_per_x{
-        dynamicData.globalData.horizontal_resolution_ns /
-        static_cast<double>(X_DISPLAY_RESOLUTION)};
+    const double nanoseconds_per_x{globalData.horizontal_resolution_ns /
+                                   static_cast<double>(X_DISPLAY_RESOLUTION)};
 
     double time_multiplier;
     const char *unit_label;
 
-    if (dynamicData.globalData.horizontal_resolution_ns >= 2000000000)
+    if (globalData.horizontal_resolution_ns >= 2000000000)
     {
         time_multiplier = 0.000000001;
         unit_label = "s";
     }
-    else if (dynamicData.globalData.horizontal_resolution_ns >= 2000000)
+    else if (globalData.horizontal_resolution_ns >= 2000000)
     {
         time_multiplier = 0.000001;
         unit_label = "ms";
     }
-    else if (dynamicData.globalData.horizontal_resolution_ns >= 20000)
+    else if (globalData.horizontal_resolution_ns >= 20000)
     {
         time_multiplier = 0.001;
         unit_label = "us";

@@ -1,19 +1,18 @@
 #pragma once
 
 #include "display/utils/TextPrinter.hpp"
+#include "sharedData/GlobalData.hpp"
 #include "sharedData/constants.hpp"
-#include "sharedData/DynamicData.hpp"
 #include "utils.hpp"
 #include <string>
 
 class LineDrawer
 {
 public:
-    LineDrawer(const DynamicData &dynamicData) : dynamicData(dynamicData) {}
+    LineDrawer(const GlobalData &globalData) : globalData(globalData) {}
 
     void drawTriggerIndicator(const int x, const int y);
-    void drawGrid(const int numOfVerticalLayers,
-                  const int numOfHorizontalLayers);
+    void drawGrid(const int numOfVerticalLayers, const int numOfHorizontalLayers);
     void drawDisplayAreaBorder();
 
 private:
@@ -33,8 +32,9 @@ private:
     void drawHorizontalGrid(const int numOfHorizontalLayers);
     void drawVerticalGrid(const int numOfVerticalLayers);
 
-    TextPrinter textPrinterForTriggerIndicator{FONT_SIZE_LARGE, COLOR_RGB_WHITE, NEUTRAL};
+    TextPrinter textPrinterForTriggerIndicator{FONT_SIZE_LARGE, COLOR_RGB_WHITE,
+                                               NEUTRAL};
     TextPrinter textPrinterForGrid{FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL};
 
-    const DynamicData &dynamicData;
+    const GlobalData &globalData;
 };
