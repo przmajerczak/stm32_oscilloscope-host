@@ -57,8 +57,10 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
     }
 
     std::size_t selectedTrigger{triggersIndexes.at(triggersIndexes.size() / 2)};
-    const int shiftCountForTriggerCenter{
-        static_cast<int>(selectedTrigger - (samples_to_display / 2))};
+    const int shiftCountForTriggerCenter{static_cast<int>(
+        selectedTrigger -
+        (samples_to_display *
+         (dynamicData.trigger_horizontal_position / X_DISPLAY_RESOLUTION)))};
 
     for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
     {

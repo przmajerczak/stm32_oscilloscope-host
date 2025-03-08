@@ -10,6 +10,14 @@ void triggerThresholdSliderOnChangeAction(GtkRange *range, gpointer data)
         static_cast<uint16_t>(gtk_range_get_value(range));
 }
 
+void triggerHorizontalPositionSliderOnChangeAction(GtkRange *range,
+                                                   gpointer data)
+{
+    DynamicData *dynamicData = (DynamicData *)data;
+    dynamicData->trigger_horizontal_position =
+        static_cast<uint16_t>(gtk_range_get_value(range));
+}
+
 void onTriggerRisingEdgeButtonClicked(GtkWidget *button, gpointer data)
 {
     ThresholdTrigger *thresholdTrigger_ptr = (ThresholdTrigger *)data;
@@ -27,6 +35,8 @@ void TriggerControls::prepare(DynamicData &dynamicData)
 {
     prepareThresholdLabel(dynamicData);
     prepareTriggerThresholdSlider(dynamicData);
+    prepareTriggerHorizontalPositionLabel(dynamicData);
+    prepareTriggerHorizontalPositionSlider(dynamicData);
     prepareTriggerLabel(dynamicData);
     prepareTriggerRisingEdgeButton(dynamicData);
     prepareTriggerFallingEdgeButton(dynamicData);
@@ -55,6 +65,34 @@ void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
 
     // TODO: refactor to display value in mV
     trigger_spin_button = gtk_spin_button_new(adjustment, 1.0, 0);
+}
+
+void TriggerControls::prepareTriggerHorizontalPositionLabel(
+    DynamicData &dynamicData)
+{
+    triggerHorizontalPositionLabel =
+        gtk_label_new("Trigger horizontal position:");
+    gtk_widget_set_hexpand(thresholdLabel, TRUE);
+}
+
+void TriggerControls::prepareTriggerHorizontalPositionSlider(
+    DynamicData &dynamicData)
+{
+    GtkAdjustment *adjustment =
+        gtk_adjustment_new((X_DISPLAY_RESOLUTION / (NUMBER_OF_CHANNELS + 1)), 0,
+                           X_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
+    triggerHorizontalPositionSlider =
+        gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
+
+    gtk_widget_set_hexpand(triggerHorizontalPositionSlider, TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(triggerHorizontalPositionSlider), FALSE);
+
+    g_signal_connect(triggerHorizontalPositionSlider, "value-changed",
+                     G_CALLBACK(triggerHorizontalPositionSliderOnChangeAction),
+                     &dynamicData);
+
+    trigger_horizontal_position_spin_button =
+        gtk_spin_button_new(adjustment, 1.0, 0);
 }
 
 void TriggerControls::prepareTriggerLabel(DynamicData &dynamicData)
@@ -89,12 +127,18 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), thresholdLabel, 0, 0, 2, 1);
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerThresholdSlider, 0, 1,
                     1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), trigger_spin_button, 1, 1,
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), trigger_spin_button, 1, 1, 1,
+                    1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerHorizontalPositionLabel,
+                    0, 2, 2, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid),
+                    triggerHorizontalPositionSlider, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid),
+                    trigger_horizontal_position_spin_button, 1, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerLabel, 0, 4, 2, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerRisingEdgeButton, 0, 5,
                     1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerLabel, 0, 2, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerRisingEdgeButton, 0, 3,
-                    1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerFallingEdgeButton, 1, 3,
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerFallingEdgeButton, 1, 5,
                     1, 1);
 
     gtk_container_add(GTK_CONTAINER(triggerControlsExpander),
