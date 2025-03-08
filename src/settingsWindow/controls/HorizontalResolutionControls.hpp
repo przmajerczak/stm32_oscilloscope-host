@@ -1,12 +1,12 @@
 #pragma once
 
-#include "sharedData/DynamicData.hpp"
+#include "sharedData/GlobalData.hpp"
 #include <gtk/gtk.h>
 
 class HorizontalResolutionControls
 {
 public:
-    void prepare(DynamicData &dynamicData);
+    void prepare(GlobalData &globalData);
     GtkWidget *getHorizontalResolutionControlsContainer();
 
 private:

@@ -3,15 +3,14 @@
 #include <cmath>
 
 void horizontalResolutionSliderOnChangeAction(GtkRange *range,
-                                              gpointer _dynamicData)
+                                              gpointer _globalData)
 {
-    DynamicData *dynamicData = (DynamicData *)_dynamicData;
+    GlobalData *globalData = (GlobalData *)_globalData;
 
-    dynamicData->globalData.horizontal_resolution_ns =
-        pow(10, gtk_range_get_value(range));
+    globalData->horizontal_resolution_ns = pow(10, gtk_range_get_value(range));
 }
 
-void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
+void HorizontalResolutionControls::prepare(GlobalData &globalData)
 {
     // TODO: extract to constants.hpp
     // TODO set to 1-1000 and ad s/ms/us button
@@ -31,7 +30,7 @@ void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
 
     g_signal_connect(horizontal_resolution_slider, "value-changed",
                      G_CALLBACK(horizontalResolutionSliderOnChangeAction),
-                     &dynamicData);
+                     &globalData);
 
     horizontal_resolution_spin_button = gtk_spin_button_new(adjustment, 1.0, 2);
 };
