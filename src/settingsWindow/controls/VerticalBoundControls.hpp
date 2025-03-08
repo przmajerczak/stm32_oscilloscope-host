@@ -1,13 +1,13 @@
 #pragma once
 
 #include "settingsWindow/controls/CallbackData.hpp"
-#include "sharedData/DynamicData.hpp"
+#include "sharedData/VerticalBoundsData.hpp"
 #include <gtk/gtk.h>
 
 class VerticalBoundControls
 {
 public:
-    void prepare(DynamicData &dynamicData);
+    void prepare(VerticalBoundsData &verticalBoundsData);
     GtkWidget *getVerticalBoundControlsContainer();
 
 private:
@@ -16,6 +16,6 @@ private:
     GtkWidget *vertical_lower_bound_spin_button = nullptr;
     GtkWidget *vertical_upper_bound_spin_button = nullptr;
 
-    CallbackData<DynamicData> callbackDataForLowerBoundSlider;
-    CallbackData<DynamicData> callbackDataForUpperBoundSlider;
+    CallbackData<VerticalBoundsData> callbackDataForLowerBoundSlider;
+    CallbackData<VerticalBoundsData> callbackDataForUpperBoundSlider;
 };

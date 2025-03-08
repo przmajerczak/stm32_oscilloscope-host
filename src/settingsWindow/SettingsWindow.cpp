@@ -21,7 +21,7 @@ void SettingsWindow::fill(DynamicData &dynamicData)
 {
     triggerControls.prepare(dynamicData);
     averagingControls.prepare(dynamicData);
-    verticalBoundControls.prepare(dynamicData);
+    verticalBoundControls.prepare(dynamicData.globalData.verticalBoundsData);
     horizontalResolutionControls.prepare(dynamicData);
     measurementsControls.prepare(dynamicData);
     debugDataControls.prepare(dynamicData);
