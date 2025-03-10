@@ -38,15 +38,13 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 
         while (1)
         {
-            AdcValues retrieved_values{singleDataRetrieve(dynamicData)};
-
-            dynamicData.retrieved_adc_values = retrieved_values;
+            singleDataRetrieve(dynamicData);
         }
     });
     t.detach();
 }
 
-AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
+void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
     Timemarker tmarker(dynamicData.timemarkersData.totalDataRetrievalAndDecodingDuration);
 
@@ -68,7 +66,13 @@ AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
     dynamicData.frame_duration_ns =
         calculateFrameDuration_ns(undecodedRetrievedData.values);
 
-    return decodeAdcValues(undecodedRetrievedData.values);
+    // TODO: enable channel 2 support
+    if (undecodedRetrievedData.channelId != ChannelId::CHANNEL_1)
+    {
+        return;
+    }
+
+    dynamicData.retrieved_adc_values = decodeAdcValues(undecodedRetrievedData.values);
 }
 
 EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)

@@ -13,7 +13,7 @@ public:
     void runContinuousDataRetrieve(DynamicData &dynamicData);
 
 private:
-    AdcValues singleDataRetrieve(DynamicData &dynamicData);
+    void singleDataRetrieve(DynamicData &dynamicData);
     EncodedAdcData retrieveData(DynamicData &dynamicData);
     AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);
     bool configureTty(const int deviceFileDescriptor);
