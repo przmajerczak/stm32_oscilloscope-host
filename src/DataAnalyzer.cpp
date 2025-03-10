@@ -11,25 +11,26 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
 {
     Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
 
-    return std::move(centerValuesOnTrigger(current_values, dynamicData));
+    const auto averaged_values{averageAdcValues(dynamicData, current_values)};
+
+    return std::move(centerValuesOnTrigger(averaged_values, dynamicData));
 }
 
 AdcValues DataAnalyzer::centerValuesOnTrigger(
-    const AdcValues &current_values,
+    const AdcValues &averaged_values,
     DynamicData &dynamicData) // TODO: change this name
 
 {
-    const auto averagedValues{averageAdcValues(dynamicData, current_values)};
-    const auto triggersIndexes{detectTriggers(dynamicData, averagedValues)};
+    const auto triggersIndexes{detectTriggers(dynamicData, averaged_values)};
 
     AdcValues valuesToDisplay;
-    if (averagedValues.size() == 0)
+    if (averaged_values.size() == 0)
     {
         dynamicData.frequency_Hz = 0.0;
         return valuesToDisplay;
     }
     const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
-                                        averagedValues.size()};
+                                        averaged_values.size()};
     const uint32_t samples_to_display{dynamicData.horizontal_resolution_ns /
                                       nanoseconds_per_sample};
 
@@ -43,9 +44,9 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
         for (std::size_t idx = 0; idx < samples_to_display; ++idx)
         {
             // TODO: copy this better with STL
-            if (idx < averagedValues.size())
+            if (idx < averaged_values.size())
             {
-                valuesToDisplay.at(idx) = averagedValues.at(idx);
+                valuesToDisplay.at(idx) = averaged_values.at(idx);
             }
             else
             {
@@ -63,11 +64,11 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
 
     for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
     {
-        const std::size_t averagedValues_idx{idx + shiftCountForTriggerCenter};
-        if (averagedValues_idx >= 0 and
-            averagedValues_idx < averagedValues.size())
+        const std::size_t averaged_values_idx{idx + shiftCountForTriggerCenter};
+        if (averaged_values_idx >= 0 and
+            averaged_values_idx < averaged_values.size())
         {
-            valuesToDisplay.at(idx) = averagedValues.at(averagedValues_idx);
+            valuesToDisplay.at(idx) = averaged_values.at(averaged_values_idx);
         }
         else
         {
@@ -122,14 +123,14 @@ AdcValues DataAnalyzer::averageAdcValues(const DynamicData &dynamicData,
 
 std::vector<std::size_t>
 DataAnalyzer::detectTriggers(const DynamicData &dynamicData,
-                             const AdcValues &averagedValues)
+                             const AdcValues &averaged_values)
 {
     std::vector<std::size_t> triggersIndexes;
 
-    for (std::size_t idx = 0; idx < averagedValues.size() - 1; ++idx)
+    for (std::size_t idx = 0; idx < averaged_values.size() - 1; ++idx)
     {
-        const auto currentValue{averagedValues.at(idx)};
-        const auto nextValue{averagedValues.at(idx + 1)};
+        const auto currentValue{averaged_values.at(idx)};
+        const auto nextValue{averaged_values.at(idx + 1)};
 
         if (isTrigger(dynamicData, currentValue, nextValue))
         {
