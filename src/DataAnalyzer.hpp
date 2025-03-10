@@ -15,7 +15,7 @@ public:
 private:
     AdcValues centerValuesOnTrigger(const AdcValues &averaged_values,
                                     DynamicData &dynamicData);
-    AdcValues averageAdcValues(const DynamicData &dynamicData,
+    AdcValues averageAdcValues(DynamicData &dynamicData,
                                const AdcValues &current_values);
     std::vector<std::size_t> detectTriggers(const DynamicData &dynamicData,
                                             const AdcValues &averaged_values);

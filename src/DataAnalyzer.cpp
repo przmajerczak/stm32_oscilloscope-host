@@ -29,14 +29,12 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
         dynamicData.frequency_Hz = 0.0;
         return valuesToDisplay;
     }
-    const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
-                                        averaged_values.size()};
-    const uint32_t samples_to_display{dynamicData.horizontal_resolution_ns /
-                                      nanoseconds_per_sample};
 
-    dynamicData.nanoseconds_per_sample = nanoseconds_per_sample;
+    const uint32_t samples_to_display{dynamicData.horizontal_resolution_ns /
+                                      dynamicData.nanoseconds_per_sample};
+
     dynamicData.frequency_Hz = calculateFrequency(
-        triggersIndexes, nanoseconds_per_sample, dynamicData.frame_duration_ns);
+        triggersIndexes, dynamicData.nanoseconds_per_sample, dynamicData.frame_duration_ns);
 
     valuesToDisplay.resize(samples_to_display);
     if (triggersIndexes.size() == 0)
@@ -79,13 +77,17 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(
     return valuesToDisplay;
 }
 
-AdcValues DataAnalyzer::averageAdcValues(const DynamicData &dynamicData,
+AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
                                          const AdcValues &current_values)
 {
     const uint16_t averaging_window_size{dynamicData.averaging_window_size};
 
     if (averaging_window_size < 2)
     {
+        const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
+                                            current_values.size()};
+        dynamicData.nanoseconds_per_sample = nanoseconds_per_sample;
+
         return std::move(current_values);
     }
 
@@ -117,6 +119,10 @@ AdcValues DataAnalyzer::averageAdcValues(const DynamicData &dynamicData,
         moving_average_window_front++;
         moving_average_window_back++;
     }
+
+    const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
+                                        averaged_values.size()};
+    dynamicData.nanoseconds_per_sample = nanoseconds_per_sample;
 
     return std::move(averaged_values);
 }
