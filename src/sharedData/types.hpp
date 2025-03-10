@@ -12,3 +12,15 @@ enum class ThresholdTrigger
     RISING_EDGE,
     FALLING_EDGE
 };
+
+enum class ChannelId
+{
+    CHANNEL_1,
+    CHANNEL_2
+};
+
+struct EncodedAdcData
+{
+    EncodedAdcValues values;
+    ChannelId channelId;
+};
