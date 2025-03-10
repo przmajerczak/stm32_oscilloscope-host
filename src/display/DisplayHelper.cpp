@@ -29,7 +29,8 @@ DisplayHelper::DisplayHelper(DynamicData &dynamicData)
 
 void DisplayHelper::display()
 {
-    Timemarker tmarker{dynamicData.timemarkersData.customNonLibraryFrameDisplayDuration};
+    Timemarker tmarker{
+        dynamicData.timemarkersData.customNonLibraryFrameDisplayDuration};
 
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -46,8 +47,14 @@ void DisplayHelper::display()
 
 void DisplayHelper::drawWaveform()
 {
-    auto adcValuesToDisplay{
-        dynamicData.adcValuesToDisplay}; // TODO: handle multithreading better
+    if (dynamicData.retrieved_adc_values.empty())
+    {
+        return;
+    }
+
+    auto adcValuesToDisplay{dataAnalyzer.prepareData(
+        dynamicData.retrieved_adc_values,
+        dynamicData)}; // TODO: handle multithreading better
     auto value_it{adcValuesToDisplay.begin()};
 
     if (value_it == adcValuesToDisplay.end())

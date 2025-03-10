@@ -51,9 +51,9 @@ gboolean minVoltageLabelTimeoutAction(gpointer _callbackData)
     std::stringstream labelContent;
 
     const auto min_voltage =
-        std::min_element(dynamicData->adcValuesToDisplay.begin(),
-                         dynamicData->adcValuesToDisplay.end());
-    if (min_voltage != dynamicData->adcValuesToDisplay.end())
+        std::min_element(dynamicData->retrieved_adc_values.begin(),
+                         dynamicData->retrieved_adc_values.end());
+    if (min_voltage != dynamicData->retrieved_adc_values.end())
     {
         labelContent << "Minimal voltage: "
                      << scaleYToVoltage_mV(
@@ -82,9 +82,9 @@ gboolean maxVoltageLabelTimeoutAction(gpointer _callbackData)
     std::stringstream labelContent;
 
     const auto max_voltage =
-        std::max_element(dynamicData->adcValuesToDisplay.begin(),
-                         dynamicData->adcValuesToDisplay.end());
-    if (max_voltage != dynamicData->adcValuesToDisplay.end())
+        std::max_element(dynamicData->retrieved_adc_values.begin(),
+                         dynamicData->retrieved_adc_values.end());
+    if (max_voltage != dynamicData->retrieved_adc_values.end())
     {
         labelContent << "Maximal voltage: "
                      << scaleYToVoltage_mV(
@@ -112,16 +112,16 @@ gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData)
     GtkLabel *label = GTK_LABEL(avgVoltageLabel);
     std::stringstream labelContent;
 
-    if (dynamicData->adcValuesToDisplay.empty())
+    if (dynamicData->retrieved_adc_values.empty())
     {
         labelContent << "Average voltage: --- mV";
     }
     else
     {
         const uint16_t avg_voltage{
-            std::accumulate(dynamicData->adcValuesToDisplay.begin(),
-                            dynamicData->adcValuesToDisplay.end(), 0) /
-            dynamicData->adcValuesToDisplay.size()};
+            std::accumulate(dynamicData->retrieved_adc_values.begin(),
+                            dynamicData->retrieved_adc_values.end(), 0) /
+            dynamicData->retrieved_adc_values.size()};
 
         labelContent << "Average voltage: "
                      << scaleYToVoltage_mV(

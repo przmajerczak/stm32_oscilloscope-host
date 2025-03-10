@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DataAnalyzer.hpp"
 #include "sharedData/types.hpp"
 #include <unistd.h>
 
@@ -22,6 +21,5 @@ private:
     uint32_t pullFrameDurationFromUndecodedRetrievedData(
         EncodedAdcValues &undecodedRetrievedData);
 
-    DataAnalyzer dataAnalyzer;
     int deviceFileDescriptor;
 };

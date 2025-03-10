@@ -10,7 +10,7 @@ class DataAnalyzer
 public:
     DataAnalyzer() {}
 
-    void handleData(const AdcValues &current_values, DynamicData &dynamicData);
+    AdcValues prepareData(const AdcValues &current_values, DynamicData &dynamicData);
 
 private:
     AdcValues centerValuesOnTrigger(const AdcValues &averagedValues,

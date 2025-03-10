@@ -39,7 +39,8 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
         while (1)
         {
             AdcValues retrieved_values{singleDataRetrieve(dynamicData)};
-            dataAnalyzer.handleData(retrieved_values, dynamicData);
+
+            dynamicData.retrieved_adc_values = retrieved_values;
         }
     });
     t.detach();

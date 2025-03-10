@@ -15,7 +15,7 @@ public:
     double trigger_horizontal_position{X_DISPLAY_RESOLUTION / (NUMBER_OF_CHANNELS + 1)};
 
     VerticalBoundsData verticalBoundsData;
-    AdcValues adcValuesToDisplay{};
+    AdcValues retrieved_adc_values{};
     double frame_duration_ns;
     double nanoseconds_per_sample;
     uint32_t horizontal_resolution_ns{DEFAULT_HORIZONTAL_RESOLUTION_NS};

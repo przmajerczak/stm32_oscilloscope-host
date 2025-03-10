@@ -6,13 +6,12 @@
 #include "sharedData/types.hpp"
 #include "utils.hpp"
 
-void DataAnalyzer::handleData(const AdcValues &current_values,
-                              DynamicData &dynamicData)
+AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
+                                    DynamicData &dynamicData)
 {
     Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
 
-    dynamicData.adcValuesToDisplay =
-        std::move(centerValuesOnTrigger(current_values, dynamicData));
+    return std::move(centerValuesOnTrigger(current_values, dynamicData));
 }
 
 AdcValues DataAnalyzer::centerValuesOnTrigger(
