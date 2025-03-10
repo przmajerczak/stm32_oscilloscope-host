@@ -12,17 +12,17 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
     Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
 
     const auto averaged_values{averageAdcValues(dynamicData, current_values)};
+    const TriggersIndexes triggersIndexes{detectTriggers(dynamicData, averaged_values)};
 
-    return std::move(centerValuesOnTrigger(averaged_values, dynamicData));
+    return std::move(centerValuesOnTrigger(averaged_values, triggersIndexes, dynamicData));
 }
 
 AdcValues DataAnalyzer::centerValuesOnTrigger(
     const AdcValues &averaged_values,
+    const TriggersIndexes &triggersIndexes,
     DynamicData &dynamicData) // TODO: change this name
 
 {
-    const auto triggersIndexes{detectTriggers(dynamicData, averaged_values)};
-
     AdcValues valuesToDisplay;
     if (averaged_values.size() == 0)
     {

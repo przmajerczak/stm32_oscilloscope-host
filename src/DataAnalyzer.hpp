@@ -13,12 +13,12 @@ public:
     AdcValues prepareData(const AdcValues &current_values, DynamicData &dynamicData);
 
 private:
-    AdcValues centerValuesOnTrigger(const AdcValues &averaged_values,
+    AdcValues centerValuesOnTrigger(const AdcValues &averaged_values, const TriggersIndexes &triggersIndexes,
                                     DynamicData &dynamicData);
     AdcValues averageAdcValues(DynamicData &dynamicData,
                                const AdcValues &current_values);
     TriggersIndexes detectTriggers(const DynamicData &dynamicData,
-                                            const AdcValues &averaged_values);
+                                   const AdcValues &averaged_values);
     bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
                    const uint16_t rightValue);
     double calculateFrequency(const TriggersIndexes &triggersIndexes,
