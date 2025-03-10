@@ -127,11 +127,11 @@ AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
     return std::move(averaged_values);
 }
 
-std::vector<std::size_t>
+TriggersIndexes
 DataAnalyzer::detectTriggers(const DynamicData &dynamicData,
                              const AdcValues &averaged_values)
 {
-    std::vector<std::size_t> triggersIndexes;
+    TriggersIndexes triggersIndexes;
 
     for (std::size_t idx = 0; idx < averaged_values.size() - 1; ++idx)
     {
@@ -169,7 +169,7 @@ bool DataAnalyzer::isTrigger(const DynamicData &dynamicData,
 }
 
 double DataAnalyzer::calculateFrequency(
-    const std::vector<std::size_t> &triggersIndexes,
+    const TriggersIndexes &triggersIndexes,
     const double nanoseconds_per_sample, const double frame_duration_ns)
 {
     if (triggersIndexes.size() < 2)

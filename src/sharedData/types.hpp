@@ -6,6 +6,7 @@
 
 using EncodedAdcValues = std::list<uint8_t>;
 using AdcValues = std::vector<uint16_t>;
+using TriggersIndexes = std::vector<std::size_t>;
 
 enum class ThresholdTrigger
 {
