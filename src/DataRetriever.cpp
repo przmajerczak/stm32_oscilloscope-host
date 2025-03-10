@@ -52,8 +52,8 @@ AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 
     constexpr std::size_t expectedReceivedDataSize{24004};
 
-    EncodedAdcValues undecodedRetrievedData{retrieveData(dynamicData)};
-    std::size_t receivedBytes{undecodedRetrievedData.size()};
+    EncodedAdcData undecodedRetrievedData{retrieveData(dynamicData)};
+    std::size_t receivedBytes{undecodedRetrievedData.values.size()};
 
     while (receivedBytes != expectedReceivedDataSize)
     {
@@ -62,36 +62,45 @@ AdcValues DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
                   << " bytes. Received bytes: " << receivedBytes << std::endl;
 
         undecodedRetrievedData = retrieveData(dynamicData);
-        receivedBytes = undecodedRetrievedData.size();
+        receivedBytes = undecodedRetrievedData.values.size();
     }
 
     dynamicData.frame_duration_ns =
-        calculateFrameDuration_ns(undecodedRetrievedData);
+        calculateFrameDuration_ns(undecodedRetrievedData.values);
 
-    return decodeAdcValues(undecodedRetrievedData);
+    return decodeAdcValues(undecodedRetrievedData.values);
 }
 
-EncodedAdcValues DataRetriever::retrieveData(DynamicData &dynamicData)
+EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
 {
     Timemarker tmarker(dynamicData.timemarkersData.singleFrameDataRetrievalDuration);
 
     uint8_t byte{0};
     uint8_t previous_byte{0};
 
-    EncodedAdcValues data;
+    EncodedAdcValues values;
 
-    while (not(byte == 0xff and previous_byte == 0xff))
+    constexpr uint8_t SECOND_LAST_BYTE_FOR_CHANNEL_1{0xff};
+    constexpr uint8_t SECOND_LAST_BYTE_FOR_CHANNEL_2{0xfe};
+
+    // TODO: wrap in nice method determining channel and return channel id along with data
+    while (
+        not(byte == 0xff and (previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 or
+                              previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_2)))
     {
         previous_byte = byte;
         long int bytes_received{read(deviceFileDescriptor, &byte, 1)};
         if (bytes_received > 0)
         {
-            data.push_back(byte);
+            values.push_back(byte);
         }
     }
 
-    data.pop_back();
-    data.pop_back();
+    values.pop_back();
+    values.pop_back();
+
+    ChannelId channelId{previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 ? ChannelId::CHANNEL_1 : ChannelId::CHANNEL_2};
+    EncodedAdcData data{values, channelId};
 
     return data;
 }
