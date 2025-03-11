@@ -16,7 +16,7 @@ public:
 
 private:
     void display();
-    void drawWaveform();
+    void drawWaveform(const ChannelId channelId);
     DynamicData &dynamicData;
     LineDrawer lineDrawer{dynamicData};
     GLFWwindow *window = nullptr;

@@ -36,7 +36,16 @@ void DisplayHelper::display()
 
     lineDrawer.drawGrid(5, 4);
 
-    drawWaveform();
+    if (dynamicData.trigger_source == CHANNEL_1)
+    {
+        drawWaveform(CHANNEL_2);
+        drawWaveform(CHANNEL_1);
+    }
+    else
+    {
+        drawWaveform(CHANNEL_1);
+        drawWaveform(CHANNEL_2);
+    }
 
     lineDrawer.drawTriggerIndicator(dynamicData.trigger_horizontal_position,
                                     dynamicData.triggerThresholdSliderValue);
@@ -45,18 +54,16 @@ void DisplayHelper::display()
     glFlush();
 }
 
-void DisplayHelper::drawWaveform()
+void DisplayHelper::drawWaveform(const ChannelId channelId)
 {
-    // TODO: handle both channels
-    if (dynamicData.retrieved_adc_values.at(CHANNEL_1).empty())
+    if (dynamicData.retrieved_adc_values.at(channelId).empty())
     {
         return;
     }
 
     // TODO: handle multithreading better
-    // TODO: handle both channels
     auto adcValuesToDisplay{dataAnalyzer.prepareData(
-        dynamicData.retrieved_adc_values.at(CHANNEL_1), dynamicData, CHANNEL_1)};
+        dynamicData.retrieved_adc_values.at(channelId), dynamicData, channelId)};
 
     auto value_it{adcValuesToDisplay.begin()};
 
@@ -66,7 +73,16 @@ void DisplayHelper::drawWaveform()
     }
 
     glPointSize(1.0);
-    glColor3f(1.0, 1.0, 0.0);
+
+    // TODO: refactor color selection
+    if (channelId == CHANNEL_1)
+    {
+        glColor3f(1.0, 1.0, 0.0);
+    }
+    else
+    {
+        glColor3f(0.0, 0.0, 1.0);
+    }
     glLineWidth(2.0);
 
     glBegin(GL_LINE_STRIP);

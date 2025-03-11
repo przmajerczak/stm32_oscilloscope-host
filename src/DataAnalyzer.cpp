@@ -15,7 +15,7 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
     const auto averaged_values{averageAdcValues(dynamicData, current_values)};
     const TriggersIndexes triggersIndexes{
         detectTriggers(dynamicData, averaged_values, channelId)};
-    dynamicData.frequency_Hz =
+    dynamicData.frequency_Hz.at(channelId) =
         calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
                            dynamicData.frame_duration_ns);
 

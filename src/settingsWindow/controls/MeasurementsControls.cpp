@@ -17,7 +17,7 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
     std::stringstream labelContent;
     labelContent << "Signal frequency: ";
 
-    const double frequency_Hz{dynamicData->frequency_Hz};
+    const double frequency_Hz{dynamicData->frequency_Hz.at(CHANNEL_1)};
     if (frequency_Hz > 1000000.0)
     {
         labelContent << std::fixed << std::setprecision(2)
