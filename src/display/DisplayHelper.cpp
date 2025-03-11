@@ -53,9 +53,11 @@ void DisplayHelper::drawWaveform()
         return;
     }
 
+    // TODO: handle multithreading better
+    // TODO: handle both channels
     auto adcValuesToDisplay{dataAnalyzer.prepareData(
-        dynamicData.retrieved_adc_values.at(CHANNEL_1),
-        dynamicData)}; // TODO: handle multithreading better
+        dynamicData.retrieved_adc_values.at(CHANNEL_1), dynamicData, CHANNEL_1)};
+
     auto value_it{adcValuesToDisplay.begin()};
 
     if (value_it == adcValuesToDisplay.end())

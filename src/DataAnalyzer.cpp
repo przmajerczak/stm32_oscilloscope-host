@@ -7,13 +7,14 @@
 #include "utils.hpp"
 
 AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
-                                    DynamicData &dynamicData)
+                                    DynamicData &dynamicData,
+                                    const ChannelId channelId)
 {
     Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
 
     const auto averaged_values{averageAdcValues(dynamicData, current_values)};
     const TriggersIndexes triggersIndexes{
-        detectTriggers(dynamicData, averaged_values)};
+        detectTriggers(dynamicData, averaged_values, channelId)};
     dynamicData.frequency_Hz =
         calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
                            dynamicData.frame_duration_ns);
@@ -126,7 +127,8 @@ AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
 }
 
 TriggersIndexes DataAnalyzer::detectTriggers(DynamicData &dynamicData,
-                                             const AdcValues &averaged_values)
+                                             const AdcValues &averaged_values,
+                                             const ChannelId channelId)
 {
     TriggersIndexes triggersIndexes;
 
@@ -141,11 +143,14 @@ TriggersIndexes DataAnalyzer::detectTriggers(DynamicData &dynamicData,
         }
     }
 
-    dynamicData.trigger_index =
-        triggersIndexes.empty() ? INVALID_VALUE
-        : triggersIndexes.size() > 2
-            ? triggersIndexes.at(triggersIndexes.size() / 2)
-            : triggersIndexes.at(0);
+    if (channelId == dynamicData.trigger_source)
+    {
+        dynamicData.trigger_index =
+            triggersIndexes.empty() ? INVALID_VALUE
+            : triggersIndexes.size() > 2
+                ? triggersIndexes.at(triggersIndexes.size() / 2)
+                : triggersIndexes.at(0);
+    }
 
     return triggersIndexes;
 }
