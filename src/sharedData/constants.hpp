@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-constexpr uint16_t X_DISPLAY_RESOLUTION{800};
-constexpr uint16_t Y_DISPLAY_RESOLUTION{600};
+constexpr uint16_t X_DISPLAY_RESOLUTION{1024};
+constexpr uint16_t Y_DISPLAY_RESOLUTION{768};
 constexpr uint16_t DISPLAY_MARGIN_WIDTH{60};
 constexpr uint16_t X_WINDOW_SIZE{X_DISPLAY_RESOLUTION +
                                  (2 * DISPLAY_MARGIN_WIDTH)};
