@@ -12,29 +12,29 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
     Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
 
     const auto averaged_values{averageAdcValues(dynamicData, current_values)};
-    const TriggersIndexes triggersIndexes{detectTriggers(dynamicData, averaged_values)};
+    const TriggersIndexes triggersIndexes{
+        detectTriggers(dynamicData, averaged_values)};
+    dynamicData.frequency_Hz =
+        calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
+                           dynamicData.frame_duration_ns);
 
-    return std::move(centerValuesOnTrigger(averaged_values, triggersIndexes, dynamicData));
+    return std::move(
+        centerValuesOnTrigger(averaged_values, triggersIndexes, dynamicData));
 }
 
 AdcValues DataAnalyzer::centerValuesOnTrigger(
-    const AdcValues &averaged_values,
-    const TriggersIndexes &triggersIndexes,
+    const AdcValues &averaged_values, const TriggersIndexes &triggersIndexes,
     DynamicData &dynamicData) // TODO: change this name
 
 {
     AdcValues valuesToDisplay;
     if (averaged_values.size() == 0)
     {
-        dynamicData.frequency_Hz = 0.0;
         return valuesToDisplay;
     }
 
     const uint32_t samples_to_display{dynamicData.horizontal_resolution_ns /
                                       dynamicData.nanoseconds_per_sample};
-
-    dynamicData.frequency_Hz = calculateFrequency(
-        triggersIndexes, dynamicData.nanoseconds_per_sample, dynamicData.frame_duration_ns);
 
     valuesToDisplay.resize(samples_to_display);
     if (triggersIndexes.size() == 0)
@@ -130,9 +130,8 @@ AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
     return std::move(averaged_values);
 }
 
-TriggersIndexes
-DataAnalyzer::detectTriggers(const DynamicData &dynamicData,
-                             const AdcValues &averaged_values)
+TriggersIndexes DataAnalyzer::detectTriggers(const DynamicData &dynamicData,
+                                             const AdcValues &averaged_values)
 {
     TriggersIndexes triggersIndexes;
 
@@ -171,9 +170,9 @@ bool DataAnalyzer::isTrigger(const DynamicData &dynamicData,
     return false;
 }
 
-double DataAnalyzer::calculateFrequency(
-    const TriggersIndexes &triggersIndexes,
-    const double nanoseconds_per_sample, const double frame_duration_ns)
+double DataAnalyzer::calculateFrequency(const TriggersIndexes &triggersIndexes,
+                                        const double nanoseconds_per_sample,
+                                        const double frame_duration_ns)
 {
     if (triggersIndexes.size() < 2)
     {
