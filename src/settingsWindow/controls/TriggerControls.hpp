@@ -17,6 +17,7 @@ private:
     void prepareTriggerLabel(DynamicData &dynamicData);
     void prepareTriggerRisingEdgeButton(DynamicData &dynamicData);
     void prepareTriggerFallingEdgeButton(DynamicData &dynamicData);
+    void prepareTriggerSourceSelection(DynamicData &dynamicData);
 
     GtkWidget *thresholdLabel = nullptr;
     GtkWidget *triggerThresholdSlider = nullptr;
@@ -27,4 +28,6 @@ private:
     GtkWidget *triggerRisingEdgeButton = nullptr;
     GtkWidget *triggerFallingEdgeButton = nullptr;
     GtkWidget *trigger_spin_button = nullptr;
+    GtkWidget *trigger_source_label = nullptr;
+    GtkWidget *trigger_source_combo = nullptr;
 };

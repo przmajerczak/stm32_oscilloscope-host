@@ -24,11 +24,19 @@ void onTriggerRisingEdgeButtonClicked(GtkWidget *button, gpointer data)
 
     *thresholdTrigger_ptr = ThresholdTrigger::RISING_EDGE;
 }
+
 void onTriggerFallingEdgeButtonClicked(GtkWidget *button, gpointer data)
 {
     ThresholdTrigger *thresholdTrigger_ptr = (ThresholdTrigger *)data;
 
     *thresholdTrigger_ptr = ThresholdTrigger::FALLING_EDGE;
+}
+
+static void onTriggerSourceChanged(GtkComboBox *widget, gpointer user_data)
+{
+    std::size_t *trigger_source = static_cast<std::size_t *>(user_data);
+
+    *trigger_source = gtk_combo_box_get_active(widget);
 }
 
 void TriggerControls::prepare(DynamicData &dynamicData)
@@ -40,6 +48,7 @@ void TriggerControls::prepare(DynamicData &dynamicData)
     prepareTriggerLabel(dynamicData);
     prepareTriggerRisingEdgeButton(dynamicData);
     prepareTriggerFallingEdgeButton(dynamicData);
+    prepareTriggerSourceSelection(dynamicData);
 }
 
 void TriggerControls::prepareThresholdLabel(DynamicData &dynamicData)
@@ -117,6 +126,26 @@ void TriggerControls::prepareTriggerFallingEdgeButton(
                      &(dynamicData.thresholdTrigger));
 }
 
+void TriggerControls::prepareTriggerSourceSelection(DynamicData &dynamicData)
+{
+    trigger_source_label = gtk_label_new("Trigger source:");
+    gtk_widget_set_hexpand(trigger_source_label, TRUE);
+
+    trigger_source_combo = gtk_combo_box_text_new();
+
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(trigger_source_combo), "ch1",
+                              "Channel 1");
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(trigger_source_combo), "ch2",
+                              "Channel 2");
+
+    gtk_combo_box_set_active(GTK_COMBO_BOX(trigger_source_combo),
+                             DEFAULT_TRIGGER_SOURCE);
+
+    g_signal_connect(trigger_source_combo, "changed",
+                     G_CALLBACK(onTriggerSourceChanged),
+                     &dynamicData.trigger_source);
+}
+
 GtkWidget *TriggerControls::getTriggerControlsContainer()
 {
     GtkWidget *triggerControlsExpander = gtk_expander_new("Trigger controls");
@@ -139,6 +168,10 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
                     1, 1);
     gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerFallingEdgeButton, 1, 5,
                     1, 1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), trigger_source_label, 0, 6, 2,
+                    1);
+    gtk_grid_attach(GTK_GRID(triggerControlsGrid), trigger_source_combo, 0, 7, 2,
+                    1);
 
     gtk_container_add(GTK_CONTAINER(triggerControlsExpander),
                       triggerControlsGrid);

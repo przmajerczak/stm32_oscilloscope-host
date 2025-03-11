@@ -14,6 +14,7 @@ public:
     uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
     ThresholdTrigger thresholdTrigger{ThresholdTrigger::FALLING_EDGE};
     double trigger_horizontal_position{X_DISPLAY_RESOLUTION / 2};
+    std::size_t trigger_source{DEFAULT_TRIGGER_SOURCE};
 
     VerticalBoundsData verticalBoundsData;
     std::array<AdcValues, NUMBER_OF_CHANNELS> retrieved_adc_values;
