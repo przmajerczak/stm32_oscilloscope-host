@@ -78,9 +78,8 @@ void TriggerControls::prepareTriggerHorizontalPositionLabel(
 void TriggerControls::prepareTriggerHorizontalPositionSlider(
     DynamicData &dynamicData)
 {
-    GtkAdjustment *adjustment =
-        gtk_adjustment_new((X_DISPLAY_RESOLUTION / (NUMBER_OF_CHANNELS + 1)), 0,
-                           X_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
+    GtkAdjustment *adjustment = gtk_adjustment_new(
+        (X_DISPLAY_RESOLUTION / 2), 0, X_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
     triggerHorizontalPositionSlider =
         gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
 

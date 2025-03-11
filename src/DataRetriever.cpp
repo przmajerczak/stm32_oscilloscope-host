@@ -46,7 +46,8 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 
 void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 {
-    Timemarker tmarker(dynamicData.timemarkersData.totalDataRetrievalAndDecodingDuration);
+    Timemarker tmarker(
+        dynamicData.timemarkersData.totalDataRetrievalAndDecodingDuration);
 
     constexpr std::size_t expectedReceivedDataSize{30004};
 
@@ -66,18 +67,14 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
     dynamicData.frame_duration_ns =
         calculateFrameDuration_ns(undecodedRetrievedData.values);
 
-    // TODO: enable channel 2 support
-    if (undecodedRetrievedData.channelId != ChannelId::CHANNEL_1)
-    {
-        return;
-    }
-
-    dynamicData.retrieved_adc_values = decodeAdcValues(undecodedRetrievedData.values);
+    dynamicData.retrieved_adc_values.at(undecodedRetrievedData.channelId) =
+        decodeAdcValues(undecodedRetrievedData.values);
 }
 
 EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
 {
-    Timemarker tmarker(dynamicData.timemarkersData.singleFrameDataRetrievalDuration);
+    Timemarker tmarker(
+        dynamicData.timemarkersData.singleFrameDataRetrievalDuration);
 
     uint8_t byte{0};
     uint8_t previous_byte{0};
@@ -87,7 +84,8 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
     constexpr uint8_t SECOND_LAST_BYTE_FOR_CHANNEL_1{0xff};
     constexpr uint8_t SECOND_LAST_BYTE_FOR_CHANNEL_2{0xfe};
 
-    // TODO: wrap in nice method determining channel and return channel id along with data
+    // TODO: wrap in nice method determining channel and return channel id along
+    // with data
     while (
         not(byte == 0xff and (previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 or
                               previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_2)))
@@ -103,7 +101,8 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
     values.pop_back();
     values.pop_back();
 
-    ChannelId channelId{previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 ? ChannelId::CHANNEL_1 : ChannelId::CHANNEL_2};
+    ChannelId channelId{
+        previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 ? CHANNEL_1 : CHANNEL_2};
     EncodedAdcData data{values, channelId};
 
     return data;
@@ -156,14 +155,16 @@ bool DataRetriever::configureTty(const int deviceFileDescriptor)
     return true;
 }
 
-double DataRetriever::calculateFrameDuration_ns(EncodedAdcValues &undecodedRetrievedData)
+double DataRetriever::calculateFrameDuration_ns(
+    EncodedAdcValues &undecodedRetrievedData)
 {
     uint32_t timer_doubleticks_per_frame{
         pullFrameDurationFromUndecodedRetrievedData(undecodedRetrievedData)};
 
     constexpr double TIMER_COUNTS_UPWARDS_EDGE_TICKS{2.0};
 
-    return timer_doubleticks_per_frame * DEVICE_TIMER_SINGLE_TICK_DURATION_NS * TIMER_COUNTS_UPWARDS_EDGE_TICKS;
+    return timer_doubleticks_per_frame * DEVICE_TIMER_SINGLE_TICK_DURATION_NS *
+           TIMER_COUNTS_UPWARDS_EDGE_TICKS;
 }
 
 uint32_t DataRetriever::pullFrameDurationFromUndecodedRetrievedData(

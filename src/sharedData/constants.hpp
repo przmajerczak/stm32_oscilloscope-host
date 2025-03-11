@@ -22,7 +22,9 @@ constexpr double DEVICE_TIMER_SINGLE_TICK_DURATION_NS{
 constexpr uint16_t LABELS_REFRESH_RATE_MS{500};
 constexpr uint16_t DEFAULT_TRIGGER_THRESHOLD{Y_DISPLAY_RESOLUTION / 2};
 constexpr uint16_t INVALID_VALUE{0xffff};
-constexpr uint8_t NUMBER_OF_CHANNELS{1};
+constexpr uint8_t NUMBER_OF_CHANNELS{2};
+constexpr std::size_t CHANNEL_1{0};
+constexpr std::size_t CHANNEL_2{1};
 constexpr float VERY_BOLD{4.0f};
 constexpr float BOLD{1.5f};
 constexpr float NEUTRAL{1.0f};
