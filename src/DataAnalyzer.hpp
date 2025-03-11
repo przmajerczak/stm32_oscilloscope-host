@@ -10,10 +10,12 @@ class DataAnalyzer
 public:
     DataAnalyzer() {}
 
-    AdcValues prepareData(const AdcValues &current_values, DynamicData &dynamicData);
+    AdcValues prepareData(const AdcValues &current_values,
+                          DynamicData &dynamicData);
 
 private:
-    AdcValues centerValuesOnTrigger(const AdcValues &averaged_values, const TriggersIndexes &triggersIndexes,
+    AdcValues centerValuesOnTrigger(const AdcValues &averaged_values,
+                                    const std::size_t triggerIndex,
                                     DynamicData &dynamicData);
     AdcValues averageAdcValues(DynamicData &dynamicData,
                                const AdcValues &current_values);
