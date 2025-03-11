@@ -18,19 +18,11 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
         calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
                            dynamicData.frame_duration_ns);
 
-    const std::size_t triggerIndex{
-        triggersIndexes.empty() ? INVALID_VALUE
-        : triggersIndexes.size() > 2
-            ? triggersIndexes.at(triggersIndexes.size() / 2)
-            : triggersIndexes.at(0)};
-
-    return std::move(
-        centerValuesOnTrigger(averaged_values, triggerIndex, dynamicData));
+    return std::move(centerValuesOnTrigger(averaged_values, dynamicData));
 }
 
 // TODO: change this name
 AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &averaged_values,
-                                              const std::size_t triggerIndex,
                                               DynamicData &dynamicData)
 
 {
@@ -44,7 +36,7 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &averaged_values,
                                       dynamicData.nanoseconds_per_sample};
 
     valuesToDisplay.resize(samples_to_display);
-    if (triggerIndex == INVALID_VALUE)
+    if (dynamicData.trigger_index == INVALID_VALUE)
     {
         for (std::size_t idx = 0; idx < samples_to_display; ++idx)
         {
@@ -62,7 +54,7 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &averaged_values,
     }
 
     const int shiftCountForTriggerCenter{static_cast<int>(
-        triggerIndex -
+        dynamicData.trigger_index -
         (samples_to_display *
          (dynamicData.trigger_horizontal_position / X_DISPLAY_RESOLUTION)))};
 
@@ -133,7 +125,7 @@ AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
     return std::move(averaged_values);
 }
 
-TriggersIndexes DataAnalyzer::detectTriggers(const DynamicData &dynamicData,
+TriggersIndexes DataAnalyzer::detectTriggers(DynamicData &dynamicData,
                                              const AdcValues &averaged_values)
 {
     TriggersIndexes triggersIndexes;
@@ -148,6 +140,12 @@ TriggersIndexes DataAnalyzer::detectTriggers(const DynamicData &dynamicData,
             triggersIndexes.push_back(idx);
         }
     }
+
+    dynamicData.trigger_index =
+        triggersIndexes.empty() ? INVALID_VALUE
+        : triggersIndexes.size() > 2
+            ? triggersIndexes.at(triggersIndexes.size() / 2)
+            : triggersIndexes.at(0);
 
     return triggersIndexes;
 }

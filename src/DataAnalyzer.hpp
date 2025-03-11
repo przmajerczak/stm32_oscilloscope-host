@@ -15,11 +15,10 @@ public:
 
 private:
     AdcValues centerValuesOnTrigger(const AdcValues &averaged_values,
-                                    const std::size_t triggerIndex,
                                     DynamicData &dynamicData);
     AdcValues averageAdcValues(DynamicData &dynamicData,
                                const AdcValues &current_values);
-    TriggersIndexes detectTriggers(const DynamicData &dynamicData,
+    TriggersIndexes detectTriggers(DynamicData &dynamicData,
                                    const AdcValues &averaged_values);
     bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
                    const uint16_t rightValue);
