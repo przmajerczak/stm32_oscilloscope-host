@@ -1,7 +1,5 @@
 #include "DataAnalyzer.hpp"
 #include "debug/Timemarker.hpp"
-#include "display/DisplayHelper.hpp"
-#include "settingsWindow/controls/TriggerControls.hpp"
 #include "sharedData/constants.hpp"
 #include "sharedData/types.hpp"
 #include "utils.hpp"
@@ -33,8 +31,9 @@ AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &averaged_values,
         return valuesToDisplay;
     }
 
-    const uint32_t samples_to_display{dynamicData.horizontal_resolution_ns /
-                                      dynamicData.nanoseconds_per_sample};
+    const uint32_t samples_to_display{
+        static_cast<uint32_t>(dynamicData.horizontal_resolution_ns /
+                              dynamicData.nanoseconds_per_sample)};
 
     valuesToDisplay.resize(samples_to_display);
     if (dynamicData.trigger_index == INVALID_VALUE)

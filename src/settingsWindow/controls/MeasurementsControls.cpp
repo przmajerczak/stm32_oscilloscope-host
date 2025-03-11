@@ -116,7 +116,7 @@ gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData)
     }
     else
     {
-        const uint16_t avg_voltage{
+        const auto avg_voltage{
             std::accumulate(dynamicData->retrieved_adc_values.at(CHANNEL_1).begin(),
                             dynamicData->retrieved_adc_values.at(CHANNEL_1).end(),
                             0) /
