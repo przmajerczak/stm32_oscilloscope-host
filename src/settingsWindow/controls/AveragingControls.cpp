@@ -16,7 +16,7 @@ void AveragingControls::prepare(DynamicData &dynamicData)
     GtkAdjustment *adjustment =
         gtk_adjustment_new(1, 1, AVERAGING_WINDOW_MAX_SIZE, 1, 0.0, 0.0);
 
-    averaging_window_size_spin_button = gtk_spin_button_new(adjustment, 1.0, 1);
+    averaging_window_size_spin_button = gtk_spin_button_new(adjustment, 1.0, 0);
     gtk_widget_set_hexpand(averaging_window_size_spin_button, TRUE);
 
     g_signal_connect(averaging_window_size_spin_button, "value-changed",
