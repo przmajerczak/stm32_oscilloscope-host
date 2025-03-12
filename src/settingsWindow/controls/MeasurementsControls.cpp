@@ -140,6 +140,8 @@ void MeasurementsControls::prepare(DynamicData &dynamicData)
     prepareMinVoltageLabel(dynamicData);
     prepareMaxVoltageLabel(dynamicData);
     prepareAvgVoltageLabel(dynamicData);
+
+    verticalMeasurements.prepare(dynamicData);
 }
 
 void MeasurementsControls::prepareFrequencyLabel(DynamicData &dynamicData)
@@ -197,6 +199,8 @@ GtkWidget *MeasurementsControls::getFrequencyControlsContainer()
         gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
 
     constexpr int padding{0};
+    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), verticalMeasurements.getVerticalMeasurementsContainer(), FALSE,
+                       TRUE, padding);
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), frequencyLabel, FALSE,
                        TRUE, padding);
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), minVoltageLabel, FALSE,
