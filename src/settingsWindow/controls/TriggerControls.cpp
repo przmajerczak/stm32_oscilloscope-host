@@ -53,8 +53,8 @@ void TriggerControls::prepare(DynamicData &dynamicData)
 
 void TriggerControls::prepareThresholdLabel(DynamicData &dynamicData)
 {
-    thresholdLabel = gtk_label_new("Threshold trigger value:");
-    gtk_widget_set_hexpand(thresholdLabel, TRUE);
+    trigger_threshold_label = gtk_label_new("Trigger threshold value:");
+    gtk_widget_set_hexpand(trigger_threshold_label, TRUE);
 }
 
 void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
@@ -62,13 +62,13 @@ void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
     // TODO: refactor to allow step=1mV instead of one y
     GtkAdjustment *adjustment = gtk_adjustment_new(
         DEFAULT_TRIGGER_THRESHOLD, 0, Y_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
-    triggerThresholdSlider =
+    trigger_threshold_slider =
         gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
 
-    gtk_widget_set_hexpand(triggerThresholdSlider, TRUE);
-    gtk_scale_set_draw_value(GTK_SCALE(triggerThresholdSlider), FALSE);
+    gtk_widget_set_hexpand(trigger_threshold_slider, TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(trigger_threshold_slider), FALSE);
 
-    g_signal_connect(triggerThresholdSlider, "value-changed",
+    g_signal_connect(trigger_threshold_slider, "value-changed",
                      G_CALLBACK(triggerThresholdSliderOnChangeAction),
                      &(dynamicData.triggerThresholdSliderValue));
 
@@ -79,9 +79,9 @@ void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
 void TriggerControls::prepareTriggerHorizontalPositionLabel(
     DynamicData &dynamicData)
 {
-    triggerHorizontalPositionLabel =
+    trigger_horizontal_position_label =
         gtk_label_new("Trigger horizontal position:");
-    gtk_widget_set_hexpand(thresholdLabel, TRUE);
+    gtk_widget_set_hexpand(trigger_threshold_label, TRUE);
 }
 
 void TriggerControls::prepareTriggerHorizontalPositionSlider(
@@ -89,13 +89,13 @@ void TriggerControls::prepareTriggerHorizontalPositionSlider(
 {
     GtkAdjustment *adjustment = gtk_adjustment_new(
         (X_DISPLAY_RESOLUTION / 2), 0, X_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
-    triggerHorizontalPositionSlider =
+    trigger_horizontal_position_slider =
         gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
 
-    gtk_widget_set_hexpand(triggerHorizontalPositionSlider, TRUE);
-    gtk_scale_set_draw_value(GTK_SCALE(triggerHorizontalPositionSlider), FALSE);
+    gtk_widget_set_hexpand(trigger_horizontal_position_slider, TRUE);
+    gtk_scale_set_draw_value(GTK_SCALE(trigger_horizontal_position_slider), FALSE);
 
-    g_signal_connect(triggerHorizontalPositionSlider, "value-changed",
+    g_signal_connect(trigger_horizontal_position_slider, "value-changed",
                      G_CALLBACK(triggerHorizontalPositionSliderOnChangeAction),
                      &dynamicData);
 
@@ -105,15 +105,15 @@ void TriggerControls::prepareTriggerHorizontalPositionSlider(
 
 void TriggerControls::prepareTriggerLabel(DynamicData &dynamicData)
 {
-    triggerLabel = gtk_label_new("Threshold trigger edge:");
-    gtk_widget_set_hexpand(triggerLabel, TRUE);
+    trigger_edge_label = gtk_label_new("Trigger edge:");
+    gtk_widget_set_hexpand(trigger_edge_label, TRUE);
 }
 
 void TriggerControls::prepareTriggerRisingEdgeButton(DynamicData &dynamicData)
 {
-    triggerRisingEdgeButton = gtk_button_new_with_label("__/‾‾");
-    gtk_widget_set_hexpand(triggerRisingEdgeButton, TRUE);
-    g_signal_connect(triggerRisingEdgeButton, "clicked",
+    trigger_rising_edge_button = gtk_button_new_with_label("__/‾‾");
+    gtk_widget_set_hexpand(trigger_rising_edge_button, TRUE);
+    g_signal_connect(trigger_rising_edge_button, "clicked",
                      G_CALLBACK(onTriggerRisingEdgeButtonClicked),
                      &(dynamicData.thresholdTrigger));
 }
@@ -121,9 +121,9 @@ void TriggerControls::prepareTriggerRisingEdgeButton(DynamicData &dynamicData)
 void TriggerControls::prepareTriggerFallingEdgeButton(
     DynamicData &dynamicData)
 {
-    triggerFallingEdgeButton = gtk_button_new_with_label("‾‾\\__");
-    gtk_widget_set_hexpand(triggerFallingEdgeButton, TRUE);
-    g_signal_connect(triggerFallingEdgeButton, "clicked",
+    trigger_falling_edge_button = gtk_button_new_with_label("‾‾\\__");
+    gtk_widget_set_hexpand(trigger_falling_edge_button, TRUE);
+    g_signal_connect(trigger_falling_edge_button, "clicked",
                      G_CALLBACK(onTriggerFallingEdgeButtonClicked),
                      &(dynamicData.thresholdTrigger));
 }
@@ -158,7 +158,7 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
 
     GtkWidget *trigger_threshold_box =
         gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
-    gtk_box_pack_start(GTK_BOX(trigger_threshold_box), triggerThresholdSlider,
+    gtk_box_pack_start(GTK_BOX(trigger_threshold_box), trigger_threshold_slider,
                        FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(trigger_threshold_box), trigger_spin_button, FALSE,
                        TRUE, padding);
@@ -166,30 +166,30 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
     GtkWidget *trigger_horizontal_position_box =
         gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
     gtk_box_pack_start(GTK_BOX(trigger_horizontal_position_box),
-                       triggerHorizontalPositionSlider, FALSE, TRUE, padding);
+                       trigger_horizontal_position_slider, FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(trigger_horizontal_position_box),
                        trigger_horizontal_position_spin_button, FALSE, TRUE,
                        padding);
 
     GtkWidget *trigger_edge_box =
         gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
-    gtk_box_pack_start(GTK_BOX(trigger_edge_box), triggerRisingEdgeButton, FALSE,
+    gtk_box_pack_start(GTK_BOX(trigger_edge_box), trigger_rising_edge_button, FALSE,
                        TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(trigger_edge_box), triggerFallingEdgeButton, FALSE,
+    gtk_box_pack_start(GTK_BOX(trigger_edge_box), trigger_falling_edge_button, FALSE,
                        TRUE, padding);
 
     GtkWidget *trigger_controls_box =
         gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
 
-    gtk_box_pack_start(GTK_BOX(trigger_controls_box), thresholdLabel, FALSE, TRUE,
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_threshold_label, FALSE, TRUE,
                        padding);
     gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_threshold_box,
                        FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(trigger_controls_box),
-                       triggerHorizontalPositionLabel, FALSE, TRUE, padding);
+                       trigger_horizontal_position_label, FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(trigger_controls_box),
                        trigger_horizontal_position_box, FALSE, TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(trigger_controls_box), triggerLabel, FALSE, TRUE,
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_edge_label, FALSE, TRUE,
                        padding);
     gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_edge_box, FALSE,
                        TRUE, padding);
