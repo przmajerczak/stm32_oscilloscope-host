@@ -189,7 +189,7 @@ void MeasurementsControls::prepareAvgVoltageLabel(DynamicData &dynamicData)
                   &callbackDataForAvgVoltageLabel);
 }
 
-GtkWidget *MeasurementsControls::getFrequencyControlsContainer()
+GtkWidget *MeasurementsControls::getMeasurementsControlsContainer()
 {
     GtkWidget *measurementsControlsExpander = gtk_expander_new("Measurements");
     gtk_expander_set_expanded(GTK_EXPANDER(measurementsControlsExpander), TRUE);

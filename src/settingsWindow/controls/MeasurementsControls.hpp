@@ -10,7 +10,7 @@ class MeasurementsControls
 {
 public:
     void prepare(DynamicData &dynamicData);
-    GtkWidget *getFrequencyControlsContainer();
+    GtkWidget *getMeasurementsControlsContainer();
 
 private:
     void prepareFrequencyLabel(DynamicData &dynamicData);

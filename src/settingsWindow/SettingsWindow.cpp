@@ -39,7 +39,7 @@ void SettingsWindow::fill(DynamicData &dynamicData)
     gtk_box_pack_start(GTK_BOX(vbox), averagingControls.getAveragingControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), verticalBoundControls.getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), horizontalResolutionControls.getHorizontalResolutionControlsContainer(), FALSE, TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(vbox), measurementsControls.getFrequencyControlsContainer(), FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), measurementsControls.getMeasurementsControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), debugDataControls.getDebugDataControlsContainer(), FALSE, TRUE, padding);
 }
 
