@@ -70,16 +70,7 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
     }
 
     glPointSize(1.0);
-
-    // TODO: refactor color selection
-    if (channelId == CHANNEL_1)
-    {
-        glColor3f(1.0, 1.0, 0.0);
-    }
-    else
-    {
-        glColor3f(0.0, 0.0, 1.0);
-    }
+    glColor3fv(CHANNELS_COLORS.at(channelId));
     glLineWidth(2.0);
 
     glBegin(GL_LINE_STRIP);

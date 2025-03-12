@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
 
 constexpr uint16_t X_DISPLAY_RESOLUTION{1024};
@@ -38,4 +39,8 @@ constexpr float FONT_SIZE_SMALL{20.0f};
 constexpr float COLOR_RGB_WHITE{1.0};
 constexpr float COLOR_RGB_LIGHT_GRAY{0.6};
 constexpr float COLOR_RGB_DARK_GRAY{0.3};
+constexpr float GLCOLOR_YELLOW[] = {1.0f, 1.0f, 0.0f};
+constexpr float GLCOLOR_BLUE[] = {0.0f, 0.0f, 1.0f};
+constexpr std::array<const float *, NUMBER_OF_CHANNELS> CHANNELS_COLORS{
+    GLCOLOR_YELLOW, GLCOLOR_BLUE};
 constexpr const char *FONT_PATH{"resources/UbuntuMono-R.ttf"};
