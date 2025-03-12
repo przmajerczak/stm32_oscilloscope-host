@@ -17,6 +17,7 @@ public:
     std::size_t trigger_index{0};
 
     VerticalBoundsData verticalBoundsData;
+    std::array<bool, NUMBER_OF_CHANNELS> active_channels;
     std::array<AdcValues, NUMBER_OF_CHANNELS> retrieved_adc_values;
     std::array<double, NUMBER_OF_CHANNELS> frequency_Hz{0.0};
     double frame_duration_ns;

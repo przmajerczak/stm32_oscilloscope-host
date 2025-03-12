@@ -36,15 +36,12 @@ void DisplayHelper::display()
 
     lineDrawer.drawGrid(5, 4);
 
-    if (dynamicData.trigger_source == CHANNEL_1)
+    for (ChannelId chId = CHANNEL_1; chId < NUMBER_OF_CHANNELS; ++chId)
     {
-        drawWaveform(CHANNEL_2);
-        drawWaveform(CHANNEL_1);
-    }
-    else
-    {
-        drawWaveform(CHANNEL_1);
-        drawWaveform(CHANNEL_2);
+        if (dynamicData.active_channels.at(chId))
+        {
+            drawWaveform(chId);
+        }
     }
 
     lineDrawer.drawTriggerIndicator(dynamicData.trigger_horizontal_position,

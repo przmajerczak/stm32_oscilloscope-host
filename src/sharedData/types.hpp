@@ -15,8 +15,15 @@ enum class ThresholdTrigger
     FALLING_EDGE
 };
 
+enum class DualChannelMode
+{
+    ON,
+    OFF
+};
+
 struct EncodedAdcData
 {
     EncodedAdcValues values;
     ChannelId channelId;
+    DualChannelMode mode;
 };

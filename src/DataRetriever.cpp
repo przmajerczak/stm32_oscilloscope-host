@@ -64,6 +64,27 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
         receivedBytes = undecodedRetrievedData.values.size();
     }
 
+    if (undecodedRetrievedData.mode == DualChannelMode::ON)
+    {
+        dynamicData.active_channels.at(CHANNEL_1) = true;
+        dynamicData.active_channels.at(CHANNEL_2) = true;
+    }
+    else
+    {
+        if (undecodedRetrievedData.channelId == CHANNEL_1)
+        {
+            dynamicData.active_channels.at(CHANNEL_1) = true;
+            dynamicData.active_channels.at(CHANNEL_2) = false;
+        }
+        else
+        {
+            dynamicData.active_channels.at(CHANNEL_1) = false;
+            dynamicData.active_channels.at(CHANNEL_2) = true;
+        }
+
+        dynamicData.trigger_source = undecodedRetrievedData.channelId;
+    }
+
     dynamicData.frame_duration_ns =
         calculateFrameDuration_ns(undecodedRetrievedData.values);
 
@@ -84,11 +105,15 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
     constexpr uint8_t SECOND_LAST_BYTE_FOR_CHANNEL_1{0xff};
     constexpr uint8_t SECOND_LAST_BYTE_FOR_CHANNEL_2{0xfe};
 
+    constexpr uint8_t ONE_CHANNEL_MODE{0xfe};
+    constexpr uint8_t DUAL_CHANNEL_MODE{0xfd};
+
     // TODO: wrap in nice method determining channel and return channel id along
     // with data
     while (
-        not(last_byte == 0xff and (previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 or
-                              previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_2)))
+        not((last_byte == ONE_CHANNEL_MODE or last_byte == DUAL_CHANNEL_MODE) and
+            (previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 or
+             previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_2)))
     {
         previous_byte = last_byte;
         long int bytes_received{read(deviceFileDescriptor, &last_byte, 1)};
@@ -103,7 +128,9 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
 
     ChannelId channelId{
         previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 ? CHANNEL_1 : CHANNEL_2};
-    EncodedAdcData data{values, channelId};
+    DualChannelMode mode{last_byte == DUAL_CHANNEL_MODE ? DualChannelMode::ON
+                                                        : DualChannelMode::OFF};
+    EncodedAdcData data{values, channelId, mode};
 
     return data;
 }
