@@ -44,3 +44,4 @@ constexpr float GLCOLOR_BLUE[] = {0.0f, 0.0f, 1.0f};
 constexpr std::array<const float *, NUMBER_OF_CHANNELS> CHANNELS_COLORS{
     GLCOLOR_YELLOW, GLCOLOR_BLUE};
 constexpr const char *FONT_PATH{"resources/UbuntuMono-R.ttf"};
+constexpr uint16_t DEFAULT_SLIDER_HEIGHT{120};

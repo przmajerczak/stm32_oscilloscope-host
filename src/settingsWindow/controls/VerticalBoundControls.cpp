@@ -41,7 +41,7 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
     gtk_widget_set_hexpand(vertical_lower_bound_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(vertical_lower_bound_slider), FALSE);
     gtk_range_set_inverted(GTK_RANGE(vertical_lower_bound_slider), TRUE);
-    gtk_widget_set_size_request(vertical_lower_bound_slider, 0, 300);
+    gtk_widget_set_size_request(vertical_lower_bound_slider, 0, DEFAULT_SLIDER_HEIGHT);
 
     GtkAdjustment *upper_bound_slider_adjustment = gtk_adjustment_new(
         INPUT_SIGNAL_MAX, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1, 0.0, 0.0);
@@ -50,7 +50,7 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
     gtk_widget_set_hexpand(vertical_upper_bound_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(vertical_upper_bound_slider), FALSE);
     gtk_range_set_inverted(GTK_RANGE(vertical_upper_bound_slider), TRUE);
-    gtk_widget_set_size_request(vertical_upper_bound_slider, 0, 300);
+    gtk_widget_set_size_request(vertical_upper_bound_slider, 0, DEFAULT_SLIDER_HEIGHT);
 
     callbackDataForLowerBoundSlider.data = &dynamicData;
     callbackDataForLowerBoundSlider.widget = vertical_upper_bound_slider;
