@@ -61,7 +61,6 @@ void LineDrawer::drawHorizontalLine(const int y, const float boldness,
 void LineDrawer::drawVerticalLine(const int x, const float boldness,
                                   const bool stipple_line)
 {
-
     if (stipple_line)
     {
         glEnable(GL_LINE_STIPPLE);
@@ -164,17 +163,17 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
     double time_multiplier;
     const char *unit_label;
 
-    if (dynamicData.horizontal_resolution_ns >= 2000000000)
+    if (dynamicData.horizontal_resolution_ns >= 1000000000)
     {
         time_multiplier = 0.000000001;
         unit_label = "s";
     }
-    else if (dynamicData.horizontal_resolution_ns >= 2000000)
+    else if (dynamicData.horizontal_resolution_ns >= 1000000)
     {
         time_multiplier = 0.000001;
         unit_label = "ms";
     }
-    else if (dynamicData.horizontal_resolution_ns >= 20000)
+    else if (dynamicData.horizontal_resolution_ns >= 10000)
     {
         time_multiplier = 0.001;
         unit_label = "us";

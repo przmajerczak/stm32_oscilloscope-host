@@ -76,7 +76,7 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
     Timemarker tmarker(
         dynamicData.timemarkersData.singleFrameDataRetrievalDuration);
 
-    uint8_t byte{0};
+    uint8_t last_byte{0};
     uint8_t previous_byte{0};
 
     EncodedAdcValues values;
@@ -87,14 +87,14 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
     // TODO: wrap in nice method determining channel and return channel id along
     // with data
     while (
-        not(byte == 0xff and (previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 or
+        not(last_byte == 0xff and (previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_1 or
                               previous_byte == SECOND_LAST_BYTE_FOR_CHANNEL_2)))
     {
-        previous_byte = byte;
-        long int bytes_received{read(deviceFileDescriptor, &byte, 1)};
+        previous_byte = last_byte;
+        long int bytes_received{read(deviceFileDescriptor, &last_byte, 1)};
         if (bytes_received > 0)
         {
-            values.push_back(byte);
+            values.push_back(last_byte);
         }
     }
 
