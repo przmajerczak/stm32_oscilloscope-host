@@ -154,7 +154,7 @@ void LineDrawer::drawHorizontalGrid(const int numOfHorizontalLayers)
 
 void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 {
-    const int middle_x{X_DISPLAY_RESOLUTION / 2};
+    const int middle_x{static_cast<int>(dynamicData.trigger_horizontal_position)};
 
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
@@ -188,22 +188,27 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
     drawVerticalLineWithLabels(middle_x, "0", unit_label, textPrinterForGrid, BOLD,
                                true);
 
-    for (int i = 1; i <= numOfVerticalLayers - 1; ++i)
+    for (int i = -2 * numOfVerticalLayers; i <= 2 * numOfVerticalLayers; ++i)
     {
-        const int right_x{middle_x + static_cast<int>(i * delta_x)};
-        const int left_x{middle_x - static_cast<int>(i * delta_x)};
+        if (i == 0)
+        {
+            continue;
+        }
+        const int x{middle_x + static_cast<int>(i * delta_x)};
 
-        const double nanoseconds_for_line{(right_x - middle_x) *
-                                          nanoseconds_per_x * time_multiplier};
+        // TODO: rethink and embed into loop contidtion
+        if (x < 0)
+        {
+            continue;
+        }
 
-        std::string left_time_value{
-            doubleToFixedLengthString(-1.0 * nanoseconds_for_line, 4)};
-        std::string right_time_value{
-            doubleToFixedLengthString(nanoseconds_for_line, 4)};
-
-        drawVerticalLineWithLabels(left_x, left_time_value.c_str(), unit_label,
-                                   textPrinterForGrid, NEUTRAL, true);
-        drawVerticalLineWithLabels(right_x, right_time_value.c_str(), unit_label,
+        if (x > X_DISPLAY_RESOLUTION)
+        {
+            break;
+        }
+        const double nanoseconds{(x - middle_x) * nanoseconds_per_x * time_multiplier};
+        std::string time_value{doubleToFixedLengthString(nanoseconds, 4)};
+        drawVerticalLineWithLabels(x, time_value.c_str(), unit_label,
                                    textPrinterForGrid, NEUTRAL, true);
     }
 }
