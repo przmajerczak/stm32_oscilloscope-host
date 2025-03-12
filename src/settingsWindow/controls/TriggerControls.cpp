@@ -41,24 +41,17 @@ static void onTriggerSourceChanged(GtkComboBox *widget, gpointer user_data)
 
 void TriggerControls::prepare(DynamicData &dynamicData)
 {
-    prepareThresholdLabel(dynamicData);
-    prepareTriggerThresholdSlider(dynamicData);
-    prepareTriggerHorizontalPositionLabel(dynamicData);
-    prepareTriggerHorizontalPositionSlider(dynamicData);
-    prepareTriggerLabel(dynamicData);
-    prepareTriggerRisingEdgeButton(dynamicData);
-    prepareTriggerFallingEdgeButton(dynamicData);
+    prepareTriggerThresholdControls(dynamicData);
+    prepareTriggerHorizontalPositionControls(dynamicData);
+    prepareTriggerEdgeControls(dynamicData);
     prepareTriggerSourceSelection(dynamicData);
 }
 
-void TriggerControls::prepareThresholdLabel(DynamicData &dynamicData)
+void TriggerControls::prepareTriggerThresholdControls(DynamicData &dynamicData)
 {
     trigger_threshold_label = gtk_label_new("Trigger threshold value:");
     gtk_widget_set_hexpand(trigger_threshold_label, TRUE);
-}
 
-void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
-{
     // TODO: refactor to allow step=1mV instead of one y
     GtkAdjustment *adjustment = gtk_adjustment_new(
         DEFAULT_TRIGGER_THRESHOLD, 0, Y_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
@@ -76,17 +69,13 @@ void TriggerControls::prepareTriggerThresholdSlider(DynamicData &dynamicData)
     trigger_spin_button = gtk_spin_button_new(adjustment, 1.0, 0);
 }
 
-void TriggerControls::prepareTriggerHorizontalPositionLabel(
+void TriggerControls::prepareTriggerHorizontalPositionControls(
     DynamicData &dynamicData)
 {
     trigger_horizontal_position_label =
         gtk_label_new("Trigger horizontal position:");
     gtk_widget_set_hexpand(trigger_threshold_label, TRUE);
-}
 
-void TriggerControls::prepareTriggerHorizontalPositionSlider(
-    DynamicData &dynamicData)
-{
     GtkAdjustment *adjustment = gtk_adjustment_new(
         (X_DISPLAY_RESOLUTION / 2), 0, X_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
     trigger_horizontal_position_slider =
@@ -103,24 +92,17 @@ void TriggerControls::prepareTriggerHorizontalPositionSlider(
         gtk_spin_button_new(adjustment, 1.0, 0);
 }
 
-void TriggerControls::prepareTriggerLabel(DynamicData &dynamicData)
+void TriggerControls::prepareTriggerEdgeControls(DynamicData &dynamicData)
 {
     trigger_edge_label = gtk_label_new("Trigger edge:");
     gtk_widget_set_hexpand(trigger_edge_label, TRUE);
-}
 
-void TriggerControls::prepareTriggerRisingEdgeButton(DynamicData &dynamicData)
-{
     trigger_rising_edge_button = gtk_button_new_with_label("__/‾‾");
     gtk_widget_set_hexpand(trigger_rising_edge_button, TRUE);
     g_signal_connect(trigger_rising_edge_button, "clicked",
                      G_CALLBACK(onTriggerRisingEdgeButtonClicked),
                      &(dynamicData.thresholdTrigger));
-}
 
-void TriggerControls::prepareTriggerFallingEdgeButton(
-    DynamicData &dynamicData)
-{
     trigger_falling_edge_button = gtk_button_new_with_label("‾‾\\__");
     gtk_widget_set_hexpand(trigger_falling_edge_button, TRUE);
     g_signal_connect(trigger_falling_edge_button, "clicked",

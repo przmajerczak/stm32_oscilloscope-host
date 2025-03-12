@@ -10,13 +10,9 @@ public:
     GtkWidget *getTriggerControlsContainer();
 
 private:
-    void prepareThresholdLabel(DynamicData &dynamicData);
-    void prepareTriggerThresholdSlider(DynamicData &dynamicData);
-    void prepareTriggerHorizontalPositionLabel(DynamicData &dynamicData);
-    void prepareTriggerHorizontalPositionSlider(DynamicData &dynamicData);
-    void prepareTriggerLabel(DynamicData &dynamicData);
-    void prepareTriggerRisingEdgeButton(DynamicData &dynamicData);
-    void prepareTriggerFallingEdgeButton(DynamicData &dynamicData);
+    void prepareTriggerThresholdControls(DynamicData &dynamicData);
+    void prepareTriggerHorizontalPositionControls(DynamicData &dynamicData);
+    void prepareTriggerEdgeControls(DynamicData &dynamicData);
     void prepareTriggerSourceSelection(DynamicData &dynamicData);
 
     GtkWidget *trigger_threshold_label = nullptr;
