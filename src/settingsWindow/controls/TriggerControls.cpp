@@ -112,6 +112,7 @@ void TriggerControls::prepareTriggerLabel(DynamicData &dynamicData)
 void TriggerControls::prepareTriggerRisingEdgeButton(DynamicData &dynamicData)
 {
     triggerRisingEdgeButton = gtk_button_new_with_label("__/‾‾");
+    gtk_widget_set_hexpand(triggerRisingEdgeButton, TRUE);
     g_signal_connect(triggerRisingEdgeButton, "clicked",
                      G_CALLBACK(onTriggerRisingEdgeButtonClicked),
                      &(dynamicData.thresholdTrigger));
@@ -121,6 +122,7 @@ void TriggerControls::prepareTriggerFallingEdgeButton(
     DynamicData &dynamicData)
 {
     triggerFallingEdgeButton = gtk_button_new_with_label("‾‾\\__");
+    gtk_widget_set_hexpand(triggerFallingEdgeButton, TRUE);
     g_signal_connect(triggerFallingEdgeButton, "clicked",
                      G_CALLBACK(onTriggerFallingEdgeButtonClicked),
                      &(dynamicData.thresholdTrigger));
@@ -151,29 +153,52 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
     GtkWidget *triggerControlsExpander = gtk_expander_new("Trigger controls");
     gtk_expander_set_expanded(GTK_EXPANDER(triggerControlsExpander), TRUE);
 
-    GtkWidget *triggerControlsGrid = gtk_grid_new();
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), thresholdLabel, 0, 0, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerThresholdSlider, 0, 1,
-                    1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), trigger_spin_button, 1, 1, 1,
-                    1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerHorizontalPositionLabel,
-                    0, 2, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid),
-                    triggerHorizontalPositionSlider, 0, 3, 1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid),
-                    trigger_horizontal_position_spin_button, 1, 3, 1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerLabel, 0, 4, 2, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerRisingEdgeButton, 0, 5,
-                    1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), triggerFallingEdgeButton, 1, 5,
-                    1, 1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), trigger_source_label, 0, 6, 2,
-                    1);
-    gtk_grid_attach(GTK_GRID(triggerControlsGrid), trigger_source_combo, 0, 7, 2,
-                    1);
+    constexpr int spacing{0};
+    constexpr int padding{0};
+
+    GtkWidget *trigger_threshold_box =
+        gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
+    gtk_box_pack_start(GTK_BOX(trigger_threshold_box), triggerThresholdSlider,
+                       FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_threshold_box), trigger_spin_button, FALSE,
+                       TRUE, padding);
+
+    GtkWidget *trigger_horizontal_position_box =
+        gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
+    gtk_box_pack_start(GTK_BOX(trigger_horizontal_position_box),
+                       triggerHorizontalPositionSlider, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_horizontal_position_box),
+                       trigger_horizontal_position_spin_button, FALSE, TRUE,
+                       padding);
+
+    GtkWidget *trigger_edge_box =
+        gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
+    gtk_box_pack_start(GTK_BOX(trigger_edge_box), triggerRisingEdgeButton, FALSE,
+                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_edge_box), triggerFallingEdgeButton, FALSE,
+                       TRUE, padding);
+
+    GtkWidget *trigger_controls_box =
+        gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
+
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), thresholdLabel, FALSE, TRUE,
+                       padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_threshold_box,
+                       FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box),
+                       triggerHorizontalPositionLabel, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box),
+                       trigger_horizontal_position_box, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), triggerLabel, FALSE, TRUE,
+                       padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_edge_box, FALSE,
+                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_source_label, FALSE,
+                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_source_combo, FALSE,
+                       TRUE, padding);
 
     gtk_container_add(GTK_CONTAINER(triggerControlsExpander),
-                      triggerControlsGrid);
+                      trigger_controls_box);
     return triggerControlsExpander;
 }
