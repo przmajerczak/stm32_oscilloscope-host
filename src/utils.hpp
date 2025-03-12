@@ -2,8 +2,6 @@
 
 #include <cstdint>
 #include <iostream>
-
-#include "settingsWindow/controls/VerticalBoundControls.hpp"
 #include "sharedData/constants.hpp"
 #include "sharedData/DynamicData.hpp"
 

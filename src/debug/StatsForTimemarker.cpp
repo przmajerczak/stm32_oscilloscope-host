@@ -1,5 +1,7 @@
 #include "StatsForTimemarker.hpp"
 
+#include <numeric>
+
 void StatsForTimemarker::logDuration_us(const uint16_t duration_us)
 {
     durations_us.push_back(duration_us);

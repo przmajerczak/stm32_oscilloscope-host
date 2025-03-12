@@ -1,6 +1,6 @@
 #include "DisplayHelper.hpp"
+
 #include "debug/Timemarker.hpp"
-#include "settingsWindow/controls/TriggerControls.hpp"
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
 

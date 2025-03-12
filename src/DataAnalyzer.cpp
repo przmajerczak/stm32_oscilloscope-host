@@ -1,8 +1,8 @@
 #include "DataAnalyzer.hpp"
 #include "debug/Timemarker.hpp"
 #include "sharedData/constants.hpp"
-#include "sharedData/types.hpp"
 #include "utils.hpp"
+#include <numeric>
 
 AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
                                     DynamicData &dynamicData,

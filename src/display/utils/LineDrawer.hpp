@@ -3,8 +3,6 @@
 #include "display/utils/TextPrinter.hpp"
 #include "sharedData/constants.hpp"
 #include "sharedData/DynamicData.hpp"
-#include "utils.hpp"
-#include <string>
 
 class LineDrawer
 {

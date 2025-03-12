@@ -1,6 +1,8 @@
 #include "LineDrawer.hpp"
 
+#include "utils.hpp"
 #include <GL/glew.h>
+#include <string>
 
 void LineDrawer::drawTriggerIndicator(const int x, const int y)
 {

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "sharedData/types.hpp"
-#include <unistd.h>
-
 #include "sharedData/DynamicData.hpp"
+#include "sharedData/types.hpp"
+#include <cstdint>
+#include <unistd.h>
 
 class DataRetriever
 {
