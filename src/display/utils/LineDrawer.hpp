@@ -36,9 +36,11 @@ private:
                        const double y2, const double r, const double g,
                        const double b, const double a);
 
-    TextPrinter textPrinterForTriggerIndicator{FONT_SIZE_LARGE, COLOR_RGB_WHITE,
+    TextPrinter textPrinterForTriggerIndicator{FONT_SIZE_MEDIUM, COLOR_RGB_WHITE,
                                                NEUTRAL};
     TextPrinter textPrinterForGrid{FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL};
+    TextPrinter textPrinterForVerticalMeasurement{FONT_SIZE_LARGE,
+                                                  COLOR_RGB_WHITE, NEUTRAL};
 
     const DynamicData &dynamicData;
 };

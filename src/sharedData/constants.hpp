@@ -34,7 +34,8 @@ constexpr float MAX_VOLTAGE_mV{3300.0f};
 constexpr float MIN_VOLTAGE_mV{0.0f};
 constexpr float ABSOULTE_VERTICAL_RESOLUTION_mV{MAX_VOLTAGE_mV -
                                                 MIN_VOLTAGE_mV};
-constexpr float FONT_SIZE_LARGE{24.0f};
+constexpr float FONT_SIZE_LARGE{28.0f};
+constexpr float FONT_SIZE_MEDIUM{24.0f};
 constexpr float FONT_SIZE_SMALL{20.0f};
 constexpr float COLOR_RGB_WHITE{1.0};
 constexpr float COLOR_RGB_LIGHT_GRAY{0.6};

@@ -25,8 +25,8 @@ public:
                                       const float new_measurement);
 
 private:
-    float baseline{Y_DISPLAY_RESOLUTION * 0.3};
-    float measurement{Y_DISPLAY_RESOLUTION * 0.6};
+    float baseline{Y_DISPLAY_RESOLUTION * 0.333};
+    float measurement{Y_DISPLAY_RESOLUTION * 0.666};
     float baseline_mV{MIN_VOLTAGE_mV};
     float measurement_mV{MAX_VOLTAGE_mV};
 };

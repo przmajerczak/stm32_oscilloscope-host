@@ -2,6 +2,7 @@
 
 #include "utils.hpp"
 #include <GL/glew.h>
+#include <cmath>
 #include <string>
 
 void LineDrawer::drawTriggerIndicator(const int x, const int y)
@@ -235,14 +236,55 @@ void LineDrawer::drawRectangle(const double x1, const double x2,
 
 void LineDrawer::drawVerticalMeasurement()
 {
-    const auto &verticalMeasurementsData{dynamicData.verticalMeasurementsData};
+    const auto y_baseline{
+        dynamicData.verticalMeasurementsData.baselineIndicator()};
+    const auto y_measurement{
+        dynamicData.verticalMeasurementsData.measurementIndicator()};
 
-    drawRectangle(
-        0, X_DISPLAY_RESOLUTION, verticalMeasurementsData.baselineIndicator(),
-        verticalMeasurementsData.measurementIndicator(), 1.0f, 1.0f, 0.0f, 0.2f);
+    drawRectangle(0, X_DISPLAY_RESOLUTION, y_baseline, y_measurement, 1.0f, 1.0f,
+                  0.0f, 0.2f);
 
     glColor3f(0.0f, 1.0f, 0.0f);
-    drawHorizontalLine(verticalMeasurementsData.baselineIndicator(), VERY_BOLD);
-    drawHorizontalLine(verticalMeasurementsData.measurementIndicator(),
-                       VERY_BOLD);
+    drawHorizontalLine(y_baseline, VERY_BOLD);
+    drawHorizontalLine(y_measurement, VERY_BOLD);
+
+    const float left_label_x{2 * DISPLAY_MARGIN_WIDTH};
+    const float right_label_x{X_DISPLAY_RESOLUTION - DISPLAY_MARGIN_WIDTH};
+
+    drawVerticalLine(DISPLAY_MARGIN_WIDTH, NEUTRAL, true, y_baseline,
+                     y_measurement);
+    drawVerticalLine(X_DISPLAY_RESOLUTION - DISPLAY_MARGIN_WIDTH, NEUTRAL, true,
+                     y_baseline, y_measurement);
+
+    const float middle_y{
+        (marginCorrected(y_measurement) + marginCorrected(y_baseline)) / 2};
+
+    const auto vertical_difference{
+        abs(dynamicData.verticalMeasurementsData.baselineIndicator_mV() -
+            dynamicData.verticalMeasurementsData.measurementIndicator_mV())};
+
+    const std::string baseline_label{
+        std::to_string(static_cast<int16_t>(
+            dynamicData.verticalMeasurementsData.baselineIndicator_mV())) +
+        " mV"};
+    const std::string difference_label{
+        std::to_string(static_cast<int16_t>(vertical_difference)) + " mV"};
+    const std::string measurement_label{
+        std::to_string(static_cast<int16_t>(
+            dynamicData.verticalMeasurementsData.measurementIndicator_mV())) +
+        " mV"};
+
+    textPrinterForVerticalMeasurement.drawText(
+        left_label_x, marginCorrected(y_measurement), measurement_label.c_str());
+    textPrinterForVerticalMeasurement.drawText(left_label_x, middle_y,
+                                               difference_label.c_str());
+    textPrinterForVerticalMeasurement.drawText(
+        left_label_x, marginCorrected(y_baseline), baseline_label.c_str());
+
+    textPrinterForVerticalMeasurement.drawText(
+        right_label_x, marginCorrected(y_measurement), measurement_label.c_str());
+    textPrinterForVerticalMeasurement.drawText(right_label_x, middle_y,
+                                               difference_label.c_str());
+    textPrinterForVerticalMeasurement.drawText(
+        right_label_x, marginCorrected(y_baseline), baseline_label.c_str());
 }
