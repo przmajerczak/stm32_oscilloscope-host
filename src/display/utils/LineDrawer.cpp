@@ -205,9 +205,28 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
         {
             break;
         }
-        const double nanoseconds{(x - middle_x) * nanoseconds_per_x * time_multiplier};
+        const double nanoseconds{(x - middle_x) * nanoseconds_per_x *
+                                 time_multiplier};
         std::string time_value{doubleToFixedLengthString(nanoseconds, 4)};
         drawVerticalLineWithLabels(x, time_value.c_str(), unit_label,
                                    textPrinterForGrid, NEUTRAL, true);
     }
+}
+
+void LineDrawer::drawRectangle(const double x1, const double x2,
+                               const double y1, const double y2, const double r,
+                               const double g, const double b, const double a)
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glColor4f(r, g, b, a);
+    glBegin(GL_QUADS);
+    glVertex2f(marginCorrected(x1), marginCorrected(y1));
+    glVertex2f(marginCorrected(x2), marginCorrected(y1));
+    glVertex2f(marginCorrected(x2), marginCorrected(y2));
+    glVertex2f(marginCorrected(x1), marginCorrected(y2));
+    glEnd();
+
+    glDisable(GL_BLEND);
 }
