@@ -1,7 +1,8 @@
 #pragma once
 
-#include "VerticalDataBase.hpp"
 #include "constants.hpp"
+
+class DynamicData;
 
 class VerticalMeasurementsData
 {
@@ -18,8 +19,10 @@ public:
     const float baselineIndicator_mV() const { return baseline_mV; }
     const float measurementIndicator_mV() const { return measurement_mV; }
 
-    void notifyAboutBaselineChange(const float new_baseline);
-    void notifyAboutMeasurementChange(const float new_measurement);
+    void notifyAboutBaselineChange(const DynamicData &dynamicData,
+                                   const float new_baseline);
+    void notifyAboutMeasurementChange(const DynamicData &dynamicData,
+                                      const float new_measurement);
 
 private:
     float baseline{Y_DISPLAY_RESOLUTION * 0.3};

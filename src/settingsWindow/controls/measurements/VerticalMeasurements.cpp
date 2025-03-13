@@ -1,9 +1,27 @@
 #include "VerticalMeasurements.hpp"
 #include "sharedData/constants.hpp"
 
-void baselineVoltageSliderOnChangeAction(GtkRange *range, gpointer data) {}
+void baselineVoltageSliderOnChangeAction(GtkRange *range, gpointer data)
+{
+    DynamicData *dynamicData = static_cast<DynamicData *>(data);
+    dynamicData->verticalMeasurementsData.notifyAboutBaselineChange(
+        *dynamicData, static_cast<uint16_t>(gtk_range_get_value(range)));
+}
 
-void measuredVoltageSliderOnChangeAction(GtkRange *range, gpointer data) {}
+void measuredVoltageSliderOnChangeAction(GtkRange *range, gpointer data)
+{
+    DynamicData *dynamicData = static_cast<DynamicData *>(data);
+    dynamicData->verticalMeasurementsData.notifyAboutMeasurementChange(
+        *dynamicData, static_cast<uint16_t>(gtk_range_get_value(range)));
+}
+
+void expenderNotifyAction(GtkExpander *expander, GParamSpec *pspec,
+                          gpointer data)
+{
+    VerticalMeasurementsData *verticalMeasurementsData =
+        static_cast<VerticalMeasurementsData *>(data);
+    verticalMeasurementsData->active = gtk_expander_get_expanded(expander);
+}
 
 void VerticalMeasurements::prepare(DynamicData &dynamicData)
 {
@@ -28,24 +46,29 @@ void VerticalMeasurements::prepare(DynamicData &dynamicData)
                                 DEFAULT_SLIDER_HEIGHT);
 
     g_signal_connect(baseline_voltage_slider, "value-changed",
-                     G_CALLBACK(baselineVoltageSliderOnChangeAction), nullptr);
+                     G_CALLBACK(baselineVoltageSliderOnChangeAction),
+                     &dynamicData);
 
     baseline_voltage_spin_button =
         gtk_spin_button_new(baseline_voltage_slider_adjustment, 1.0, 0);
 
     g_signal_connect(measured_voltage_slider, "value-changed",
-                     G_CALLBACK(measuredVoltageSliderOnChangeAction), nullptr);
+                     G_CALLBACK(measuredVoltageSliderOnChangeAction),
+                     &dynamicData);
 
     measured_voltage_spin_button =
         gtk_spin_button_new(measurement_voltage_slider_adjustment, 1.0, 0);
+
+    verticalMeasurementsExpander = gtk_expander_new("Vertical measurements");
+    gtk_expander_set_expanded(GTK_EXPANDER(verticalMeasurementsExpander), FALSE);
+
+    g_signal_connect(verticalMeasurementsExpander, "notify::expanded",
+                     G_CALLBACK(expenderNotifyAction),
+                     &dynamicData.verticalMeasurementsData);
 }
 
 GtkWidget *VerticalMeasurements::getVerticalMeasurementsContainer()
 {
-    GtkWidget *verticalMeasurementsExpander =
-        gtk_expander_new("Vertical measurements");
-    gtk_expander_set_expanded(GTK_EXPANDER(verticalMeasurementsExpander), FALSE);
-
     constexpr int spacing{0};
     constexpr int padding{0};
 
