@@ -3,6 +3,7 @@
 #include "sharedData/constants.hpp"
 #include "sharedData/types.hpp"
 #include "sharedData/VerticalBoundsData.hpp"
+#include "sharedData/VerticalMeasurementsData.hpp"
 #include "sharedData/TimemarkersData.hpp"
 #include <array>
 #include <cstdint>
@@ -24,6 +25,7 @@ public:
     double nanoseconds_per_sample;
     uint32_t horizontal_resolution_ns{DEFAULT_HORIZONTAL_RESOLUTION_NS};
     uint16_t averaging_window_size{1};
+    VerticalMeasurementsData verticalMeasurementsData;
 
     TimemarkersData timemarkersData;
 };
