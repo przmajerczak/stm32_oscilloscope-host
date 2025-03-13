@@ -10,9 +10,9 @@ public:
     LineDrawer(const DynamicData &dynamicData) : dynamicData(dynamicData) {}
 
     void drawTriggerIndicator(const int x, const int y);
-    void drawGrid(const int numOfVerticalLayers,
-                  const int numOfHorizontalLayers);
+    void drawGrid(const int numOfVerticalLayers, const int numOfHorizontalLayers);
     void drawDisplayAreaBorder();
+    void drawVerticalMeasurement();
 
 private:
     void drawHorizontalLine(const int y, const float boldness,

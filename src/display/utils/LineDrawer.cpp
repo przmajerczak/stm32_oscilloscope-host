@@ -184,8 +184,8 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
         unit_label = "ns";
     }
 
-    drawVerticalLineWithLabels(middle_x, "0", unit_label, textPrinterForGrid, BOLD,
-                               true);
+    drawVerticalLineWithLabels(middle_x, "0", unit_label, textPrinterForGrid,
+                               BOLD, true);
 
     for (int i = -2 * numOfVerticalLayers; i <= 2 * numOfVerticalLayers; ++i)
     {
@@ -229,4 +229,18 @@ void LineDrawer::drawRectangle(const double x1, const double x2,
     glEnd();
 
     glDisable(GL_BLEND);
+}
+
+void LineDrawer::drawVerticalMeasurement()
+{
+    const auto &verticalMeasurementsData{dynamicData.verticalMeasurementsData};
+
+    drawRectangle(
+        0, X_DISPLAY_RESOLUTION, verticalMeasurementsData.baselineIndicator(),
+        verticalMeasurementsData.measurementIndicator(), 1.0f, 1.0f, 0.0f, 0.2f);
+
+    glColor3f(0.0f, 1.0f, 0.0f);
+    drawHorizontalLine(verticalMeasurementsData.baselineIndicator(), VERY_BOLD);
+    drawHorizontalLine(verticalMeasurementsData.measurementIndicator(),
+                       VERY_BOLD);
 }

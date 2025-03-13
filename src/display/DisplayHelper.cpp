@@ -44,6 +44,11 @@ void DisplayHelper::display()
         }
     }
 
+    if (dynamicData.verticalMeasurementsData.active)
+    {
+        lineDrawer.drawVerticalMeasurement();
+    }
+
     lineDrawer.drawTriggerIndicator(dynamicData.trigger_horizontal_position,
                                     dynamicData.triggerThresholdSliderValue);
     lineDrawer.drawDisplayAreaBorder();
