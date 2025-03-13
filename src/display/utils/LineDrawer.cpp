@@ -35,7 +35,8 @@ void LineDrawer::drawDisplayAreaBorder()
 }
 
 void LineDrawer::drawHorizontalLine(const int y, const float boldness,
-                                    const bool stipple_line)
+                                    const bool stipple_line, const int x1,
+                                    const int x2)
 {
     if (stipple_line)
     {
@@ -47,8 +48,8 @@ void LineDrawer::drawHorizontalLine(const int y, const float boldness,
 
     glBegin(GL_LINES);
 
-    glVertex2f(marginCorrected(0), marginCorrected(y));
-    glVertex2f(marginCorrected(X_DISPLAY_RESOLUTION), marginCorrected(y));
+    glVertex2f(marginCorrected(x1), marginCorrected(y));
+    glVertex2f(marginCorrected(x2), marginCorrected(y));
 
     glEnd();
 
@@ -59,7 +60,8 @@ void LineDrawer::drawHorizontalLine(const int y, const float boldness,
 }
 
 void LineDrawer::drawVerticalLine(const int x, const float boldness,
-                                  const bool stipple_line)
+                                  const bool stipple_line, const int y1,
+                                  const int y2)
 {
     if (stipple_line)
     {
@@ -71,8 +73,8 @@ void LineDrawer::drawVerticalLine(const int x, const float boldness,
 
     glBegin(GL_LINES);
 
-    glVertex2f(marginCorrected(x), marginCorrected(0));
-    glVertex2f(marginCorrected(x), marginCorrected(Y_DISPLAY_RESOLUTION));
+    glVertex2f(marginCorrected(x), marginCorrected(y1));
+    glVertex2f(marginCorrected(x), marginCorrected(y2));
 
     glEnd();
 

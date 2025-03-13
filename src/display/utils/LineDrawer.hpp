@@ -16,9 +16,11 @@ public:
 
 private:
     void drawHorizontalLine(const int y, const float boldness,
-                            const bool stipple_line = false);
+                            const bool stipple_line = false, const int x1 = 0,
+                            const int x2 = X_DISPLAY_RESOLUTION);
     void drawVerticalLine(const int x, const float boldness,
-                          const bool stipple_line = false);
+                          const bool stipple_line = false, const int y1 = 0,
+                          const int y2 = Y_DISPLAY_RESOLUTION);
     void drawHorizontalLineWithLabels(const int y, const char *unit_label,
                                       const TextPrinter &textPrinter,
                                       const float boldness_line = NEUTRAL,
