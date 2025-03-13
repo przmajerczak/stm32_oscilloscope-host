@@ -13,12 +13,12 @@ static float yAsPercentOfMaxY(const int y)
 static int scaleAdcValueToY(const DynamicData &dynamicData, const uint16_t adc_value)
 {
     const float current_vertical_display_resolution{
-        dynamicData.verticalBoundsData.vertical_upper_bound -
-        dynamicData.verticalBoundsData.vertical_lower_bound};
+        dynamicData.verticalBoundsData.verticalUpperBound() -
+        dynamicData.verticalBoundsData.verticalLowerBound()};
     const float factor{INPUT_SIGNAL_RESOLUTION /
                        current_vertical_display_resolution};
     float scaled_adc_value{
-        (adc_value - dynamicData.verticalBoundsData.vertical_lower_bound) * factor};
+        (adc_value - dynamicData.verticalBoundsData.verticalLowerBound()) * factor};
 
     // TODO: remove flat lines at the bounds
     if (scaled_adc_value > INPUT_SIGNAL_MAX)
@@ -38,20 +38,20 @@ static int scaleAdcValueToY(const DynamicData &dynamicData, const uint16_t adc_v
 static int scaleYToVoltage_mV(const DynamicData &dynamicData, const int y)
 {
     const float current_vertical_display_resolution{
-        dynamicData.verticalBoundsData.vertical_upper_bound_mV -
-        dynamicData.verticalBoundsData.vertical_lower_bound_mV};
+        dynamicData.verticalBoundsData.verticalUpperBound_mV() -
+        dynamicData.verticalBoundsData.verticalLowerBound_mV()};
 
     return (yAsPercentOfMaxY(y) * current_vertical_display_resolution) +
-           dynamicData.verticalBoundsData.vertical_lower_bound_mV;
+           dynamicData.verticalBoundsData.verticalLowerBound_mV();
 }
 
 static uint16_t scaleYToAdcWithinBounds(const DynamicData &dynamicData, const int y)
 {
     const float current_vertical_display_resolution{
-        dynamicData.verticalBoundsData.vertical_upper_bound -
-        dynamicData.verticalBoundsData.vertical_lower_bound};
+        dynamicData.verticalBoundsData.verticalUpperBound() -
+        dynamicData.verticalBoundsData.verticalLowerBound()};
 
-    return dynamicData.verticalBoundsData.vertical_lower_bound + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
+    return dynamicData.verticalBoundsData.verticalLowerBound() + yAsPercentOfMaxY(y) * current_vertical_display_resolution;
 }
 
 static std::string doubleToFixedLengthString(const double value, std::size_t len)
