@@ -3,32 +3,30 @@
 
 void baselineTimestampSliderOnChangeAction(GtkRange *range, gpointer data)
 {
-    /*
     DynamicData *dynamicData = static_cast<DynamicData *>(data);
     dynamicData->horizontalMeasurementsData.notifyAboutBaselineChange(
         *dynamicData, static_cast<int16_t>(gtk_range_get_value(range)));
-        */
 }
 
 void measuredTimestampSliderOnChangeAction(
     GtkRange *range,
     gpointer
         data)
-{ /*
-     DynamicData *dynamicData = static_cast<DynamicData *>(data);
-     dynamicData->horizontalMeasurementsData.notifyAboutMeasurementChange(
-         *dynamicData,
-     static_cast<int16_t>(gtk_range_get_value(range)));*/
+{
+    DynamicData *dynamicData = static_cast<DynamicData *>(data);
+    dynamicData->horizontalMeasurementsData.notifyAboutMeasurementChange(
+        *dynamicData,
+        static_cast<int16_t>(gtk_range_get_value(range)));
 }
 
 void horizontalMeasurementsExpenderNotifyAction(
     GtkExpander *expander, GParamSpec *pspec,
     gpointer data)
-{ /*
-     HorizontalMeasurementsData *horizontalMeasurementsData =
-         static_cast<HorizontalMeasurementsData *>(data);
-     horizontalMeasurementsData->active =
-     gtk_expander_get_expanded(expander);*/
+{
+    HorizontalMeasurementsData *horizontalMeasurementsData =
+        static_cast<HorizontalMeasurementsData *>(data);
+    horizontalMeasurementsData->active =
+        gtk_expander_get_expanded(expander);
 }
 
 void HorizontalMeasurements::prepare(DynamicData &dynamicData)
@@ -46,14 +44,14 @@ void HorizontalMeasurements::prepare(DynamicData &dynamicData)
         GTK_ORIENTATION_HORIZONTAL, measurement_timestamp_slider_adjustment);
     gtk_widget_set_hexpand(measured_timestamp_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(measured_timestamp_slider), FALSE);
-    /*
-        dynamicData.horizontalMeasurementsData.notifyAboutBaselineChange(
-            dynamicData,
-       static_cast<int16_t>(gtk_range_get_value(GTK_RANGE(baseline_timestamp_slider))));
-        dynamicData.horizontalMeasurementsData.notifyAboutMeasurementChange(
-            dynamicData,
-       static_cast<int16_t>(gtk_range_get_value(GTK_RANGE(measured_timestamp_slider))));
-    */
+
+    dynamicData.horizontalMeasurementsData.notifyAboutBaselineChange(
+        dynamicData,
+        static_cast<int16_t>(gtk_range_get_value(GTK_RANGE(baseline_timestamp_slider))));
+    dynamicData.horizontalMeasurementsData.notifyAboutMeasurementChange(
+        dynamicData,
+        static_cast<int16_t>(gtk_range_get_value(GTK_RANGE(measured_timestamp_slider))));
+
     g_signal_connect(baseline_timestamp_slider, "value-changed",
                      G_CALLBACK(baselineTimestampSliderOnChangeAction),
                      &dynamicData);
@@ -74,7 +72,7 @@ void HorizontalMeasurements::prepare(DynamicData &dynamicData)
 
     g_signal_connect(horizontalMeasurementsExpander, "notify::expanded",
                      G_CALLBACK(horizontalMeasurementsExpenderNotifyAction),
-                     nullptr /*&dynamicData.horizontalMeasurementsData*/);
+                     &dynamicData.horizontalMeasurementsData);
 }
 
 GtkWidget *HorizontalMeasurements::getHorizontalMeasurementsContainer()

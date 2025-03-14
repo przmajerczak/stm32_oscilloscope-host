@@ -4,6 +4,7 @@
 #include "sharedData/types.hpp"
 #include "sharedData/VerticalBoundsData.hpp"
 #include "sharedData/VerticalMeasurementsData.hpp"
+#include "sharedData/HorizontalMeasurementsData.hpp"
 #include "sharedData/TimemarkersData.hpp"
 #include <array>
 #include <cstdint>
@@ -26,6 +27,7 @@ public:
     uint32_t horizontal_resolution_ns{DEFAULT_HORIZONTAL_RESOLUTION_NS};
     uint16_t averaging_window_size{1};
     VerticalMeasurementsData verticalMeasurementsData;
+    HorizontalMeasurementsData horizontalMeasurementsData;
 
     TimemarkersData timemarkersData;
 };
