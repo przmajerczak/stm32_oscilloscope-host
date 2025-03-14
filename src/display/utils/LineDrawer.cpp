@@ -188,15 +188,8 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
         unit_label = "ns";
     }
 
-    drawVerticalLineWithLabels(middle_x, "0", unit_label, textPrinterForGrid,
-                               BOLD, true);
-
     for (int i = -2 * numOfVerticalLayers; i <= 2 * numOfVerticalLayers; ++i)
     {
-        if (i == 0)
-        {
-            continue;
-        }
         const int x{middle_x + static_cast<int>(i * delta_x)};
 
         // TODO: rethink and embed into loop contidtion
