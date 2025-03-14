@@ -29,10 +29,13 @@ void LineDrawer::drawDisplayAreaBorder()
 
     constexpr float HALF_THICKNESS{VERY_BOLD / 2};
 
-    drawVerticalLine(-1 * HALF_THICKNESS, VERY_BOLD);
-    drawVerticalLine(X_DISPLAY_RESOLUTION + HALF_THICKNESS, VERY_BOLD);
-    drawHorizontalLine(-1 * HALF_THICKNESS, VERY_BOLD);
-    drawHorizontalLine(Y_DISPLAY_RESOLUTION + HALF_THICKNESS, VERY_BOLD);
+    constexpr double x1{-1 * HALF_THICKNESS};
+    constexpr double x2{X_DISPLAY_RESOLUTION + HALF_THICKNESS};
+    constexpr double y1{-1 * HALF_THICKNESS};
+    constexpr double y2{Y_DISPLAY_RESOLUTION + HALF_THICKNESS};
+
+    drawOutline(x1, x2, y1, y2, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY,
+                COLOR_RGB_LIGHT_GRAY, 1.0f, VERY_BOLD);
 }
 
 void LineDrawer::drawHorizontalLine(const int y, const float boldness,
