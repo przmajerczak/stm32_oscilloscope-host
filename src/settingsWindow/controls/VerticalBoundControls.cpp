@@ -14,6 +14,8 @@ void verticalLowerBoundSliderOnChangeAction(GtkRange *range,
 
     gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),
                         dynamicData->verticalBoundsData.verticalUpperBound());
+
+    dynamicData->verticalMeasurementsData.recalculateValues(*dynamicData);
 }
 
 void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
@@ -29,6 +31,8 @@ void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
 
     gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider),
                         dynamicData->verticalBoundsData.verticalLowerBound());
+
+    dynamicData->verticalMeasurementsData.recalculateValues(*dynamicData);
 }
 
 void VerticalBoundControls::prepare(DynamicData &dynamicData)

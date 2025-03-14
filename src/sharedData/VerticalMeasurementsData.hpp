@@ -23,6 +23,7 @@ public:
                                    const float new_baseline);
     void notifyAboutMeasurementChange(const DynamicData &dynamicData,
                                       const float new_measurement);
+    void recalculateValues(const DynamicData &dynamicData);
 
 private:
     float baseline{Y_DISPLAY_RESOLUTION * 0.333};

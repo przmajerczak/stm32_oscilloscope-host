@@ -14,3 +14,9 @@ void VerticalMeasurementsData::notifyAboutMeasurementChange(
     measurement = new_measurement;
     measurement_mV = scaleYToVoltage_mV(dynamicData, new_measurement);
 }
+
+void VerticalMeasurementsData::recalculateValues(const DynamicData &dynamicData)
+{
+    baseline_mV = scaleYToVoltage_mV(dynamicData, baseline);
+    measurement_mV = scaleYToVoltage_mV(dynamicData, measurement);
+}
