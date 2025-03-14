@@ -60,6 +60,15 @@ static uint16_t scaleYToAdcWithinBounds(const DynamicData &dynamicData,
            yAsPercentOfMaxY(y) * current_vertical_display_resolution;
 }
 
+static double scaleXToNanoseconds(const DynamicData &dynamicData, const double x)
+{
+    const double x_zero_ns{dynamicData.trigger_horizontal_position};
+    const double nanoseconds_per_x{dynamicData.horizontal_resolution_ns /
+                                   static_cast<double>(X_DISPLAY_RESOLUTION)};
+
+    return (x - x_zero_ns) * nanoseconds_per_x;
+}
+
 static std::string doubleToFixedLengthString(const double value,
                                              std::size_t len)
 {
