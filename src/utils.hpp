@@ -23,7 +23,6 @@ static int scaleAdcValueToY(const DynamicData &dynamicData,
         (adc_value - dynamicData.verticalBoundsData.verticalLowerBound()) *
         factor};
 
-    // TODO: remove flat lines at the bounds
     if (scaled_adc_value > INPUT_SIGNAL_MAX)
     {
         scaled_adc_value = INPUT_SIGNAL_MAX;

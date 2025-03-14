@@ -10,11 +10,8 @@ void averagingWindowSizeSpinButtonOnChangeAction(GtkSpinButton *spin_button,
 
 void AveragingControls::prepare(DynamicData &dynamicData)
 {
-    // TODO: replace with constant indicating frame size
-    constexpr uint16_t AVERAGING_WINDOW_MAX_SIZE{10000};
-
     GtkAdjustment *adjustment =
-        gtk_adjustment_new(1, 1, AVERAGING_WINDOW_MAX_SIZE, 1, 0.0, 0.0);
+        gtk_adjustment_new(1, 1, SAMPLES_PER_TRANSMISSION, 1, 0.0, 0.0);
 
     averaging_window_size_spin_button = gtk_spin_button_new(adjustment, 1.0, 0);
     gtk_widget_set_hexpand(averaging_window_size_spin_button, TRUE);

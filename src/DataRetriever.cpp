@@ -49,7 +49,11 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
     Timemarker tmarker(
         dynamicData.timemarkersData.totalDataRetrievalAndDecodingDuration);
 
-    constexpr std::size_t expectedReceivedDataSize{30004};
+    constexpr uint16_t TWO_BYTES_PER_SAMPLE{2};
+    constexpr uint16_t METADATA_BYTES{4};
+
+    constexpr std::size_t expectedReceivedDataSize{
+        TWO_BYTES_PER_SAMPLE * SAMPLES_PER_TRANSMISSION + METADATA_BYTES};
 
     EncodedAdcData undecodedRetrievedData{retrieveData(dynamicData)};
     std::size_t receivedBytes{undecodedRetrievedData.values.size()};
