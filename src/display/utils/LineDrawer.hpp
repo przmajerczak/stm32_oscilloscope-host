@@ -37,8 +37,8 @@ private:
     TextPrinter textPrinterForTriggerIndicator{FONT_SIZE_MEDIUM, COLOR_RGB_WHITE,
                                                NEUTRAL};
     TextPrinter textPrinterForGrid{FONT_SIZE_SMALL, COLOR_RGB_DARK_GRAY, NEUTRAL};
-    TextPrinter textPrinterForVerticalMeasurement{FONT_SIZE_LARGE,
-                                                  COLOR_RGB_WHITE, NEUTRAL};
+    TextPrinter textPrinterForMeasurements{FONT_SIZE_LARGE, COLOR_RGB_WHITE,
+                                           NEUTRAL};
 
     const DynamicData &dynamicData;
 };

@@ -232,21 +232,21 @@ void LineDrawer::drawVerticalMeasurement()
             dynamicData.verticalMeasurementsData.measurementIndicator_mV())) +
         " mV"};
 
-    textPrinterForVerticalMeasurement.drawText(
+    textPrinterForMeasurements.drawText(
         left_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
         true, r, g, b);
-    textPrinterForVerticalMeasurement.drawText(
+    textPrinterForMeasurements.drawText(
         left_label_x, middle_y, difference_label.c_str(), true, r, g, b);
-    textPrinterForVerticalMeasurement.drawText(
+    textPrinterForMeasurements.drawText(
         left_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
         r, g, b);
 
-    textPrinterForVerticalMeasurement.drawText(
+    textPrinterForMeasurements.drawText(
         right_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
         true, r, g, b);
-    textPrinterForVerticalMeasurement.drawText(
+    textPrinterForMeasurements.drawText(
         right_label_x, middle_y, difference_label.c_str(), true, r, g, b);
-    textPrinterForVerticalMeasurement.drawText(
+    textPrinterForMeasurements.drawText(
         right_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
         r, g, b);
 }
