@@ -216,24 +216,6 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
     }
 }
 
-void LineDrawer::drawRectangle(const double x1, const double x2,
-                               const double y1, const double y2, const double r,
-                               const double g, const double b, const double a)
-{
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glColor4f(r, g, b, a);
-    glBegin(GL_QUADS);
-    glVertex2f(marginCorrected(x1), marginCorrected(y1));
-    glVertex2f(marginCorrected(x2), marginCorrected(y1));
-    glVertex2f(marginCorrected(x2), marginCorrected(y2));
-    glVertex2f(marginCorrected(x1), marginCorrected(y2));
-    glEnd();
-
-    glDisable(GL_BLEND);
-}
-
 void LineDrawer::drawVerticalMeasurement()
 {
     const auto y_baseline{

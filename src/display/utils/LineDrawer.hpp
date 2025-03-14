@@ -32,9 +32,6 @@ private:
                                     const bool stipple_line = false);
     void drawHorizontalGrid(const int numOfHorizontalLayers);
     void drawVerticalGrid(const int numOfVerticalLayers);
-    void drawRectangle(const double x1, const double x2, const double y1,
-                       const double y2, const double r, const double g,
-                       const double b, const double a);
 
     TextPrinter textPrinterForTriggerIndicator{FONT_SIZE_MEDIUM, COLOR_RGB_WHITE,
                                                NEUTRAL};
