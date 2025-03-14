@@ -209,7 +209,7 @@ void LineDrawer::drawVerticalMeasurement()
     const float left_label_x{2 * DISPLAY_MARGIN_WIDTH};
     const float right_label_x{X_DISPLAY_RESOLUTION - DISPLAY_MARGIN_WIDTH};
 
-    drawVerticalLine(DISPLAY_MARGIN_WIDTH, NEUTRAL, true, y_baseline,
+    drawVerticalLine(marginCorrected(0), NEUTRAL, true, y_baseline,
                      y_measurement);
     drawVerticalLine(X_DISPLAY_RESOLUTION - DISPLAY_MARGIN_WIDTH, NEUTRAL, true,
                      y_baseline, y_measurement);
@@ -232,23 +232,22 @@ void LineDrawer::drawVerticalMeasurement()
             dynamicData.verticalMeasurementsData.measurementIndicator_mV())) +
         " mV"};
 
-    textPrinterForMeasurements.drawText(
-        left_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
-        true, r, g, b);
-    textPrinterForMeasurements.drawText(
-        left_label_x, middle_y, difference_label.c_str(), true, r, g, b);
-    textPrinterForMeasurements.drawText(
-        left_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
-        r, g, b);
+    textPrinterForMeasurements.drawText(left_label_x,
+                                        marginCorrected(y_measurement),
+                                        measurement_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(left_label_x, middle_y,
+                                        difference_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(left_label_x, marginCorrected(y_baseline),
+                                        baseline_label.c_str(), true, r, g, b);
 
-    textPrinterForMeasurements.drawText(
-        right_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
-        true, r, g, b);
-    textPrinterForMeasurements.drawText(
-        right_label_x, middle_y, difference_label.c_str(), true, r, g, b);
-    textPrinterForMeasurements.drawText(
-        right_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
-        r, g, b);
+    textPrinterForMeasurements.drawText(right_label_x,
+                                        marginCorrected(y_measurement),
+                                        measurement_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(right_label_x, middle_y,
+                                        difference_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(right_label_x,
+                                        marginCorrected(y_baseline),
+                                        baseline_label.c_str(), true, r, g, b);
 }
 
 void LineDrawer::drawHorizontalMeasurement()
@@ -268,4 +267,56 @@ void LineDrawer::drawHorizontalMeasurement()
     glColor3f(r, g, b);
     drawVerticalLine(x_baseline, BOLD);
     drawVerticalLine(x_measurement, BOLD);
+
+    const float lower_label_y{2 * DISPLAY_MARGIN_WIDTH};
+    const float upper_label_y{Y_DISPLAY_RESOLUTION};
+
+    drawHorizontalLine(marginCorrected(0), NEUTRAL, true, x_baseline,
+                       x_measurement);
+    drawHorizontalLine(Y_DISPLAY_RESOLUTION - DISPLAY_MARGIN_WIDTH, NEUTRAL, true,
+                       x_baseline, x_measurement);
+
+    const float middle_x{
+        (marginCorrected(x_measurement) + marginCorrected(x_baseline)) / 2};
+
+    const auto horizontal_difference{
+        abs(dynamicData.horizontalMeasurementsData.baselineIndicator_ns() -
+            dynamicData.horizontalMeasurementsData.measurementIndicator_ns())};
+
+    const auto [baseline_value, baseline_unit_label] =
+        nanosecondsToNormalizedTimestampAndUnit(
+            dynamicData,
+            dynamicData.horizontalMeasurementsData.baselineIndicator_ns());
+    const auto [difference_value, difference_unit_label] =
+        nanosecondsToNormalizedTimestampAndUnit(dynamicData,
+                                                horizontal_difference);
+    const auto [measurement_value, measurement_unit_label] =
+        nanosecondsToNormalizedTimestampAndUnit(
+            dynamicData,
+            dynamicData.horizontalMeasurementsData.measurementIndicator_ns());
+
+    const std::string baseline_label =
+        std::string(baseline_value) + baseline_unit_label;
+    const std::string difference_label =
+        std::string(difference_value) + difference_unit_label;
+    const std::string measurement_label =
+        std::string(measurement_value) + measurement_unit_label;
+
+    textPrinterForMeasurements.drawText(marginCorrected(x_measurement),
+                                        lower_label_y, measurement_label.c_str(),
+                                        true, r, g, b);
+    textPrinterForMeasurements.drawText(middle_x, lower_label_y,
+                                        difference_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(marginCorrected(x_baseline),
+                                        lower_label_y, baseline_label.c_str(),
+                                        true, r, g, b);
+
+    textPrinterForMeasurements.drawText(marginCorrected(x_measurement),
+                                        upper_label_y, measurement_label.c_str(),
+                                        true, r, g, b);
+    textPrinterForMeasurements.drawText(middle_x, upper_label_y,
+                                        difference_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(marginCorrected(x_baseline),
+                                        upper_label_y, baseline_label.c_str(),
+                                        true, r, g, b);
 }
