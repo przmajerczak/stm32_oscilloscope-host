@@ -5,6 +5,7 @@
 #include "CallbackData.hpp"
 #include "sharedData/DynamicData.hpp"
 #include "measurements/VerticalMeasurements.hpp"
+#include "measurements/HorizontalMeasurements.hpp"
 
 class MeasurementsControls
 {
@@ -29,4 +30,5 @@ private:
     CallbackData<DynamicData> callbackDataForAvgVoltageLabel;
 
     VerticalMeasurements verticalMeasurements;
+    HorizontalMeasurements horizontalMeasurements;
 };
