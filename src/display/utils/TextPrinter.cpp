@@ -20,8 +20,7 @@ TextPrinter::~TextPrinter()
 }
 
 void TextPrinter::drawText(const float x, const float y, const char *text,
-                           const bool background, const double r,
-                           const double g, const double b) const
+                           const bool background, const float *gl_color) const
 {
     if (text != nullptr)
     {
@@ -32,9 +31,8 @@ void TextPrinter::drawText(const float x, const float y, const char *text,
             const double y1{y - font_size};
             const double y2{y - 2.7 * font_size};
 
-            drawRectangle(x1, x2, y1, y2, COLOR_RGB_BLACK, COLOR_RGB_BLACK,
-                          COLOR_RGB_BLACK);
-            drawOutline(x1, x2, y1, y2, r, g, b);
+            drawRectangle(x1, x2, y1, y2, GLCOLOR_BLACK);
+            drawOutline(x1, x2, y1, y2, gl_color);
         }
 
         glDisable(GL_TEXTURE_2D);

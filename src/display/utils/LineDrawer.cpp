@@ -1,5 +1,6 @@
 #include "LineDrawer.hpp"
 
+#include "sharedData/constants.hpp"
 #include "utils.hpp"
 #include <GL/glew.h>
 #include <cmath>
@@ -7,7 +8,7 @@
 
 void LineDrawer::drawTriggerIndicator(const int x, const int y)
 {
-    glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
+    glColor3fv(GLCOLOR_LIGHT_GRAY);
 
     drawVerticalLine(x, NEUTRAL);
     drawHorizontalLineWithLabels(y, "mV", textPrinterForTriggerIndicator,
@@ -17,7 +18,7 @@ void LineDrawer::drawTriggerIndicator(const int x, const int y)
 void LineDrawer::drawGrid(const int numOfVerticalLayers,
                           const int numOfHorizontalLayers)
 {
-    glColor3f(COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY, COLOR_RGB_DARK_GRAY);
+    glColor3fv(GLCOLOR_DARK_GRAY);
 
     drawHorizontalGrid(numOfHorizontalLayers);
     drawVerticalGrid(numOfVerticalLayers);
@@ -25,7 +26,7 @@ void LineDrawer::drawGrid(const int numOfVerticalLayers,
 
 void LineDrawer::drawDisplayAreaBorder()
 {
-    glColor3f(COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY);
+    glColor3fv(GLCOLOR_LIGHT_GRAY);
 
     constexpr float HALF_THICKNESS{VERY_BOLD / 2};
 
@@ -34,8 +35,7 @@ void LineDrawer::drawDisplayAreaBorder()
     constexpr double y1{-1 * HALF_THICKNESS};
     constexpr double y2{Y_DISPLAY_RESOLUTION + HALF_THICKNESS};
 
-    drawOutline(x1, x2, y1, y2, COLOR_RGB_LIGHT_GRAY, COLOR_RGB_LIGHT_GRAY,
-                COLOR_RGB_LIGHT_GRAY, 1.0f, VERY_BOLD);
+    drawOutline(x1, x2, y1, y2, GLCOLOR_LIGHT_GRAY, VERY_BOLD);
 }
 
 void LineDrawer::drawHorizontalLine(const int y, const float boldness,
@@ -195,14 +195,10 @@ void LineDrawer::drawVerticalMeasurement()
     const auto y_measurement{
         dynamicData.verticalMeasurementsData.measurementIndicator()};
 
-    drawRectangle(0, X_DISPLAY_RESOLUTION, y_baseline, y_measurement, 1.0f, 1.0f,
-                  0.0f, 0.2f);
+    drawRectangle(0, X_DISPLAY_RESOLUTION, y_baseline, y_measurement,
+                  GLCOLOR_GREEN, 0.2f);
 
-    constexpr float r{0.0f};
-    constexpr float g{1.0f};
-    constexpr float b{0.0f};
-
-    glColor3f(r, g, b);
+    glColor3fv(GLCOLOR_GREEN);
     drawHorizontalLine(y_baseline, BOLD);
     drawHorizontalLine(y_measurement, BOLD);
 
@@ -232,22 +228,23 @@ void LineDrawer::drawVerticalMeasurement()
             dynamicData.verticalMeasurementsData.measurementIndicator_mV())) +
         " mV"};
 
-    textPrinterForMeasurements.drawText(left_label_x,
-                                        marginCorrected(y_measurement),
-                                        measurement_label.c_str(), true, r, g, b);
-    textPrinterForMeasurements.drawText(left_label_x, middle_y,
-                                        difference_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(
+        left_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
+        true, GLCOLOR_GREEN);
+    textPrinterForMeasurements.drawText(
+        left_label_x, middle_y, difference_label.c_str(), true, GLCOLOR_GREEN);
     textPrinterForMeasurements.drawText(left_label_x, marginCorrected(y_baseline),
-                                        baseline_label.c_str(), true, r, g, b);
+                                        baseline_label.c_str(), true,
+                                        GLCOLOR_GREEN);
 
-    textPrinterForMeasurements.drawText(right_label_x,
-                                        marginCorrected(y_measurement),
-                                        measurement_label.c_str(), true, r, g, b);
-    textPrinterForMeasurements.drawText(right_label_x, middle_y,
-                                        difference_label.c_str(), true, r, g, b);
-    textPrinterForMeasurements.drawText(right_label_x,
-                                        marginCorrected(y_baseline),
-                                        baseline_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(
+        right_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
+        true, GLCOLOR_GREEN);
+    textPrinterForMeasurements.drawText(
+        right_label_x, middle_y, difference_label.c_str(), true, GLCOLOR_GREEN);
+    textPrinterForMeasurements.drawText(
+        right_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
+        GLCOLOR_GREEN);
 }
 
 void LineDrawer::drawHorizontalMeasurement()
@@ -257,14 +254,10 @@ void LineDrawer::drawHorizontalMeasurement()
     const auto x_measurement{
         dynamicData.horizontalMeasurementsData.measurementIndicator()};
 
-    drawRectangle(x_baseline, x_measurement, 0, Y_DISPLAY_RESOLUTION, 1.0f, 1.0f,
-                  0.0f, 0.2f);
+    drawRectangle(x_baseline, x_measurement, 0, Y_DISPLAY_RESOLUTION, GLCOLOR_RED,
+                  0.2f);
 
-    constexpr float r{1.0f};
-    constexpr float g{0.0f};
-    constexpr float b{0.0f};
-
-    glColor3f(r, g, b);
+    glColor3fv(GLCOLOR_RED);
     drawVerticalLine(x_baseline, BOLD);
     drawVerticalLine(x_measurement, BOLD);
 
@@ -302,21 +295,23 @@ void LineDrawer::drawHorizontalMeasurement()
     const std::string measurement_label =
         std::string(measurement_value) + measurement_unit_label;
 
-    textPrinterForMeasurements.drawText(marginCorrected(x_measurement - DISPLAY_MARGIN_WIDTH),
-                                        lower_label_y, measurement_label.c_str(),
-                                        true, r, g, b);
-    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2, lower_label_y,
-                                        difference_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(
+        marginCorrected(x_measurement - DISPLAY_MARGIN_WIDTH), lower_label_y,
+        measurement_label.c_str(), true, GLCOLOR_RED);
+    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2,
+                                        lower_label_y, difference_label.c_str(),
+                                        true, GLCOLOR_RED);
     textPrinterForMeasurements.drawText(marginCorrected(x_baseline),
                                         lower_label_y, baseline_label.c_str(),
-                                        true, r, g, b);
+                                        true, GLCOLOR_RED);
 
-    textPrinterForMeasurements.drawText(marginCorrected(x_measurement - DISPLAY_MARGIN_WIDTH),
-                                        upper_label_y, measurement_label.c_str(),
-                                        true, r, g, b);
-    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2, upper_label_y,
-                                        difference_label.c_str(), true, r, g, b);
+    textPrinterForMeasurements.drawText(
+        marginCorrected(x_measurement - DISPLAY_MARGIN_WIDTH), upper_label_y,
+        measurement_label.c_str(), true, GLCOLOR_RED);
+    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2,
+                                        upper_label_y, difference_label.c_str(),
+                                        true, GLCOLOR_RED);
     textPrinterForMeasurements.drawText(marginCorrected(x_baseline),
                                         upper_label_y, baseline_label.c_str(),
-                                        true, r, g, b);
+                                        true, GLCOLOR_RED);
 }

@@ -41,6 +41,11 @@ constexpr float COLOR_RGB_WHITE{1.0};
 constexpr float COLOR_RGB_LIGHT_GRAY{0.6};
 constexpr float COLOR_RGB_DARK_GRAY{0.3};
 constexpr float COLOR_RGB_BLACK{0.0};
+constexpr float GLCOLOR_LIGHT_GRAY[] = {0.6f, 0.6f, 0.6f};
+constexpr float GLCOLOR_DARK_GRAY[] = {0.3f, 0.3f, 0.3f};
+constexpr float GLCOLOR_BLACK[] = {0.0f, 0.0f, 0.0f};
+constexpr float GLCOLOR_RED[] = {1.0f, 0.0f, 0.0f};
+constexpr float GLCOLOR_GREEN[] = {0.0f, 1.0f, 0.0f};
 constexpr float GLCOLOR_YELLOW[] = {1.0f, 1.0f, 0.0f};
 constexpr float GLCOLOR_BLUE[] = {0.0f, 0.0f, 1.0f};
 constexpr std::array<const float *, NUMBER_OF_CHANNELS> CHANNELS_COLORS{

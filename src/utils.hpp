@@ -60,7 +60,8 @@ static uint16_t scaleYToAdcWithinBounds(const DynamicData &dynamicData,
            yAsPercentOfMaxY(y) * current_vertical_display_resolution;
 }
 
-static double scaleXToNanoseconds(const DynamicData &dynamicData, const double x)
+static double scaleXToNanoseconds(const DynamicData &dynamicData,
+                                  const double x)
 {
     const double x_zero_ns{dynamicData.trigger_horizontal_position};
     const double nanoseconds_per_x{dynamicData.horizontal_resolution_ns /
@@ -122,7 +123,8 @@ nanosecondsToNormalizedTimestampAndUnit(const DynamicData &dynamicData,
         unit_label = "us";
     }
 
-    return {doubleToFixedLengthString(nanoseconds * time_multiplier, 4).c_str(), unit_label};
+    return {doubleToFixedLengthString(nanoseconds * time_multiplier, 4).c_str(),
+            unit_label};
 }
 
 template <typename T>
@@ -132,13 +134,13 @@ static inline T marginCorrected(const T &value)
 }
 
 static void drawRectangle(const double x1, const double x2, const double y1,
-                          const double y2, const double r, const double g,
-                          const double b, const double a = 1.0f)
+                          const double y2, const float *gl_color,
+                          const double a = 1.0f)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glColor4f(r, g, b, a);
+    glColor4f(gl_color[0], gl_color[1], gl_color[2], a);
     glBegin(GL_QUADS);
     glVertex2f(marginCorrected(x1), marginCorrected(y1));
     glVertex2f(marginCorrected(x2), marginCorrected(y1));
@@ -150,12 +152,11 @@ static void drawRectangle(const double x1, const double x2, const double y1,
 }
 
 static void drawOutline(const double x1, const double x2, const double y1,
-                        const double y2, const double r, const double g,
-                        const double b, const double a = 1.0f,
+                        const double y2, const float *gl_color,
                         const double boldness = BOLD)
 {
     glLineWidth(boldness);
-    glColor4f(r, g, b, a);
+    glColor3fv(gl_color);
 
     glBegin(GL_LINE_LOOP);
 

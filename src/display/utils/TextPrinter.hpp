@@ -1,5 +1,6 @@
 #pragma once
 
+#include "sharedData/constants.hpp"
 #include <freetype/freetype.h>
 
 /*
@@ -15,8 +16,8 @@ public:
     ~TextPrinter();
 
     void drawText(const float x, const float y, const char *text,
-                  const bool background = false, const double r = 0.0f,
-                  const double g = 0.0f, const double b = 0.0f) const;
+                  const bool background = false,
+                  const float *gl_color = GLCOLOR_BLACK) const;
 
 private:
     float drawCharacterReturnWidth(const char character, const float x,
