@@ -229,9 +229,13 @@ void LineDrawer::drawVerticalMeasurement()
     drawRectangle(0, X_DISPLAY_RESOLUTION, y_baseline, y_measurement, 1.0f, 1.0f,
                   0.0f, 0.2f);
 
-    glColor3f(0.0f, 1.0f, 0.0f);
-    drawHorizontalLine(y_baseline, VERY_BOLD);
-    drawHorizontalLine(y_measurement, VERY_BOLD);
+    constexpr float r{0.0f};
+    constexpr float g{1.0f};
+    constexpr float b{0.0f};
+
+    glColor3f(r, g, b);
+    drawHorizontalLine(y_baseline, BOLD);
+    drawHorizontalLine(y_measurement, BOLD);
 
     const float left_label_x{2 * DISPLAY_MARGIN_WIDTH};
     const float right_label_x{X_DISPLAY_RESOLUTION - DISPLAY_MARGIN_WIDTH};
@@ -260,16 +264,20 @@ void LineDrawer::drawVerticalMeasurement()
         " mV"};
 
     textPrinterForVerticalMeasurement.drawText(
-        left_label_x, marginCorrected(y_measurement), measurement_label.c_str());
-    textPrinterForVerticalMeasurement.drawText(left_label_x, middle_y,
-                                               difference_label.c_str());
+        left_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
+        true, r, g, b);
     textPrinterForVerticalMeasurement.drawText(
-        left_label_x, marginCorrected(y_baseline), baseline_label.c_str());
+        left_label_x, middle_y, difference_label.c_str(), true, r, g, b);
+    textPrinterForVerticalMeasurement.drawText(
+        left_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
+        r, g, b);
 
     textPrinterForVerticalMeasurement.drawText(
-        right_label_x, marginCorrected(y_measurement), measurement_label.c_str());
-    textPrinterForVerticalMeasurement.drawText(right_label_x, middle_y,
-                                               difference_label.c_str());
+        right_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
+        true, r, g, b);
     textPrinterForVerticalMeasurement.drawText(
-        right_label_x, marginCorrected(y_baseline), baseline_label.c_str());
+        right_label_x, middle_y, difference_label.c_str(), true, r, g, b);
+    textPrinterForVerticalMeasurement.drawText(
+        right_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
+        r, g, b);
 }

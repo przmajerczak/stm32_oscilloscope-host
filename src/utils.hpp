@@ -98,7 +98,7 @@ static inline T marginCorrected(const T &value)
 
 static void drawRectangle(const double x1, const double x2, const double y1,
                           const double y2, const double r, const double g,
-                          const double b, const double a)
+                          const double b, const double a = 1.0f)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -116,8 +116,8 @@ static void drawRectangle(const double x1, const double x2, const double y1,
 
 static void drawOutline(const double x1, const double x2, const double y1,
                         const double y2, const double r, const double g,
-                        const double b, const double a,
-                        const double boldness = NEUTRAL)
+                        const double b, const double a = 1.0f,
+                        const double boldness = BOLD)
 {
     glLineWidth(boldness);
     glColor4f(r, g, b, a);

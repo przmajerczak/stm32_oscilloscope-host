@@ -1,9 +1,12 @@
 #include "TextPrinter.hpp"
 
 #include "sharedData/constants.hpp"
+#include "utils.hpp"
 #include <GL/glew.h>
 
-TextPrinter::TextPrinter(const float font_size, const float color_rgb, const float boldness) : font_size(font_size), color_rgb(color_rgb), boldness(boldness)
+TextPrinter::TextPrinter(const float font_size, const float color_rgb,
+                         const float boldness)
+    : font_size(font_size), color_rgb(color_rgb), boldness(boldness)
 {
     FT_Init_FreeType(&ftLibrary);
     FT_New_Face(ftLibrary, FONT_PATH, 0, &ftFace);
@@ -16,10 +19,24 @@ TextPrinter::~TextPrinter()
     FT_Done_FreeType(ftLibrary);
 }
 
-void TextPrinter::drawText(const float x, const float y, const char *text) const
+void TextPrinter::drawText(const float x, const float y, const char *text,
+                           const bool background, const double r,
+                           const double g, const double b) const
 {
     if (text != nullptr)
     {
+        if (background)
+        {
+            const double x1{x - 2.5 * font_size};
+            const double x2{x1 + strlen(text) * 13};
+            const double y1{y - font_size};
+            const double y2{y - 2.7 * font_size};
+
+            drawRectangle(x1, x2, y1, y2, COLOR_RGB_BLACK, COLOR_RGB_BLACK,
+                          COLOR_RGB_BLACK);
+            drawOutline(x1, x2, y1, y2, r, g, b);
+        }
+
         glDisable(GL_TEXTURE_2D);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 

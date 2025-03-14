@@ -10,13 +10,17 @@
 class TextPrinter
 {
 public:
-    TextPrinter(const float font_size, const float color_rgb, const float boldness_text);
+    TextPrinter(const float font_size, const float color_rgb,
+                const float boldness_text);
     ~TextPrinter();
 
-    void drawText(const float x, const float y, const char *text) const;
+    void drawText(const float x, const float y, const char *text,
+                  const bool background = false, const double r = 0.0f,
+                  const double g = 0.0f, const double b = 0.0f) const;
 
 private:
-    float drawCharacterReturnWidth(const char character, const float x, float y) const;
+    float drawCharacterReturnWidth(const char character, const float x,
+                                   float y) const;
     void flipBitmap(FT_Bitmap *bitmap) const;
     void applyColor(FT_Bitmap *bitmap) const;
 

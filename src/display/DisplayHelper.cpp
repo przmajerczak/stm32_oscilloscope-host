@@ -46,13 +46,12 @@ void DisplayHelper::display()
 
     lineDrawer.drawTriggerIndicator(dynamicData.trigger_horizontal_position,
                                     dynamicData.triggerThresholdSliderValue);
+    lineDrawer.drawDisplayAreaBorder();
 
     if (dynamicData.verticalMeasurementsData.active)
     {
         lineDrawer.drawVerticalMeasurement();
     }
-
-    lineDrawer.drawDisplayAreaBorder();
 
     glFlush();
 }
