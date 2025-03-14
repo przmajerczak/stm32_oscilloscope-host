@@ -13,6 +13,7 @@ public:
     void drawGrid(const int numOfVerticalLayers, const int numOfHorizontalLayers);
     void drawDisplayAreaBorder();
     void drawVerticalMeasurement();
+    void drawHorizontalMeasurement();
 
 private:
     void drawHorizontalLine(const int y, const float boldness,

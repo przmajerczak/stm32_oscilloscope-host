@@ -281,3 +281,22 @@ void LineDrawer::drawVerticalMeasurement()
         right_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
         r, g, b);
 }
+
+void LineDrawer::drawHorizontalMeasurement()
+{
+    const auto x_baseline{
+        dynamicData.horizontalMeasurementsData.baselineIndicator()};
+    const auto x_measurement{
+        dynamicData.horizontalMeasurementsData.measurementIndicator()};
+
+    drawRectangle(x_baseline, x_measurement, 0, Y_DISPLAY_RESOLUTION, 1.0f, 1.0f,
+                  0.0f, 0.2f);
+
+    constexpr float r{1.0f};
+    constexpr float g{0.0f};
+    constexpr float b{0.0f};
+
+    glColor3f(r, g, b);
+    drawVerticalLine(x_baseline, BOLD);
+    drawVerticalLine(x_measurement, BOLD);
+}

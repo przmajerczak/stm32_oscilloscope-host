@@ -53,6 +53,11 @@ void DisplayHelper::display()
         lineDrawer.drawVerticalMeasurement();
     }
 
+    if (dynamicData.horizontalMeasurementsData.active)
+    {
+        lineDrawer.drawHorizontalMeasurement();
+    }
+
     glFlush();
 }
 
