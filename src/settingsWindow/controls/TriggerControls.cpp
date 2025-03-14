@@ -16,6 +16,7 @@ void triggerHorizontalPositionSliderOnChangeAction(GtkRange *range,
     DynamicData *dynamicData = (DynamicData *)data;
     dynamicData->trigger_horizontal_position =
         static_cast<uint16_t>(gtk_range_get_value(range));
+    dynamicData->horizontalMeasurementsData.recalculateValues(*dynamicData);
 }
 
 void onTriggerRisingEdgeButtonClicked(GtkWidget *button, gpointer data)

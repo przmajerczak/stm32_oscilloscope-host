@@ -14,3 +14,9 @@ void HorizontalMeasurementsData::notifyAboutMeasurementChange(
     measurement = new_measurement;
     measurement_ns = scaleXToNanoseconds(dynamicData, new_measurement);
 }
+
+void HorizontalMeasurementsData::recalculateValues(const DynamicData &dynamicData)
+{
+    baseline_ns = scaleXToNanoseconds(dynamicData, baseline);
+    measurement_ns = scaleXToNanoseconds(dynamicData, measurement);
+}
