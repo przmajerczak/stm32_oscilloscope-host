@@ -80,7 +80,7 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
     }
 
     glPointSize(1.0);
-    glColor3fv(CHANNELS_COLORS.at(channelId));
+    glColor4fv(CHANNELS_COLORS.at(channelId));
     glLineWidth(2.0);
 
     glBegin(GL_LINE_STRIP);

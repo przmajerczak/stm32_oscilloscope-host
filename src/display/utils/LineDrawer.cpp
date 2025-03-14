@@ -8,7 +8,7 @@
 
 void LineDrawer::drawTriggerIndicator(const int x, const int y)
 {
-    glColor3fv(GLCOLOR_LIGHT_GRAY);
+    glColor4fv(GLCOLOR_LIGHT_GRAY);
 
     drawVerticalLine(x, NEUTRAL);
     drawHorizontalLineWithLabels(y, "mV", textPrinterForTriggerIndicator,
@@ -18,7 +18,7 @@ void LineDrawer::drawTriggerIndicator(const int x, const int y)
 void LineDrawer::drawGrid(const int numOfVerticalLayers,
                           const int numOfHorizontalLayers)
 {
-    glColor3fv(GLCOLOR_DARK_GRAY);
+    glColor4fv(GLCOLOR_DARK_GRAY);
 
     drawHorizontalGrid(numOfHorizontalLayers);
     drawVerticalGrid(numOfVerticalLayers);
@@ -26,7 +26,7 @@ void LineDrawer::drawGrid(const int numOfVerticalLayers,
 
 void LineDrawer::drawDisplayAreaBorder()
 {
-    glColor3fv(GLCOLOR_LIGHT_GRAY);
+    glColor4fv(GLCOLOR_LIGHT_GRAY);
 
     constexpr float HALF_THICKNESS{VERY_BOLD / 2};
 
@@ -196,9 +196,9 @@ void LineDrawer::drawVerticalMeasurement()
         dynamicData.verticalMeasurementsData.measurementIndicator()};
 
     drawRectangle(0, X_DISPLAY_RESOLUTION, y_baseline, y_measurement,
-                  GLCOLOR_GREEN, 0.2f);
+                  GLCOLOR_GREEN_TRANSPARENT);
 
-    glColor3fv(GLCOLOR_GREEN);
+    glColor4fv(GLCOLOR_GREEN);
     drawHorizontalLine(y_baseline, BOLD);
     drawHorizontalLine(y_measurement, BOLD);
 
@@ -254,10 +254,9 @@ void LineDrawer::drawHorizontalMeasurement()
     const auto x_measurement{
         dynamicData.horizontalMeasurementsData.measurementIndicator()};
 
-    drawRectangle(x_baseline, x_measurement, 0, Y_DISPLAY_RESOLUTION, GLCOLOR_RED,
-                  0.2f);
+    drawRectangle(x_baseline, x_measurement, 0, Y_DISPLAY_RESOLUTION, GLCOLOR_RED_TRANSPARENT);
 
-    glColor3fv(GLCOLOR_RED);
+    glColor4fv(GLCOLOR_RED);
     drawVerticalLine(x_baseline, BOLD);
     drawVerticalLine(x_measurement, BOLD);
 

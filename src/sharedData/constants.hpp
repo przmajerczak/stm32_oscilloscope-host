@@ -37,17 +37,17 @@ constexpr float ABSOULTE_VERTICAL_RESOLUTION_mV{MAX_VOLTAGE_mV -
 constexpr float FONT_SIZE_LARGE{28.0f};
 constexpr float FONT_SIZE_MEDIUM{24.0f};
 constexpr float FONT_SIZE_SMALL{20.0f};
-constexpr float COLOR_RGB_WHITE{1.0};
-constexpr float COLOR_RGB_LIGHT_GRAY{0.6};
-constexpr float COLOR_RGB_DARK_GRAY{0.3};
-constexpr float COLOR_RGB_BLACK{0.0};
-constexpr float GLCOLOR_LIGHT_GRAY[] = {0.6f, 0.6f, 0.6f};
-constexpr float GLCOLOR_DARK_GRAY[] = {0.3f, 0.3f, 0.3f};
-constexpr float GLCOLOR_BLACK[] = {0.0f, 0.0f, 0.0f};
-constexpr float GLCOLOR_RED[] = {1.0f, 0.0f, 0.0f};
-constexpr float GLCOLOR_GREEN[] = {0.0f, 1.0f, 0.0f};
-constexpr float GLCOLOR_YELLOW[] = {1.0f, 1.0f, 0.0f};
-constexpr float GLCOLOR_BLUE[] = {0.0f, 0.0f, 1.0f};
+constexpr float MONOCHROME_TEXT_COLOR_WHITE{1.0};
+constexpr float MONOCHROME_TEXT_COLOR_DARK_GRAY{0.3};
+constexpr float GLCOLOR_LIGHT_GRAY[] = {0.6f, 0.6f, 0.6f, 1.0f};
+constexpr float GLCOLOR_DARK_GRAY[] = {0.3f, 0.3f, 0.3f, 1.0f};
+constexpr float GLCOLOR_BLACK[] = {0.0f, 0.0f, 0.0f, 1.0f};
+constexpr float GLCOLOR_RED[] = {1.0f, 0.0f, 0.0f, 1.0f};
+constexpr float GLCOLOR_GREEN[] = {0.0f, 1.0f, 0.0f, 1.0f};
+constexpr float GLCOLOR_RED_TRANSPARENT[] = {1.0f, 0.0f, 0.0f, 0.2f};
+constexpr float GLCOLOR_GREEN_TRANSPARENT[] = {0.0f, 1.0f, 0.0f, 0.1f};
+constexpr float GLCOLOR_YELLOW[] = {1.0f, 1.0f, 0.0f, 1.0f};
+constexpr float GLCOLOR_BLUE[] = {0.0f, 0.0f, 1.0f, 1.0f};
 constexpr std::array<const float *, NUMBER_OF_CHANNELS> CHANNELS_COLORS{
     GLCOLOR_YELLOW, GLCOLOR_BLUE};
 constexpr const char *FONT_PATH{"resources/UbuntuMono-R.ttf"};

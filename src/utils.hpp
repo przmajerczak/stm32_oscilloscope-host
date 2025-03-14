@@ -134,13 +134,12 @@ static inline T marginCorrected(const T &value)
 }
 
 static void drawRectangle(const double x1, const double x2, const double y1,
-                          const double y2, const float *gl_color,
-                          const double a = 1.0f)
+                          const double y2, const float *gl_color)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glColor4f(gl_color[0], gl_color[1], gl_color[2], a);
+    glColor4fv(gl_color);
     glBegin(GL_QUADS);
     glVertex2f(marginCorrected(x1), marginCorrected(y1));
     glVertex2f(marginCorrected(x2), marginCorrected(y1));
@@ -156,7 +155,7 @@ static void drawOutline(const double x1, const double x2, const double y1,
                         const double boldness = BOLD)
 {
     glLineWidth(boldness);
-    glColor3fv(gl_color);
+    glColor4fv(gl_color);
 
     glBegin(GL_LINE_LOOP);
 
