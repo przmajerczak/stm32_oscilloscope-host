@@ -122,7 +122,7 @@ nanosecondsToNormalizedTimestampAndUnit(const DynamicData &dynamicData,
         unit_label = "us";
     }
 
-    return {doubleToFixedLengthString(nanoseconds * time_multiplier, 4).c_str(), "ns"};
+    return {doubleToFixedLengthString(nanoseconds * time_multiplier, 4).c_str(), unit_label};
 }
 
 template <typename T>
