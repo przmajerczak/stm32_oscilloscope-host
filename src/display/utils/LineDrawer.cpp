@@ -164,30 +164,6 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
     const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
                         (2.0f * numOfVerticalLayers)};
 
-    double time_multiplier;
-    const char *unit_label;
-
-    if (dynamicData.horizontal_resolution_ns >= 1000000000)
-    {
-        time_multiplier = 0.000000001;
-        unit_label = "s";
-    }
-    else if (dynamicData.horizontal_resolution_ns >= 1000000)
-    {
-        time_multiplier = 0.000001;
-        unit_label = "ms";
-    }
-    else if (dynamicData.horizontal_resolution_ns >= 10000)
-    {
-        time_multiplier = 0.001;
-        unit_label = "us";
-    }
-    else
-    {
-        time_multiplier = 1;
-        unit_label = "ns";
-    }
-
     for (int i = -2 * numOfVerticalLayers; i <= 2 * numOfVerticalLayers; ++i)
     {
         const int x{middle_x + static_cast<int>(i * delta_x)};
@@ -203,8 +179,10 @@ void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
             break;
         }
 
-        const double nanoseconds{scaleXToNanoseconds(dynamicData, x) * time_multiplier};
-        std::string time_value{doubleToFixedLengthString(nanoseconds, 4)};
+        const auto [time_value, unit_label] =
+            nanosecondsToNormalizedTimestampAndUnit(
+                dynamicData, scaleXToNanoseconds(dynamicData, x));
+
         drawVerticalLineWithLabels(x, time_value.c_str(), unit_label,
                                    textPrinterForGrid, NEUTRAL, true);
     }

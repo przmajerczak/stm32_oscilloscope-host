@@ -99,6 +99,32 @@ static std::string doubleToFixedLengthString(const double value,
     return fixedLengthNumber.substr(0, len + 1);
 }
 
+static std::pair<std::string, const char *>
+nanosecondsToNormalizedTimestampAndUnit(const DynamicData &dynamicData,
+                                        const double nanoseconds)
+{
+    double time_multiplier{1.0f};
+    const char *unit_label{"ns"};
+
+    if (dynamicData.horizontal_resolution_ns >= 1000000000)
+    {
+        time_multiplier = 0.000000001;
+        unit_label = "s";
+    }
+    else if (dynamicData.horizontal_resolution_ns >= 1000000)
+    {
+        time_multiplier = 0.000001;
+        unit_label = "ms";
+    }
+    else if (dynamicData.horizontal_resolution_ns >= 10000)
+    {
+        time_multiplier = 0.001;
+        unit_label = "us";
+    }
+
+    return {doubleToFixedLengthString(nanoseconds * time_multiplier, 4).c_str(), "ns"};
+}
+
 template <typename T>
 static inline T marginCorrected(const T &value)
 {
