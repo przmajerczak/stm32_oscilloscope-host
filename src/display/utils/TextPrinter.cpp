@@ -28,7 +28,7 @@ void TextPrinter::drawText(const float x, const float y, const char *text,
         if (background)
         {
             const double x1{x - 2.5 * font_size};
-            const double x2{x1 + strlen(text) * 13};
+            const double x2{x1 + strlen(text) * 14};
             const double y1{y - font_size};
             const double y2{y - 2.7 * font_size};
 
@@ -68,6 +68,10 @@ float TextPrinter::drawCharacterReturnWidth(const char character, const float x,
     glDrawPixels(bitmap->width, bitmap->rows, GL_LUMINANCE, GL_UNSIGNED_BYTE,
                  bitmap->buffer);
 
+    if (character == ',')
+    {
+        return 2 * bitmap->width;
+    }
     return bitmap->width;
 }
 

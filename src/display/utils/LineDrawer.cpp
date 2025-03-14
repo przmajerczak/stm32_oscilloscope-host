@@ -302,19 +302,19 @@ void LineDrawer::drawHorizontalMeasurement()
     const std::string measurement_label =
         std::string(measurement_value) + measurement_unit_label;
 
-    textPrinterForMeasurements.drawText(marginCorrected(x_measurement),
+    textPrinterForMeasurements.drawText(marginCorrected(x_measurement - DISPLAY_MARGIN_WIDTH),
                                         lower_label_y, measurement_label.c_str(),
                                         true, r, g, b);
-    textPrinterForMeasurements.drawText(middle_x, lower_label_y,
+    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2, lower_label_y,
                                         difference_label.c_str(), true, r, g, b);
     textPrinterForMeasurements.drawText(marginCorrected(x_baseline),
                                         lower_label_y, baseline_label.c_str(),
                                         true, r, g, b);
 
-    textPrinterForMeasurements.drawText(marginCorrected(x_measurement),
+    textPrinterForMeasurements.drawText(marginCorrected(x_measurement - DISPLAY_MARGIN_WIDTH),
                                         upper_label_y, measurement_label.c_str(),
                                         true, r, g, b);
-    textPrinterForMeasurements.drawText(middle_x, upper_label_y,
+    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2, upper_label_y,
                                         difference_label.c_str(), true, r, g, b);
     textPrinterForMeasurements.drawText(marginCorrected(x_baseline),
                                         upper_label_y, baseline_label.c_str(),
