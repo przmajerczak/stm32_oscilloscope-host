@@ -160,25 +160,10 @@ void LineDrawer::drawHorizontalGrid(const int numOfHorizontalLayers)
 void LineDrawer::drawVerticalGrid(const int numOfVerticalLayers)
 {
     const int middle_x{static_cast<int>(dynamicData.trigger_horizontal_position)};
+    const int delta_x{X_DISPLAY_RESOLUTION / (2 * numOfVerticalLayers)};
 
-    const float delta_x{static_cast<float>(X_DISPLAY_RESOLUTION) /
-                        (2.0f * numOfVerticalLayers)};
-
-    for (int i = -2 * numOfVerticalLayers; i <= 2 * numOfVerticalLayers; ++i)
+    for (int x = middle_x % delta_x; x < X_DISPLAY_RESOLUTION; x += delta_x)
     {
-        const int x{middle_x + static_cast<int>(i * delta_x)};
-
-        // TODO: rethink and embed into loop contidtion
-        if (x < 0)
-        {
-            continue;
-        }
-
-        if (x > X_DISPLAY_RESOLUTION)
-        {
-            break;
-        }
-
         const auto [time_value, unit_label] =
             nanosecondsToNormalizedTimestampAndUnit(
                 dynamicData, scaleXToNanoseconds(dynamicData, x));
@@ -254,7 +239,8 @@ void LineDrawer::drawHorizontalMeasurement()
     const auto x_measurement{
         dynamicData.horizontalMeasurementsData.measurementIndicator()};
 
-    drawRectangle(x_baseline, x_measurement, 0, Y_DISPLAY_RESOLUTION, GLCOLOR_RED_TRANSPARENT);
+    drawRectangle(x_baseline, x_measurement, 0, Y_DISPLAY_RESOLUTION,
+                  GLCOLOR_RED_TRANSPARENT);
 
     glColor4fv(GLCOLOR_RED);
     drawVerticalLine(x_baseline, BOLD);
