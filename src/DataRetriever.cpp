@@ -16,15 +16,18 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
         // TODO: auto-detect correct path
         deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
 
+        // TODO: handle runtime disconnect
         while (deviceFileDescriptor == -1)
         {
-            std::cerr << "Error while trying to connect to the device. Retrying."
-                      << std::endl;
-
             if (errno == EACCES) // permission denied
             {
                 std::cerr << "Read access permission needed." << std::endl;
                 system("sudo chmod +r /dev/ttyACM0");
+            }
+            else
+            {
+                std::cerr << "Error while trying to connect to the device. Retrying."
+                          << std::endl;
             }
 
             deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
@@ -33,7 +36,8 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
         if (not configureTty(deviceFileDescriptor))
         {
             std::cerr << "Warning: tty configuration error. "
-                         "Data decoding might be inaccurate." << std::endl;
+                         "Data decoding might be inaccurate."
+                      << std::endl;
         }
 
         while (1)
