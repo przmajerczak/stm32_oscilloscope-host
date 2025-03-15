@@ -216,20 +216,20 @@ void LineDrawer::drawVerticalMeasurement()
     textPrinterForMeasurements.drawText(
         left_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
         true, GLCOLOR_GREEN);
-    textPrinterForMeasurements.drawText(
-        left_label_x, middle_y, difference_label.c_str(), true, GLCOLOR_GREEN);
     textPrinterForMeasurements.drawText(left_label_x, marginCorrected(y_baseline),
                                         baseline_label.c_str(), true,
                                         GLCOLOR_GREEN);
+    textPrinterForMeasurements.drawText(
+        left_label_x, middle_y, difference_label.c_str(), true, GLCOLOR_GREEN);
 
     textPrinterForMeasurements.drawText(
         right_label_x, marginCorrected(y_measurement), measurement_label.c_str(),
         true, GLCOLOR_GREEN);
     textPrinterForMeasurements.drawText(
-        right_label_x, middle_y, difference_label.c_str(), true, GLCOLOR_GREEN);
-    textPrinterForMeasurements.drawText(
         right_label_x, marginCorrected(y_baseline), baseline_label.c_str(), true,
         GLCOLOR_GREEN);
+    textPrinterForMeasurements.drawText(
+        right_label_x, middle_y, difference_label.c_str(), true, GLCOLOR_GREEN);
 }
 
 void LineDrawer::drawHorizontalMeasurement()
@@ -283,20 +283,20 @@ void LineDrawer::drawHorizontalMeasurement()
     textPrinterForMeasurements.drawText(
         marginCorrected(x_measurement - DISPLAY_MARGIN_WIDTH), lower_label_y,
         measurement_label.c_str(), true, GLCOLOR_RED);
-    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2,
-                                        lower_label_y, difference_label.c_str(),
-                                        true, GLCOLOR_RED);
     textPrinterForMeasurements.drawText(marginCorrected(x_baseline),
                                         lower_label_y, baseline_label.c_str(),
+                                        true, GLCOLOR_RED);
+    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2,
+                                        lower_label_y, difference_label.c_str(),
                                         true, GLCOLOR_RED);
 
     textPrinterForMeasurements.drawText(
         marginCorrected(x_measurement - DISPLAY_MARGIN_WIDTH), upper_label_y,
         measurement_label.c_str(), true, GLCOLOR_RED);
-    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2,
-                                        upper_label_y, difference_label.c_str(),
-                                        true, GLCOLOR_RED);
     textPrinterForMeasurements.drawText(marginCorrected(x_baseline),
                                         upper_label_y, baseline_label.c_str(),
+                                        true, GLCOLOR_RED);
+    textPrinterForMeasurements.drawText(middle_x - DISPLAY_MARGIN_WIDTH / 2,
+                                        upper_label_y, difference_label.c_str(),
                                         true, GLCOLOR_RED);
 }

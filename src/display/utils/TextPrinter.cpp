@@ -26,9 +26,9 @@ void TextPrinter::drawText(const float x, const float y, const char *text,
     {
         if (background)
         {
-            const double x1{x - 2.5 * font_size};
-            const double x2{x1 + strlen(text) * 14};
-            const double y1{y - font_size};
+            const double x1{x - 2.6 * font_size};
+            const double x2{x1 + strlen(text) * 12};
+            const double y1{y - 1.5 * font_size};
             const double y2{y - 2.7 * font_size};
 
             drawRectangle(x1, x2, y1, y2, GLCOLOR_BLACK);
