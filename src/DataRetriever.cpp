@@ -13,32 +13,7 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 {
     std::thread t([&]()
     {
-        // TODO: auto-detect correct path
-        deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
-
-        // TODO: handle runtime disconnect
-        while (deviceFileDescriptor == -1)
-        {
-            if (errno == EACCES) // permission denied
-            {
-                std::cerr << "Read access permission needed." << std::endl;
-                system("sudo chmod +r /dev/ttyACM0");
-            }
-            else
-            {
-                std::cerr << "Error while trying to connect to the device. Retrying."
-                          << std::endl;
-            }
-
-            deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
-        }
-
-        if (not configureTty(deviceFileDescriptor))
-        {
-            std::cerr << "Warning: tty configuration error. "
-                         "Data decoding might be inaccurate."
-                      << std::endl;
-        }
+        establishConnection();
 
         while (1)
         {
@@ -46,6 +21,36 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
         }
     });
     t.detach();
+}
+
+void DataRetriever::establishConnection()
+{
+    // TODO: auto-detect correct path
+    deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+
+    // TODO: handle runtime disconnect
+    while (deviceFileDescriptor == -1)
+    {
+        if (errno == EACCES) // permission denied
+        {
+            std::cerr << "Read access permission needed." << std::endl;
+            system("sudo chmod +r /dev/ttyACM0");
+        }
+        else
+        {
+            std::cerr << "Error while trying to connect to the device. Retrying."
+                      << std::endl;
+        }
+
+        deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+    }
+
+    if (not configureTty(deviceFileDescriptor))
+    {
+        std::cerr << "Warning: tty configuration error. "
+                     "Data decoding might be inaccurate."
+                  << std::endl;
+    }
 }
 
 void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)

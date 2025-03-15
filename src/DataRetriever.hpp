@@ -13,6 +13,7 @@ public:
     void runContinuousDataRetrieve(DynamicData &dynamicData);
 
 private:
+    void establishConnection();
     void singleDataRetrieve(DynamicData &dynamicData);
     EncodedAdcData retrieveData(DynamicData &dynamicData);
     AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);
