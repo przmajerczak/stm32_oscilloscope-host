@@ -28,7 +28,6 @@ void DataRetriever::establishConnection()
 {
     deviceFileDescriptor = open(determineDeviceFilepath().c_str(), O_RDONLY);
 
-    // TODO: handle runtime disconnect
     while (deviceFileDescriptor == -1)
     {
         if (errno == EACCES) // permission denied
@@ -172,6 +171,9 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
     constexpr uint8_t ONE_CHANNEL_MODE{0xfe};
     constexpr uint8_t DUAL_CHANNEL_MODE{0xfd};
 
+    constexpr uint8_t FAILED_READ_ATTEMPTS_LIMIT{10};
+    uint8_t failed_read_attempts = 0;
+
     // TODO: wrap in nice method determining channel and return channel id along
     // with data
     while (
@@ -184,6 +186,16 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
         if (bytes_received > 0)
         {
             values.push_back(last_byte);
+        }
+        else if (bytes_received == 0)
+        {
+            if (failed_read_attempts++ > FAILED_READ_ATTEMPTS_LIMIT)
+            {
+                std::cerr << "Device disconnected. Attemping reconnect. " << std::endl;
+
+                close(deviceFileDescriptor);
+                establishConnection();
+            }
         }
     }
 
