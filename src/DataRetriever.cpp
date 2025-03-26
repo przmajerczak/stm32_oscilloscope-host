@@ -26,19 +26,21 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 
 void DataRetriever::establishConnection()
 {
-    const std::string device_path{determineDeviceFilepath()};
-
-    deviceFileDescriptor = open(device_path.c_str(), O_RDONLY);
+    deviceFileDescriptor = open(determineDeviceFilepath().c_str(), O_RDONLY);
 
     // TODO: handle runtime disconnect
     while (deviceFileDescriptor == -1)
     {
         if (errno == EACCES) // permission denied
         {
-            std::cerr << "Read access permission needed." << std::endl;
+            const std::string device_filepath{determineDeviceFilepath()};
+            std::cerr << "Read access permission needed for oscilloscope serial "
+                         "device file "
+                      << device_filepath << std::endl;
 
             std::string chmod_command{"sudo chmod +r "};
-            chmod_command.append(device_path.c_str());
+            chmod_command.append(device_filepath);
+
             system(chmod_command.c_str());
         }
         else
@@ -47,7 +49,7 @@ void DataRetriever::establishConnection()
                       << std::endl;
         }
 
-        deviceFileDescriptor = open(device_path.c_str(), O_RDONLY);
+        deviceFileDescriptor = open(determineDeviceFilepath().c_str(), O_RDONLY);
     }
 
     if (not configureTty(deviceFileDescriptor))
@@ -67,7 +69,8 @@ std::string DataRetriever::determineDeviceFilepath()
     command_results = popen("ls -l /dev/serial/by-id", "r");
     if (command_results != nullptr)
     {
-        while (fgets(list_of_serial_devices, PATH_MAX, command_results) != nullptr)
+        while (fgets(list_of_serial_devices, PATH_MAX, command_results) !=
+               nullptr)
         {
             std::string device_info{list_of_serial_devices};
 
@@ -89,7 +92,8 @@ std::string DataRetriever::determineDeviceFilepath()
     }
     else
     {
-        std::cerr << "Failed to find device file path. Using default one." << std::endl;
+        std::cerr << "Failed to find device file path. Using default one."
+                  << std::endl;
     }
 
     pclose(command_results);
