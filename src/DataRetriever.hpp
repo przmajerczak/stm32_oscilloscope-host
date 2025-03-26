@@ -4,6 +4,7 @@
 #include "sharedData/types.hpp"
 #include <cstdint>
 #include <unistd.h>
+#include <string>
 
 class DataRetriever
 {
@@ -14,6 +15,7 @@ public:
 
 private:
     void establishConnection();
+    std::string determineDeviceFilepath();
     void singleDataRetrieve(DynamicData &dynamicData);
     EncodedAdcData retrieveData(DynamicData &dynamicData);
     AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);

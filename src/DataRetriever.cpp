@@ -25,8 +25,10 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
 
 void DataRetriever::establishConnection()
 {
+    const std::string device_path{determineDeviceFilepath()};
+
     // TODO: auto-detect correct path
-    deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+    deviceFileDescriptor = open(device_path.c_str(), O_RDONLY);
 
     // TODO: handle runtime disconnect
     while (deviceFileDescriptor == -1)
@@ -34,7 +36,10 @@ void DataRetriever::establishConnection()
         if (errno == EACCES) // permission denied
         {
             std::cerr << "Read access permission needed." << std::endl;
-            system("sudo chmod +r /dev/ttyACM0");
+
+            std::string chmod_command{"sudo chmod +r "};
+            chmod_command.append(device_path.c_str());
+            system(chmod_command.c_str());
         }
         else
         {
@@ -42,7 +47,7 @@ void DataRetriever::establishConnection()
                       << std::endl;
         }
 
-        deviceFileDescriptor = open("/dev/ttyACM0", O_RDONLY);
+        deviceFileDescriptor = open(device_path.c_str(), O_RDONLY);
     }
 
     if (not configureTty(deviceFileDescriptor))
@@ -51,6 +56,11 @@ void DataRetriever::establishConnection()
                      "Data decoding might be inaccurate."
                   << std::endl;
     }
+}
+
+std::string DataRetriever::determineDeviceFilepath()
+{
+    return "/dev/ttyACM0";
 }
 
 void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
