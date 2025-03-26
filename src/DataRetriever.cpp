@@ -28,6 +28,10 @@ void DataRetriever::establishConnection()
 {
     deviceFileDescriptor = open(determineDeviceFilepath().c_str(), O_RDONLY);
 
+    constexpr uint8_t FAILED_CONNECTION_ATTEMPTS_LOGGING_LIMIT{20};
+    uint8_t failed_connection_attempts_since_last_log =
+        FAILED_CONNECTION_ATTEMPTS_LOGGING_LIMIT + 1;
+
     while (deviceFileDescriptor == -1)
     {
         if (errno == EACCES) // permission denied
@@ -44,8 +48,14 @@ void DataRetriever::establishConnection()
         }
         else
         {
-            std::cerr << "Error while trying to connect to the device. Retrying."
-                      << std::endl;
+            if (failed_connection_attempts_since_last_log++ >
+                FAILED_CONNECTION_ATTEMPTS_LOGGING_LIMIT)
+            {
+                std::cerr << "Error while trying to connect to the device. Retrying."
+                          << std::endl;
+
+                failed_connection_attempts_since_last_log = 0;
+            }
         }
 
         deviceFileDescriptor = open(determineDeviceFilepath().c_str(), O_RDONLY);
@@ -65,7 +75,7 @@ std::string DataRetriever::determineDeviceFilepath()
     char list_of_serial_devices[PATH_MAX];
     std::string filename{"ttyACM0"};
 
-    command_results = popen("ls -l /dev/serial/by-id", "r");
+    command_results = popen("ls -l /dev/serial/by-id 2> /dev/null", "r");
     if (command_results != nullptr)
     {
         while (fgets(list_of_serial_devices, PATH_MAX, command_results) !=
