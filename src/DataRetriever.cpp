@@ -4,6 +4,7 @@
 #include "sharedData/constants.hpp"
 #include <fcntl.h>
 #include <iostream>
+#include <regex>
 #include <termios.h>
 #include <thread>
 
@@ -27,7 +28,6 @@ void DataRetriever::establishConnection()
 {
     const std::string device_path{determineDeviceFilepath()};
 
-    // TODO: auto-detect correct path
     deviceFileDescriptor = open(device_path.c_str(), O_RDONLY);
 
     // TODO: handle runtime disconnect
@@ -60,7 +60,44 @@ void DataRetriever::establishConnection()
 
 std::string DataRetriever::determineDeviceFilepath()
 {
-    return "/dev/ttyACM0";
+    FILE *command_results;
+    char list_of_serial_devices[PATH_MAX];
+    std::string filename{"ttyACM0"};
+
+    command_results = popen("ls -l /dev/serial/by-id", "r");
+    if (command_results != nullptr)
+    {
+        while (fgets(list_of_serial_devices, PATH_MAX, command_results) != nullptr)
+        {
+            std::string device_info{list_of_serial_devices};
+
+            std::regex device_regex("STM32_Virtual_ComPort");
+            std::smatch regex_matches;
+            std::regex_search(device_info, regex_matches, device_regex);
+
+            if (not regex_matches.empty())
+            {
+                std::regex device_filename_regex("tty\\w+");
+                std::regex_search(device_info, regex_matches, device_filename_regex);
+                if (regex_matches.size() == 1)
+                {
+                    filename = regex_matches.str();
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        std::cerr << "Failed to find device file path. Using default one." << std::endl;
+    }
+
+    pclose(command_results);
+
+    std::string filepath{"/dev/"};
+    filepath.append(filename);
+
+    return filepath;
 }
 
 void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
