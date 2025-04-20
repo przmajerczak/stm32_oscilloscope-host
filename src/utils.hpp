@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <iostream>
 
-static int scaleAdcValueToY(const DynamicData &dynamicData,
+static float scaleAdcValueToY(const DynamicData &dynamicData,
                             const uint16_t adc_value)
 {
     const float current_vertical_display_resolution{
@@ -27,31 +27,31 @@ static int scaleAdcValueToY(const DynamicData &dynamicData,
         scaled_adc_value = INPUT_SIGNAL_MIN;
     }
 
-    const int y{static_cast<int>(
+    const float y{
         (scaled_adc_value / static_cast<float>(INPUT_SIGNAL_RESOLUTION)) *
-        static_cast<float>(Y_DISPLAY_RESOLUTION))};
+        static_cast<float>(Y_DISPLAY_RESOLUTION)};
     return y;
 }
 
-static int scaleYToVoltage_mV(const DynamicData &dynamicData, const int y)
+static int scaleYToVoltage_mV(const DynamicData &dynamicData, const float y)
 {
     const float current_vertical_display_resolution{
         dynamicData.verticalBoundsData.verticalUpperBound_mV() -
         dynamicData.verticalBoundsData.verticalLowerBound_mV()};
 
-    return ((static_cast<float>(y) * current_vertical_display_resolution) /
+    return ((y * current_vertical_display_resolution) /
             static_cast<float>(Y_DISPLAY_RESOLUTION)) +
            dynamicData.verticalBoundsData.verticalLowerBound_mV();
 }
 
 static uint16_t scaleYToAdcWithinBounds(const DynamicData &dynamicData,
-                                        const int y)
+                                        const float y)
 {
     const float current_vertical_display_resolution{
         dynamicData.verticalBoundsData.verticalUpperBound() -
         dynamicData.verticalBoundsData.verticalLowerBound()};
 
-    return ((static_cast<float>(y) * current_vertical_display_resolution) /
+    return ((y * current_vertical_display_resolution) /
             static_cast<float>(Y_DISPLAY_RESOLUTION)) +
            dynamicData.verticalBoundsData.verticalLowerBound();
 }

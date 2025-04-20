@@ -86,7 +86,7 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
     glBegin(GL_LINE_STRIP);
 
     float x{static_cast<float>(marginCorrected(0))};
-    int y;
+    float y;
 
     const std::size_t values_to_display{adcValuesToDisplay.size()};
     const double x_length{static_cast<double>(X_DISPLAY_RESOLUTION) /

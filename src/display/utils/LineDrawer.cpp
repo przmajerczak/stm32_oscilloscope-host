@@ -6,7 +6,7 @@
 #include <cmath>
 #include <string>
 
-void LineDrawer::drawTriggerIndicator(const int x, const int y)
+void LineDrawer::drawTriggerIndicator(const float x, const float y)
 {
     glColor4fv(GLCOLOR_LIGHT_GRAY);
 
@@ -38,9 +38,9 @@ void LineDrawer::drawDisplayAreaBorder()
     drawOutline(x1, x2, y1, y2, GLCOLOR_LIGHT_GRAY, VERY_BOLD);
 }
 
-void LineDrawer::drawHorizontalLine(const int y, const float boldness,
-                                    const bool stipple_line, const int x1,
-                                    const int x2)
+void LineDrawer::drawHorizontalLine(const float y, const float boldness,
+                                    const bool stipple_line, const float x1,
+                                    const float x2)
 {
     if (stipple_line)
     {
@@ -63,9 +63,9 @@ void LineDrawer::drawHorizontalLine(const int y, const float boldness,
     }
 }
 
-void LineDrawer::drawVerticalLine(const int x, const float boldness,
-                                  const bool stipple_line, const int y1,
-                                  const int y2)
+void LineDrawer::drawVerticalLine(const float x, const float boldness,
+                                  const bool stipple_line, const float y1,
+                                  const float y2)
 {
     if (stipple_line)
     {
@@ -88,7 +88,7 @@ void LineDrawer::drawVerticalLine(const int x, const float boldness,
     }
 }
 
-void LineDrawer::drawHorizontalLineWithLabels(const int y,
+void LineDrawer::drawHorizontalLineWithLabels(const float y,
                                               const char *unit_label,
                                               const TextPrinter &textPrinter,
                                               const float boldness_line,
@@ -96,11 +96,10 @@ void LineDrawer::drawHorizontalLineWithLabels(const int y,
 {
     drawHorizontalLine(y, boldness_line, stipple_line);
 
-    const int right_x{marginCorrected(X_DISPLAY_RESOLUTION) +
-                      static_cast<uint16_t>(2 * VERY_BOLD)};
-    const int left_x{static_cast<uint16_t>(2 * VERY_BOLD)};
-    const int upper_line_y{marginCorrected(y)};
-    const int lower_line_y{upper_line_y - 20}; // TODO: remove magic number
+    const float right_x{marginCorrected(X_DISPLAY_RESOLUTION) + (2 * VERY_BOLD)};
+    const float left_x{2 * VERY_BOLD};
+    const float upper_line_y{marginCorrected(y)};
+    const float lower_line_y{upper_line_y - 20}; // TODO: remove magic number
 
     const std::string voltage_value{
         std::to_string(scaleYToVoltage_mV(dynamicData, y))};
@@ -112,7 +111,7 @@ void LineDrawer::drawHorizontalLineWithLabels(const int y,
 }
 
 // TODO: move value_label generation inside
-void LineDrawer::drawVerticalLineWithLabels(const int x,
+void LineDrawer::drawVerticalLineWithLabels(const float x,
                                             const char *value_label,
                                             const char *unit_label,
                                             const TextPrinter &textPrinter,
@@ -121,12 +120,11 @@ void LineDrawer::drawVerticalLineWithLabels(const int x,
 {
     drawVerticalLine(x, boldness_line, stipple_line);
 
-    const int upper_unit_y{marginCorrected(Y_DISPLAY_RESOLUTION) +
-                           static_cast<uint16_t>(2 * VERY_BOLD)};
-    const int upper_value_y{upper_unit_y + 20};
-    const int lower_value_y{marginCorrected(0) -
-                            static_cast<uint16_t>(2 * VERY_BOLD) - 20};
-    const int lower_unit_y{lower_value_y - 20};
+    const float upper_unit_y{marginCorrected(Y_DISPLAY_RESOLUTION) +
+                             (2 * VERY_BOLD)};
+    const float upper_value_y{upper_unit_y + 20};
+    const float lower_value_y{marginCorrected(0) - (2 * VERY_BOLD) - 20};
+    const float lower_unit_y{lower_value_y - 20};
 
     textPrinter.drawText(marginCorrected(x) - 20, upper_value_y, value_label);
     textPrinter.drawText(marginCorrected(x) - 10, upper_unit_y, unit_label);
@@ -136,7 +134,7 @@ void LineDrawer::drawVerticalLineWithLabels(const int x,
 
 void LineDrawer::drawHorizontalGrid(const int numOfHorizontalLayers)
 {
-    const int middle_y{Y_DISPLAY_RESOLUTION / 2};
+    const float middle_y{Y_DISPLAY_RESOLUTION / 2};
 
     drawHorizontalLineWithLabels(middle_y, " mV", textPrinterForGrid, NEUTRAL,
                                  true);
@@ -147,8 +145,8 @@ void LineDrawer::drawHorizontalGrid(const int numOfHorizontalLayers)
     const float delta_y{Y_DISPLAY_RESOLUTION / (2.0f * numOfHorizontalLayers)};
     for (int i = 1; i < numOfHorizontalLayers; ++i)
     {
-        const int upper_y{middle_y + static_cast<int>(i * delta_y)};
-        const int lower_y{middle_y - static_cast<int>(i * delta_y)};
+        const float upper_y{middle_y + (i * delta_y)};
+        const float lower_y{middle_y - (i * delta_y)};
 
         drawHorizontalLineWithLabels(upper_y, " mV", textPrinterForGrid, NEUTRAL,
                                      true);
