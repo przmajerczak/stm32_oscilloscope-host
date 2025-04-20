@@ -6,11 +6,6 @@
 #include <cstdint>
 #include <iostream>
 
-static float yAsPercentOfMaxY(const int y)
-{
-    return static_cast<float>(y) / static_cast<float>(Y_DISPLAY_RESOLUTION);
-}
-
 static int scaleAdcValueToY(const DynamicData &dynamicData,
                             const uint16_t adc_value)
 {
@@ -44,7 +39,8 @@ static int scaleYToVoltage_mV(const DynamicData &dynamicData, const int y)
         dynamicData.verticalBoundsData.verticalUpperBound_mV() -
         dynamicData.verticalBoundsData.verticalLowerBound_mV()};
 
-    return (yAsPercentOfMaxY(y) * current_vertical_display_resolution) +
+    return ((static_cast<float>(y) * current_vertical_display_resolution) /
+            static_cast<float>(Y_DISPLAY_RESOLUTION)) +
            dynamicData.verticalBoundsData.verticalLowerBound_mV();
 }
 
@@ -55,8 +51,9 @@ static uint16_t scaleYToAdcWithinBounds(const DynamicData &dynamicData,
         dynamicData.verticalBoundsData.verticalUpperBound() -
         dynamicData.verticalBoundsData.verticalLowerBound()};
 
-    return dynamicData.verticalBoundsData.verticalLowerBound() +
-           yAsPercentOfMaxY(y) * current_vertical_display_resolution;
+    return ((static_cast<float>(y) * current_vertical_display_resolution) /
+            static_cast<float>(Y_DISPLAY_RESOLUTION)) +
+           dynamicData.verticalBoundsData.verticalLowerBound();
 }
 
 static double scaleXToNanoseconds(const DynamicData &dynamicData,
