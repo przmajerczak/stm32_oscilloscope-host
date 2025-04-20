@@ -31,9 +31,9 @@ constexpr std::size_t DEFAULT_TRIGGER_SOURCE{CHANNEL_1};
 constexpr float VERY_BOLD{4.0f};
 constexpr float BOLD{1.5f};
 constexpr float NEUTRAL{1.0f};
-constexpr float MAX_VOLTAGE_mV{3300.0f};
-constexpr float MIN_VOLTAGE_mV{-3300.0f};
-constexpr float ABSOULTE_VERTICAL_RESOLUTION_mV{MAX_VOLTAGE_mV -
+constexpr int16_t MAX_VOLTAGE_mV{3300};
+constexpr int16_t MIN_VOLTAGE_mV{-3300};
+constexpr int16_t ABSOULTE_VERTICAL_RESOLUTION_mV{MAX_VOLTAGE_mV -
                                                 MIN_VOLTAGE_mV};
 constexpr float FONT_SIZE_LARGE{28.0f};
 constexpr float FONT_SIZE_MEDIUM{24.0f};
