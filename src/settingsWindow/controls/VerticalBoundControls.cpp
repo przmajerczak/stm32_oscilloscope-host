@@ -10,10 +10,10 @@ void verticalLowerBoundSliderOnChangeAction(GtkRange *range,
     DynamicData *dynamicData = callbackData->data;
 
     dynamicData->verticalBoundsData.notifyAboutLowerBoundChange(
-        static_cast<uint16_t>(gtk_range_get_value(range)));
+        static_cast<int16_t>(gtk_range_get_value(range)));
 
     gtk_range_set_value(GTK_RANGE(vertical_upper_bound_slider),
-                        dynamicData->verticalBoundsData.verticalUpperBound());
+                        dynamicData->verticalBoundsData.verticalUpperBound_mV());
 
     dynamicData->verticalMeasurementsData.recalculateValues(*dynamicData);
 }
@@ -27,10 +27,10 @@ void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
     DynamicData *dynamicData = callbackData->data;
 
     dynamicData->verticalBoundsData.notifyAboutUpperBoundChange(
-        static_cast<uint16_t>(gtk_range_get_value(range)));
+        static_cast<int16_t>(gtk_range_get_value(range)));
 
     gtk_range_set_value(GTK_RANGE(vertical_lower_bound_slider),
-                        dynamicData->verticalBoundsData.verticalLowerBound());
+                        dynamicData->verticalBoundsData.verticalLowerBound_mV());
 
     dynamicData->verticalMeasurementsData.recalculateValues(*dynamicData);
 }
@@ -39,7 +39,7 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
 {
     // TODO: make this display value in mV, not in ys
     GtkAdjustment *lower_bound_slider_adjustment = gtk_adjustment_new(
-        INPUT_SIGNAL_MIN, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1, 0.0, 0.0);
+        MIN_VOLTAGE_mV, MIN_VOLTAGE_mV, MAX_VOLTAGE_mV, 1, 0.0, 0.0);
     vertical_lower_bound_slider =
         gtk_scale_new(GTK_ORIENTATION_VERTICAL, lower_bound_slider_adjustment);
     gtk_widget_set_hexpand(vertical_lower_bound_slider, TRUE);
@@ -48,7 +48,7 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
     gtk_widget_set_size_request(vertical_lower_bound_slider, 0, DEFAULT_SLIDER_HEIGHT);
 
     GtkAdjustment *upper_bound_slider_adjustment = gtk_adjustment_new(
-        INPUT_SIGNAL_MAX, INPUT_SIGNAL_MIN, INPUT_SIGNAL_MAX, 1, 0.0, 0.0);
+        MAX_VOLTAGE_mV, MIN_VOLTAGE_mV, MAX_VOLTAGE_mV, 1, 0.0, 0.0);
     vertical_upper_bound_slider =
         gtk_scale_new(GTK_ORIENTATION_VERTICAL, upper_bound_slider_adjustment);
     gtk_widget_set_hexpand(vertical_upper_bound_slider, TRUE);

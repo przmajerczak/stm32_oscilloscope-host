@@ -16,8 +16,8 @@ public:
     const int16_t verticalLowerBound_mV() const { return vertical_lower_bound_mV; }
     const int16_t verticalUpperBound_mV() const { return vertical_upper_bound_mV; }
 
-    void notifyAboutLowerBoundChange(const uint16_t new_vertical_lower_bound);
-    void notifyAboutUpperBoundChange(const uint16_t new_vertical_upper_bound);
+    void notifyAboutLowerBoundChange(const uint16_t new_vertical_lower_bound_mV);
+    void notifyAboutUpperBoundChange(const uint16_t new_vertical_upper_bound_mV);
 
 private:
     uint16_t vertical_lower_bound{INPUT_SIGNAL_MIN};
@@ -26,4 +26,5 @@ private:
     int16_t vertical_upper_bound_mV{MAX_VOLTAGE_mV};
 
     int16_t scaleAdcTo_mV(const uint16_t adc_value) const;
+    uint16_t scaleMillivoltsToAdc(const int16_t value_mV) const;
 };
