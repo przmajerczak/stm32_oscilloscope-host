@@ -139,6 +139,7 @@ void DisplayHelper::run()
                 last_frame_time = current_time;
 
                 dynamicData.new_data_available = false;
+                dynamicData.display_configuration_changed = false;
             }
         }
     }

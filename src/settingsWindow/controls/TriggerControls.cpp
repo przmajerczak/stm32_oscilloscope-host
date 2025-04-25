@@ -9,6 +9,8 @@ void triggerThresholdSliderOnChangeAction(GtkRange *range, gpointer data)
     DynamicData *dynamicData = (DynamicData *)data;
     dynamicData->triggerThresholdSliderValue =
         static_cast<uint16_t>(gtk_range_get_value(range));
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void triggerHorizontalPositionSliderOnChangeAction(GtkRange *range,
@@ -18,24 +20,32 @@ void triggerHorizontalPositionSliderOnChangeAction(GtkRange *range,
     dynamicData->trigger_horizontal_position =
         static_cast<uint16_t>(gtk_range_get_value(range));
     dynamicData->horizontalMeasurementsData.recalculateValues(*dynamicData);
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void onTriggerRisingEdgeButtonClicked(GtkWidget *button, gpointer data)
 {
     DynamicData *dynamicData = (DynamicData *)data;
     dynamicData->thresholdTrigger = ThresholdTrigger::RISING_EDGE;
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void onTriggerFallingEdgeButtonClicked(GtkWidget *button, gpointer data)
 {
     DynamicData *dynamicData = (DynamicData *)data;
     dynamicData->thresholdTrigger = ThresholdTrigger::FALLING_EDGE;
+
+    dynamicData->display_configuration_changed = true;
 }
 
 static void onTriggerSourceChanged(GtkComboBox *widget, gpointer data)
 {
     DynamicData *dynamicData = (DynamicData *)data;
     dynamicData->trigger_source = gtk_combo_box_get_active(widget);
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void TriggerControls::prepare(DynamicData &dynamicData)

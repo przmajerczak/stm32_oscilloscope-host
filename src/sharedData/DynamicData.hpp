@@ -29,7 +29,7 @@ public:
     VerticalMeasurementsData verticalMeasurementsData;
     HorizontalMeasurementsData horizontalMeasurementsData;
     bool new_data_available{true};
-    bool display_configuration_changed{true}; //TODO: add implementation
+    bool display_configuration_changed{false};
 
     TimemarkersData timemarkersData;
 };

@@ -9,6 +9,8 @@ void horizontalResolutionSliderOnChangeAction(GtkRange *range,
 
     dynamicData->horizontal_resolution_ns = pow(10, gtk_range_get_value(range));
     dynamicData->horizontalMeasurementsData.recalculateValues(*dynamicData);
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void HorizontalResolutionControls::prepare(DynamicData &dynamicData)

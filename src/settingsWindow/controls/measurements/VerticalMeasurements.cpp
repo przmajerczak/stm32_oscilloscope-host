@@ -6,6 +6,8 @@ void baselineVoltageSliderOnChangeAction(GtkRange *range, gpointer data)
     DynamicData *dynamicData = static_cast<DynamicData *>(data);
     dynamicData->verticalMeasurementsData.notifyAboutBaselineChange(
         *dynamicData, static_cast<int16_t>(gtk_range_get_value(range)));
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void measuredVoltageSliderOnChangeAction(GtkRange *range, gpointer data)
@@ -13,6 +15,8 @@ void measuredVoltageSliderOnChangeAction(GtkRange *range, gpointer data)
     DynamicData *dynamicData = static_cast<DynamicData *>(data);
     dynamicData->verticalMeasurementsData.notifyAboutMeasurementChange(
         *dynamicData, static_cast<int16_t>(gtk_range_get_value(range)));
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void verticalMeasurementsExpenderNotifyAction(GtkExpander *expander, GParamSpec *pspec,
@@ -20,6 +24,8 @@ void verticalMeasurementsExpenderNotifyAction(GtkExpander *expander, GParamSpec 
 {
     DynamicData *dynamicData = static_cast<DynamicData *>(data);
     dynamicData->verticalMeasurementsData.active = gtk_expander_get_expanded(expander);
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void VerticalMeasurements::prepare(DynamicData &dynamicData)

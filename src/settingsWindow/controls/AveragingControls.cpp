@@ -6,6 +6,8 @@ void averagingWindowSizeSpinButtonOnChangeAction(GtkSpinButton *spin_button,
     DynamicData *dynamicData = (DynamicData *)_dynamicData;
 
     dynamicData->averaging_window_size = gtk_spin_button_get_value(spin_button);
+
+    dynamicData->display_configuration_changed = true;
 }
 
 void AveragingControls::prepare(DynamicData &dynamicData)
