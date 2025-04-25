@@ -19,6 +19,7 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
         while (1)
         {
             singleDataRetrieve(dynamicData);
+            dynamicData.new_data_available = true;
         }
     });
     t.detach();

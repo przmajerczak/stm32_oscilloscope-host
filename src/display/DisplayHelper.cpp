@@ -137,6 +137,8 @@ void DisplayHelper::run()
                 glfwPollEvents();
 
                 last_frame_time = current_time;
+
+                dynamicData.new_data_available = false;
             }
         }
     }

@@ -28,7 +28,7 @@ public:
     uint16_t averaging_window_size{1};
     VerticalMeasurementsData verticalMeasurementsData;
     HorizontalMeasurementsData horizontalMeasurementsData;
-    bool new_data_available{true}; //TODO: add implementation
+    bool new_data_available{true};
     bool display_configuration_changed{true}; //TODO: add implementation
 
     TimemarkersData timemarkersData;
