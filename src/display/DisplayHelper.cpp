@@ -125,13 +125,19 @@ void DisplayHelper::run()
                                       frame_duration};
         if (time_for_new_frame)
         {
-            Timemarker tmarker{dynamicData.timemarkersData.totalFrameDisplayDuration};
-            display();
+            if (dynamicData.new_data_available or
+                dynamicData.display_configuration_changed)
+            {
+                Timemarker tmarker{
+                    dynamicData.timemarkersData.totalFrameDisplayDuration};
 
-            glfwSwapBuffers(window);
-            glfwPollEvents();
+                display();
 
-            last_frame_time = current_time;
+                glfwSwapBuffers(window);
+                glfwPollEvents();
+
+                last_frame_time = current_time;
+            }
         }
     }
 }
