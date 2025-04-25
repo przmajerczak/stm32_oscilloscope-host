@@ -5,8 +5,9 @@
 
 void triggerThresholdSliderOnChangeAction(GtkRange *range, gpointer data)
 {
-    uint16_t *triggerThresholdSliderValue_ptr = (uint16_t *)data;
-    *triggerThresholdSliderValue_ptr =
+    // TODO: use static_cast instead of C-style casts
+    DynamicData *dynamicData = (DynamicData *)data;
+    dynamicData->triggerThresholdSliderValue =
         static_cast<uint16_t>(gtk_range_get_value(range));
 }
 
@@ -21,23 +22,20 @@ void triggerHorizontalPositionSliderOnChangeAction(GtkRange *range,
 
 void onTriggerRisingEdgeButtonClicked(GtkWidget *button, gpointer data)
 {
-    ThresholdTrigger *thresholdTrigger_ptr = (ThresholdTrigger *)data;
-
-    *thresholdTrigger_ptr = ThresholdTrigger::RISING_EDGE;
+    DynamicData *dynamicData = (DynamicData *)data;
+    dynamicData->thresholdTrigger = ThresholdTrigger::RISING_EDGE;
 }
 
 void onTriggerFallingEdgeButtonClicked(GtkWidget *button, gpointer data)
 {
-    ThresholdTrigger *thresholdTrigger_ptr = (ThresholdTrigger *)data;
-
-    *thresholdTrigger_ptr = ThresholdTrigger::FALLING_EDGE;
+    DynamicData *dynamicData = (DynamicData *)data;
+    dynamicData->thresholdTrigger = ThresholdTrigger::FALLING_EDGE;
 }
 
-static void onTriggerSourceChanged(GtkComboBox *widget, gpointer user_data)
+static void onTriggerSourceChanged(GtkComboBox *widget, gpointer data)
 {
-    std::size_t *trigger_source = static_cast<std::size_t *>(user_data);
-
-    *trigger_source = gtk_combo_box_get_active(widget);
+    DynamicData *dynamicData = (DynamicData *)data;
+    dynamicData->trigger_source = gtk_combo_box_get_active(widget);
 }
 
 void TriggerControls::prepare(DynamicData &dynamicData)
@@ -64,7 +62,7 @@ void TriggerControls::prepareTriggerThresholdControls(DynamicData &dynamicData)
 
     g_signal_connect(trigger_threshold_slider, "value-changed",
                      G_CALLBACK(triggerThresholdSliderOnChangeAction),
-                     &(dynamicData.triggerThresholdSliderValue));
+                     &dynamicData);
 
     // TODO: refactor to display value in mV
     trigger_spin_button = gtk_spin_button_new(adjustment, 1.0, 0);
@@ -102,13 +100,13 @@ void TriggerControls::prepareTriggerEdgeControls(DynamicData &dynamicData)
     gtk_widget_set_hexpand(trigger_rising_edge_button, TRUE);
     g_signal_connect(trigger_rising_edge_button, "clicked",
                      G_CALLBACK(onTriggerRisingEdgeButtonClicked),
-                     &(dynamicData.thresholdTrigger));
+                     &dynamicData);
 
     trigger_falling_edge_button = gtk_button_new_with_label("‾‾\\__");
     gtk_widget_set_hexpand(trigger_falling_edge_button, TRUE);
     g_signal_connect(trigger_falling_edge_button, "clicked",
                      G_CALLBACK(onTriggerFallingEdgeButtonClicked),
-                     &(dynamicData.thresholdTrigger));
+                     &dynamicData);
 }
 
 void TriggerControls::prepareTriggerSourceSelection(DynamicData &dynamicData)
@@ -128,7 +126,7 @@ void TriggerControls::prepareTriggerSourceSelection(DynamicData &dynamicData)
 
     g_signal_connect(trigger_source_combo, "changed",
                      G_CALLBACK(onTriggerSourceChanged),
-                     &dynamicData.trigger_source);
+                     &dynamicData);
 }
 
 GtkWidget *TriggerControls::getTriggerControlsContainer()

@@ -23,10 +23,8 @@ void horizontalMeasurementsExpenderNotifyAction(
     GtkExpander *expander, GParamSpec *pspec,
     gpointer data)
 {
-    HorizontalMeasurementsData *horizontalMeasurementsData =
-        static_cast<HorizontalMeasurementsData *>(data);
-    horizontalMeasurementsData->active =
-        gtk_expander_get_expanded(expander);
+    DynamicData *dynamicData = static_cast<DynamicData *>(data);
+    dynamicData->horizontalMeasurementsData.active = gtk_expander_get_expanded(expander);
 }
 
 void HorizontalMeasurements::prepare(DynamicData &dynamicData)
@@ -72,7 +70,7 @@ void HorizontalMeasurements::prepare(DynamicData &dynamicData)
 
     g_signal_connect(horizontalMeasurementsExpander, "notify::expanded",
                      G_CALLBACK(horizontalMeasurementsExpenderNotifyAction),
-                     &dynamicData.horizontalMeasurementsData);
+                     &dynamicData);
 }
 
 GtkWidget *HorizontalMeasurements::getHorizontalMeasurementsContainer()

@@ -18,9 +18,8 @@ void measuredVoltageSliderOnChangeAction(GtkRange *range, gpointer data)
 void verticalMeasurementsExpenderNotifyAction(GtkExpander *expander, GParamSpec *pspec,
                                               gpointer data)
 {
-    VerticalMeasurementsData *verticalMeasurementsData =
-        static_cast<VerticalMeasurementsData *>(data);
-    verticalMeasurementsData->active = gtk_expander_get_expanded(expander);
+    DynamicData *dynamicData = static_cast<DynamicData *>(data);
+    dynamicData->verticalMeasurementsData.active = gtk_expander_get_expanded(expander);
 }
 
 void VerticalMeasurements::prepare(DynamicData &dynamicData)
@@ -69,7 +68,7 @@ void VerticalMeasurements::prepare(DynamicData &dynamicData)
 
     g_signal_connect(verticalMeasurementsExpander, "notify::expanded",
                      G_CALLBACK(verticalMeasurementsExpenderNotifyAction),
-                     &dynamicData.verticalMeasurementsData);
+                     &dynamicData);
 }
 
 GtkWidget *VerticalMeasurements::getVerticalMeasurementsContainer()
