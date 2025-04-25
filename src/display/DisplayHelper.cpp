@@ -120,13 +120,13 @@ void DisplayHelper::run()
 
     while (!glfwWindowShouldClose(window))
     {
-        const double current_time{glfwGetTime()};
-        const bool time_for_new_frame{(current_time - last_frame_time) >=
-                                      frame_duration};
-        if (time_for_new_frame)
+        if (dynamicData.new_data_available or
+            dynamicData.display_configuration_changed)
         {
-            if (dynamicData.new_data_available or
-                dynamicData.display_configuration_changed)
+            const double current_time{glfwGetTime()};
+            const bool time_for_new_frame{(current_time - last_frame_time) >=
+                                          frame_duration};
+            if (time_for_new_frame)
             {
                 Timemarker tmarker{
                     dynamicData.timemarkersData.totalFrameDisplayDuration};
