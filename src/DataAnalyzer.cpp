@@ -188,4 +188,16 @@ void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
 
     signalMeasurementsData.max_value =
         (max_value != adc_values_to_display.end()) ? *max_value : INVALID_VALUE;
+
+    if (adc_values_to_display.empty())
+    {
+        signalMeasurementsData.average_value = INVALID_VALUE;
+    }
+    else
+    {
+        const auto average_value{std::accumulate(adc_values_to_display.begin(),
+                                                 adc_values_to_display.end(), 0) /
+                                 adc_values_to_display.size()};
+        signalMeasurementsData.average_value = average_value;
+    }
 }

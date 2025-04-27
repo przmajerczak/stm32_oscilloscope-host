@@ -109,22 +109,20 @@ gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData)
     GtkLabel *label = GTK_LABEL(avgVoltageLabel);
     std::stringstream labelContent;
 
-    if (dynamicData->retrieved_adc_values.at(CHANNEL_1).empty())
+    if (dynamicData->signalMeasurementsData.at(CHANNEL_1).average_value ==
+        INVALID_VALUE)
     {
         labelContent << "Average voltage: --- mV";
     }
     else
     {
-        const auto avg_voltage{
-            std::accumulate(dynamicData->retrieved_adc_values.at(CHANNEL_1).begin(),
-                            dynamicData->retrieved_adc_values.at(CHANNEL_1).end(),
-                            0) /
-            dynamicData->retrieved_adc_values.at(CHANNEL_1).size()};
-
         labelContent << "Average voltage: "
                      << scaleYToVoltage_mV(
                             *dynamicData,
-                            scaleAdcValueToY(*dynamicData, avg_voltage))
+                            scaleAdcValueToY(
+                                *dynamicData,
+                                dynamicData->signalMeasurementsData.at(CHANNEL_1)
+                                    .average_value))
                      << " mV";
     }
 
