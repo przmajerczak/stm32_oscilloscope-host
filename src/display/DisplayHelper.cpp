@@ -85,7 +85,7 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
 
     glBegin(GL_LINE_STRIP);
 
-    float x{static_cast<float>(marginCorrected(0))};
+    float x;
     float y;
 
     const double x_length{
@@ -93,20 +93,27 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
          dynamicData.nanoseconds_per_sample) /
         static_cast<double>(dynamicData.horizontal_resolution_ns)};
 
-    while (*value_it == INVALID_VALUE)
+    if (dynamicData.trigger_index == INVALID_VALUE)
     {
-        x += x_length;
-        ++value_it;
+        x = marginCorrected(dynamicData.trigger_horizontal_position);
+    }
+    else
+    {
+        x = marginCorrected(dynamicData.trigger_horizontal_position -
+                            (dynamicData.trigger_index * x_length));
+    }
+
+    if (x < marginCorrected(0.0f))
+    {
+        const std::size_t shiftToDisplayBeginning{
+            static_cast<std::size_t>((marginCorrected(0.0f) - x) / x_length)};
+        x += shiftToDisplayBeginning * x_length;
+        value_it += shiftToDisplayBeginning;
     }
 
     for (value_it; value_it != adcValuesToDisplay.end(); ++value_it)
     {
         if (x > marginCorrected(X_DISPLAY_RESOLUTION))
-        {
-            break;
-        }
-
-        if (*value_it == INVALID_VALUE)
         {
             break;
         }

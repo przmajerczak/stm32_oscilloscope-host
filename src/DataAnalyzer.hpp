@@ -12,8 +12,6 @@ public:
                           DynamicData &dynamicData, const ChannelId channelId);
 
 private:
-    AdcValues centerValuesOnTrigger(const AdcValues &averaged_values,
-                                    DynamicData &dynamicData);
     AdcValues averageAdcValues(DynamicData &dynamicData,
                                const AdcValues &current_values);
     TriggersIndexes detectTriggers(DynamicData &dynamicData,

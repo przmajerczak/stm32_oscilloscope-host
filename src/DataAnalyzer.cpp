@@ -15,50 +15,10 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
     const TriggersIndexes triggersIndexes{
         detectTriggers(dynamicData, averaged_values, channelId)};
 
-    const AdcValues adc_values_to_display{
-        centerValuesOnTrigger(averaged_values, dynamicData)};
-    calculateMeasurements(dynamicData, adc_values_to_display, triggersIndexes,
+    calculateMeasurements(dynamicData, averaged_values, triggersIndexes,
                           channelId);
 
-    return std::move(adc_values_to_display);
-}
-
-// TODO: change this name
-AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &averaged_values,
-                                              DynamicData &dynamicData)
-{
-    if (averaged_values.empty() or dynamicData.trigger_index == INVALID_VALUE)
-    {
-        return averaged_values;
-    }
-
-    const uint32_t samples_to_display{
-        static_cast<uint32_t>(dynamicData.horizontal_resolution_ns /
-                              dynamicData.nanoseconds_per_sample)};
-
-    const int shiftCountForTriggerCenter{static_cast<int>(
-        dynamicData.trigger_index -
-        (samples_to_display *
-         (dynamicData.trigger_horizontal_position / X_DISPLAY_RESOLUTION)))};
-
-    AdcValues valuesToDisplay;
-    valuesToDisplay.resize(samples_to_display);
-
-    for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
-    {
-        const std::size_t averaged_values_idx{idx + shiftCountForTriggerCenter};
-        if (averaged_values_idx >= 0 and
-            averaged_values_idx < averaged_values.size())
-        {
-            valuesToDisplay.at(idx) = averaged_values.at(averaged_values_idx);
-        }
-        else
-        {
-            valuesToDisplay.at(idx) = INVALID_VALUE;
-        }
-    }
-
-    return valuesToDisplay;
+    return std::move(averaged_values);
 }
 
 AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
