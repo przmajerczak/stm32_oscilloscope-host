@@ -8,10 +8,11 @@
 
 gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 {
-    CallbackData<DynamicData> *callbackData =
-        (CallbackData<DynamicData> *)_callbackData;
-    GtkWidget *frequencyLabel = callbackData->widget;
-    DynamicData *dynamicData = callbackData->data;
+    LabelsAndDynamicData *labels_and_dynamic_data =
+        (LabelsAndDynamicData *)_callbackData;
+    GtkWidget *frequencyLabel =
+        labels_and_dynamic_data->labels_pointers->at(CHANNEL_1).frequencyLabel;
+    DynamicData *dynamicData = labels_and_dynamic_data->dynamicData;
 
     GtkLabel *label = GTK_LABEL(frequencyLabel);
     std::stringstream labelContent;
@@ -49,10 +50,11 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 
 gboolean minVoltageLabelTimeoutAction(gpointer _callbackData)
 {
-    CallbackData<DynamicData> *callbackData =
-        (CallbackData<DynamicData> *)_callbackData;
-    GtkWidget *minVoltageLabel = callbackData->widget;
-    DynamicData *dynamicData = callbackData->data;
+    LabelsAndDynamicData *labels_and_dynamic_data =
+        (LabelsAndDynamicData *)_callbackData;
+    GtkWidget *minVoltageLabel =
+        labels_and_dynamic_data->labels_pointers->at(CHANNEL_1).minVoltageLabel;
+    DynamicData *dynamicData = labels_and_dynamic_data->dynamicData;
 
     GtkLabel *label = GTK_LABEL(minVoltageLabel);
     std::stringstream labelContent;
@@ -79,10 +81,11 @@ gboolean minVoltageLabelTimeoutAction(gpointer _callbackData)
 
 gboolean maxVoltageLabelTimeoutAction(gpointer _callbackData)
 {
-    CallbackData<DynamicData> *callbackData =
-        (CallbackData<DynamicData> *)_callbackData;
-    GtkWidget *maxVoltageLabel = callbackData->widget;
-    DynamicData *dynamicData = callbackData->data;
+    LabelsAndDynamicData *labels_and_dynamic_data =
+        (LabelsAndDynamicData *)_callbackData;
+    GtkWidget *maxVoltageLabel =
+        labels_and_dynamic_data->labels_pointers->at(CHANNEL_1).maxVoltageLabel;
+    DynamicData *dynamicData = labels_and_dynamic_data->dynamicData;
 
     GtkLabel *label = GTK_LABEL(maxVoltageLabel);
     std::stringstream labelContent;
@@ -109,10 +112,11 @@ gboolean maxVoltageLabelTimeoutAction(gpointer _callbackData)
 
 gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData)
 {
-    CallbackData<DynamicData> *callbackData =
-        (CallbackData<DynamicData> *)_callbackData;
-    GtkWidget *avgVoltageLabel = callbackData->widget;
-    DynamicData *dynamicData = callbackData->data;
+    LabelsAndDynamicData *labels_and_dynamic_data =
+        (LabelsAndDynamicData *)_callbackData;
+    GtkWidget *avgVoltageLabel =
+        labels_and_dynamic_data->labels_pointers->at(CHANNEL_1).avgVoltageLabel;
+    DynamicData *dynamicData = labels_and_dynamic_data->dynamicData;
 
     GtkLabel *label = GTK_LABEL(avgVoltageLabel);
     std::stringstream labelContent;
@@ -142,6 +146,9 @@ gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData)
 
 void MeasurementsControls::prepare(DynamicData &dynamicData)
 {
+    labels_and_dynamic_data.dynamicData = &dynamicData;
+    labels_and_dynamic_data.labels_pointers = &labels_pointers;
+
     prepareFrequencyLabel(dynamicData);
     prepareMinVoltageLabel(dynamicData);
     prepareMaxVoltageLabel(dynamicData);
@@ -154,54 +161,34 @@ void MeasurementsControls::prepare(DynamicData &dynamicData)
 void MeasurementsControls::prepareFrequencyLabel(DynamicData &dynamicData)
 {
     labels_pointers.at(CHANNEL_1).frequencyLabel = gtk_label_new("--- Hz");
-    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).frequencyLabel,
-                           TRUE);
-
-    callbackDataForFrequencyLabel.widget =
-        labels_pointers.at(CHANNEL_1).frequencyLabel;
-    callbackDataForFrequencyLabel.data = &dynamicData;
+    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).frequencyLabel, TRUE);
 
     g_timeout_add(LABELS_REFRESH_RATE_MS, frequencyLabelTimeoutAction,
-                  &callbackDataForFrequencyLabel);
+                  &labels_and_dynamic_data);
 }
 void MeasurementsControls::prepareMinVoltageLabel(DynamicData &dynamicData)
 {
     labels_pointers.at(CHANNEL_1).minVoltageLabel = gtk_label_new("--- mV");
-    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).minVoltageLabel,
-                           TRUE);
-
-    callbackDataForMinVoltageLabel.widget =
-        labels_pointers.at(CHANNEL_1).minVoltageLabel;
-    callbackDataForMinVoltageLabel.data = &dynamicData;
+    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).minVoltageLabel, TRUE);
 
     g_timeout_add(LABELS_REFRESH_RATE_MS, minVoltageLabelTimeoutAction,
-                  &callbackDataForMinVoltageLabel);
+                  &labels_and_dynamic_data);
 }
 void MeasurementsControls::prepareMaxVoltageLabel(DynamicData &dynamicData)
 {
     labels_pointers.at(CHANNEL_1).maxVoltageLabel = gtk_label_new("-- mV");
-    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).maxVoltageLabel,
-                           TRUE);
-
-    callbackDataForMaxVoltageLabel.widget =
-        labels_pointers.at(CHANNEL_1).maxVoltageLabel;
-    callbackDataForMaxVoltageLabel.data = &dynamicData;
+    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).maxVoltageLabel, TRUE);
 
     g_timeout_add(LABELS_REFRESH_RATE_MS, maxVoltageLabelTimeoutAction,
-                  &callbackDataForMaxVoltageLabel);
+                  &labels_and_dynamic_data);
 }
 void MeasurementsControls::prepareAvgVoltageLabel(DynamicData &dynamicData)
 {
     labels_pointers.at(CHANNEL_1).avgVoltageLabel = gtk_label_new("--- mV");
-    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).avgVoltageLabel,
-                           TRUE);
-
-    callbackDataForAvgVoltageLabel.widget =
-        labels_pointers.at(CHANNEL_1).avgVoltageLabel;
-    callbackDataForAvgVoltageLabel.data = &dynamicData;
+    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).avgVoltageLabel, TRUE);
 
     g_timeout_add(LABELS_REFRESH_RATE_MS, avgVoltageLabelTimeoutAction,
-                  &callbackDataForAvgVoltageLabel);
+                  &labels_and_dynamic_data);
 }
 
 GtkWidget *MeasurementsControls::getMeasurementsGridContainer()
@@ -235,14 +222,11 @@ GtkWidget *MeasurementsControls::getMeasurementsGridContainer()
     gtk_grid_attach(GTK_GRID(measurementsGrid),
                     labels_pointers.at(CHANNEL_1).frequencyLabel, 1, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(measurementsGrid),
-                    labels_pointers.at(CHANNEL_1).maxVoltageLabel, 1, 2, 1,
-                    1);
+                    labels_pointers.at(CHANNEL_1).maxVoltageLabel, 1, 2, 1, 1);
     gtk_grid_attach(GTK_GRID(measurementsGrid),
-                    labels_pointers.at(CHANNEL_1).avgVoltageLabel, 1, 3, 1,
-                    1);
+                    labels_pointers.at(CHANNEL_1).avgVoltageLabel, 1, 3, 1, 1);
     gtk_grid_attach(GTK_GRID(measurementsGrid),
-                    labels_pointers.at(CHANNEL_1).minVoltageLabel, 1, 4, 1,
-                    1);
+                    labels_pointers.at(CHANNEL_1).minVoltageLabel, 1, 4, 1, 1);
 
     gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_CH2, 2, 0, 1, 1);
 

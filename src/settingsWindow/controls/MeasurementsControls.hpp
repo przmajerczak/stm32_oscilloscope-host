@@ -2,7 +2,6 @@
 
 #include <gtk/gtk.h>
 
-#include "CallbackData.hpp"
 #include "measurements/HorizontalMeasurements.hpp"
 #include "measurements/VerticalMeasurements.hpp"
 #include "sharedData/DynamicData.hpp"
@@ -17,6 +16,12 @@ struct LabelsForSingleChannel
 };
 
 using LabelsPointers = std::array<LabelsForSingleChannel, NUMBER_OF_CHANNELS>;
+
+struct LabelsAndDynamicData
+{
+    DynamicData *dynamicData;
+    LabelsPointers *labels_pointers;
+};
 
 class MeasurementsControls
 {
@@ -33,11 +38,7 @@ private:
     GtkWidget *getMeasurementsGridContainer();
 
     LabelsPointers labels_pointers;
-
-    CallbackData<DynamicData> callbackDataForFrequencyLabel;
-    CallbackData<DynamicData> callbackDataForMinVoltageLabel;
-    CallbackData<DynamicData> callbackDataForMaxVoltageLabel;
-    CallbackData<DynamicData> callbackDataForAvgVoltageLabel;
+    LabelsAndDynamicData labels_and_dynamic_data;
 
     VerticalMeasurements verticalMeasurements;
     HorizontalMeasurements horizontalMeasurements;
