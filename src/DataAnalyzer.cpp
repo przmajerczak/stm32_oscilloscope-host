@@ -26,40 +26,23 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
 // TODO: change this name
 AdcValues DataAnalyzer::centerValuesOnTrigger(const AdcValues &averaged_values,
                                               DynamicData &dynamicData)
-
 {
-    AdcValues valuesToDisplay;
-    if (averaged_values.size() == 0)
+    if (averaged_values.empty() or dynamicData.trigger_index == INVALID_VALUE)
     {
-        return valuesToDisplay;
+        return averaged_values;
     }
 
     const uint32_t samples_to_display{
         static_cast<uint32_t>(dynamicData.horizontal_resolution_ns /
                               dynamicData.nanoseconds_per_sample)};
 
-    valuesToDisplay.resize(samples_to_display);
-    if (dynamicData.trigger_index == INVALID_VALUE)
-    {
-        for (std::size_t idx = 0; idx < samples_to_display; ++idx)
-        {
-            // TODO: copy this better with STL
-            if (idx < averaged_values.size())
-            {
-                valuesToDisplay.at(idx) = averaged_values.at(idx);
-            }
-            else
-            {
-                valuesToDisplay.at(idx) = INVALID_VALUE;
-            }
-        }
-        return valuesToDisplay;
-    }
-
     const int shiftCountForTriggerCenter{static_cast<int>(
         dynamicData.trigger_index -
         (samples_to_display *
          (dynamicData.trigger_horizontal_position / X_DISPLAY_RESOLUTION)))};
+
+    AdcValues valuesToDisplay;
+    valuesToDisplay.resize(samples_to_display);
 
     for (std::size_t idx = 0; idx < valuesToDisplay.size(); ++idx)
     {

@@ -88,9 +88,10 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
     float x{static_cast<float>(marginCorrected(0))};
     float y;
 
-    const std::size_t values_to_display{adcValuesToDisplay.size()};
-    const double x_length{static_cast<double>(X_DISPLAY_RESOLUTION) /
-                          static_cast<double>(values_to_display)};
+    const double x_length{
+        (static_cast<double>(X_DISPLAY_RESOLUTION) *
+         dynamicData.nanoseconds_per_sample) /
+        static_cast<double>(dynamicData.horizontal_resolution_ns)};
 
     while (*value_it == INVALID_VALUE)
     {
@@ -100,6 +101,11 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
 
     for (value_it; value_it != adcValuesToDisplay.end(); ++value_it)
     {
+        if (x > marginCorrected(X_DISPLAY_RESOLUTION))
+        {
+            break;
+        }
+
         if (*value_it == INVALID_VALUE)
         {
             break;
