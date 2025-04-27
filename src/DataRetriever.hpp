@@ -3,8 +3,8 @@
 #include "sharedData/DynamicData.hpp"
 #include "sharedData/types.hpp"
 #include <cstdint>
-#include <unistd.h>
 #include <string>
+#include <unistd.h>
 
 class DataRetriever
 {
@@ -18,6 +18,7 @@ private:
     std::string determineDeviceFilepath();
     void singleDataRetrieve(DynamicData &dynamicData);
     EncodedAdcData retrieveData(DynamicData &dynamicData);
+    ChannelId determineChannelId(const uint8_t second_last_byte) const;
     AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);
     bool configureTty(const int deviceFileDescriptor);
     double calculateFrameDuration_ns(EncodedAdcValues &undecodedRetrievedData);
