@@ -128,6 +128,11 @@ double DataAnalyzer::calculateFrequency(const TriggersIndexes &triggersIndexes,
                                         const double nanoseconds_per_sample,
                                         const double frame_duration_ns)
 {
+    if (triggersIndexes.empty())
+    {
+        return -1.0;
+    }
+
     if (triggersIndexes.size() < 2)
     {
         return triggersIndexes.size() / frame_duration_ns;
