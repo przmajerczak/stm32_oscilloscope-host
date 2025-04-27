@@ -18,19 +18,27 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 
     const double frequency_Hz{
         dynamicData->signalMeasurementsData.at(CHANNEL_1).frequency_Hz};
-    if (frequency_Hz > 1000000.0)
+
+    if (frequency_Hz >= 0.0)
     {
-        labelContent << std::fixed << std::setprecision(2)
-                     << frequency_Hz / 1000000.0 << " MHz";
-    }
-    else if (frequency_Hz > 1000.0)
-    {
-        labelContent << std::fixed << std::setprecision(2) << frequency_Hz / 1000.0
-                     << " kHz";
+        if (frequency_Hz > 1000000.0)
+        {
+            labelContent << std::fixed << std::setprecision(2)
+                         << frequency_Hz / 1000000.0 << " MHz";
+        }
+        else if (frequency_Hz > 1000.0)
+        {
+            labelContent << std::fixed << std::setprecision(2) << frequency_Hz / 1000.0
+                         << " kHz";
+        }
+        else
+        {
+            labelContent << std::fixed << std::setprecision(2) << frequency_Hz << " Hz";
+        }
     }
     else
     {
-        labelContent << std::fixed << std::setprecision(2) << frequency_Hz << " Hz";
+        labelContent << "--- Hz";
     }
 
     gtk_label_set_text(label, labelContent.str().c_str());
@@ -125,6 +133,8 @@ gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData)
     }
 
     gtk_label_set_text(label, labelContent.str().c_str());
+
+    dynamicData->signalMeasurementsData.at(CHANNEL_1).reset();
 
     return TRUE;
 }
