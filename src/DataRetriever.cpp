@@ -176,17 +176,13 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
 
     EncodedAdcValues values;
 
-    constexpr uint8_t ONE_CHANNEL_MODE{0xfe};
-    constexpr uint8_t DUAL_CHANNEL_MODE{0xfd};
-
     constexpr uint8_t FAILED_READ_ATTEMPTS_LIMIT{10};
     uint8_t failed_read_attempts = 0;
 
     // TODO: wrap in nice method determining channel and return channel id along
     // with data
-    while (
-        not((last_byte == ONE_CHANNEL_MODE or last_byte == DUAL_CHANNEL_MODE) and
-            (determineChannelId(previous_byte) != NUMBER_OF_CHANNELS)))
+    while (not((determineChannelMode(last_byte) != DualChannelMode::INVALID) and
+               (determineChannelId(previous_byte) != NUMBER_OF_CHANNELS)))
     {
         previous_byte = last_byte;
         long int bytes_received{read(deviceFileDescriptor, &last_byte, 1)};
@@ -209,11 +205,29 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
     values.pop_back();
     values.pop_back();
 
-    DualChannelMode mode{last_byte == DUAL_CHANNEL_MODE ? DualChannelMode::ON
-                                                        : DualChannelMode::OFF};
-    EncodedAdcData data{values, determineChannelId(previous_byte), mode};
+    EncodedAdcData data{values, determineChannelId(previous_byte),
+                        determineChannelMode(last_byte)};
 
     return data;
+}
+
+DualChannelMode
+DataRetriever::determineChannelMode(const uint8_t last_byte) const
+{
+    constexpr uint8_t LAST_BYTE_FOR_ONE_CHANNEL_MODE{0xfe};
+    constexpr uint8_t LAST_BYTE_FOR_DUAL_CHANNEL_MODE{0xfd};
+
+    if (last_byte == LAST_BYTE_FOR_ONE_CHANNEL_MODE)
+    {
+        return DualChannelMode::OFF;
+    }
+
+    if (last_byte == LAST_BYTE_FOR_DUAL_CHANNEL_MODE)
+    {
+        return DualChannelMode::ON;
+    }
+
+    return DualChannelMode::INVALID;
 }
 
 ChannelId

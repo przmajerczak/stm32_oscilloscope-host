@@ -20,7 +20,8 @@ enum class ThresholdTrigger
 enum class DualChannelMode
 {
     ON,
-    OFF
+    OFF,
+    INVALID
 };
 
 struct EncodedAdcData
