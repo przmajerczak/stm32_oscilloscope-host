@@ -50,18 +50,21 @@ AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
     auto moving_average_window_back{
         std::next(moving_average_window_front, averaging_window_size)};
 
-    // TODO: make this algorithm more optimal by using real movinf window
-    // with adding and subtracing front/back element at each iteration
-    // instead of accumulating every time
+    auto moving_average_window{std::accumulate(moving_average_window_front,
+                                               moving_average_window_back, 0)};
+
     for (auto &averaged_value : averaged_values)
     {
-        averaged_value = static_cast<AdcValues::value_type>(
-            static_cast<double>(std::accumulate(moving_average_window_front,
-                                                moving_average_window_back, 0)) /
-            static_cast<double>(averaging_window_size));
+        averaged_value =
+            static_cast<AdcValue>(static_cast<double>(moving_average_window) /
+                                  static_cast<double>(averaging_window_size));
+
+        moving_average_window -= *moving_average_window_front;
 
         moving_average_window_front++;
         moving_average_window_back++;
+
+        moving_average_window += *moving_average_window_back;
     }
 
     const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
