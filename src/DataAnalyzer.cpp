@@ -189,6 +189,8 @@ void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
     signalMeasurementsData.max_value =
         (max_value != adc_values_to_display.end()) ? *max_value : INVALID_VALUE;
 
+    signalMeasurementsData.amplitude = max_value - min_value;
+
     if (adc_values_to_display.empty())
     {
         signalMeasurementsData.average_value = INVALID_VALUE;
