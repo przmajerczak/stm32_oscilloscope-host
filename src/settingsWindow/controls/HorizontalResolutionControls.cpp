@@ -32,8 +32,6 @@ void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
     g_signal_connect(horizontal_resolution_slider, "value-changed",
                      G_CALLBACK(horizontalResolutionSliderOnChangeAction),
                      &dynamicData);
-
-    horizontal_resolution_spin_button = gtk_spin_button_new(adjustment, 1.0, 2);
 };
 
 GtkWidget *
@@ -51,8 +49,6 @@ HorizontalResolutionControls::getHorizontalResolutionControlsContainer()
     constexpr int padding{0};
     gtk_box_pack_start(GTK_BOX(horizontalResolutionHorizontalBox),
                        horizontal_resolution_slider, FALSE, TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(horizontalResolutionHorizontalBox),
-                       horizontal_resolution_spin_button, FALSE, TRUE, padding);
 
     gtk_container_add(GTK_CONTAINER(horizontalResolutionControlsExpander),
                       horizontalResolutionHorizontalBox);

@@ -19,7 +19,6 @@ private:
     GtkWidget *trigger_threshold_slider = nullptr;
     GtkWidget *trigger_horizontal_position_label = nullptr;
     GtkWidget *trigger_horizontal_position_slider = nullptr;
-    GtkWidget *trigger_horizontal_position_spin_button = nullptr;
     GtkWidget *trigger_edge_label = nullptr;
     GtkWidget *trigger_rising_edge_button = nullptr;
     GtkWidget *trigger_falling_edge_button = nullptr;

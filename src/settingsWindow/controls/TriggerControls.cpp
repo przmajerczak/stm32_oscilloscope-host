@@ -96,9 +96,6 @@ void TriggerControls::prepareTriggerHorizontalPositionControls(
     g_signal_connect(trigger_horizontal_position_slider, "value-changed",
                      G_CALLBACK(triggerHorizontalPositionSliderOnChangeAction),
                      &dynamicData);
-
-    trigger_horizontal_position_spin_button =
-        gtk_spin_button_new(adjustment, 1.0, 0);
 }
 
 void TriggerControls::prepareTriggerEdgeControls(DynamicData &dynamicData)
@@ -158,9 +155,6 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
         gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
     gtk_box_pack_start(GTK_BOX(trigger_horizontal_position_box),
                        trigger_horizontal_position_slider, FALSE, TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(trigger_horizontal_position_box),
-                       trigger_horizontal_position_spin_button, FALSE, TRUE,
-                       padding);
 
     GtkWidget *trigger_edge_box =
         gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
