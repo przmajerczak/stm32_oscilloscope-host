@@ -127,33 +127,20 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
 
 void DisplayHelper::run()
 {
-    constexpr double fps{100.0};
-    constexpr double frame_duration{1.0 / fps};
-    double last_frame_time{0.0};
-
     while (!glfwWindowShouldClose(window))
     {
         if (dynamicData.new_data_available or
             dynamicData.display_configuration_changed)
         {
-            const double current_time{glfwGetTime()};
-            const bool time_for_new_frame{(current_time - last_frame_time) >=
-                                          frame_duration};
-            if (time_for_new_frame)
-            {
-                Timemarker tmarker{
-                    dynamicData.timemarkersData.totalFrameDisplayDuration};
+            Timemarker tmarker{dynamicData.timemarkersData.totalFrameDisplayDuration};
 
-                display();
+            display();
 
-                glfwSwapBuffers(window);
-                glfwPollEvents();
+            glfwSwapBuffers(window);
+            glfwPollEvents();
 
-                last_frame_time = current_time;
-
-                dynamicData.new_data_available = false;
-                dynamicData.display_configuration_changed = false;
-            }
+            dynamicData.new_data_available = false;
+            dynamicData.display_configuration_changed = false;
         }
     }
 }
