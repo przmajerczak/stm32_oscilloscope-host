@@ -18,6 +18,8 @@ private:
     std::string determineDeviceFilepath();
     void singleDataRetrieve(DynamicData &dynamicData);
     EncodedAdcData retrieveData(DynamicData &dynamicData);
+    bool detectEndSequence(const uint8_t second_last_byte,
+                           const uint8_t last_byte) const;
     DualChannelMode determineChannelMode(const uint8_t last_byte) const;
     ChannelId determineChannelId(const uint8_t second_last_byte) const;
     AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);

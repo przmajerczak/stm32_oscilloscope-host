@@ -179,10 +179,7 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
     constexpr uint8_t FAILED_READ_ATTEMPTS_LIMIT{10};
     uint8_t failed_read_attempts = 0;
 
-    // TODO: wrap in nice method determining channel and return channel id along
-    // with data
-    while (not((determineChannelMode(last_byte) != DualChannelMode::INVALID) and
-               (determineChannelId(previous_byte) != NUMBER_OF_CHANNELS)))
+    while (not(detectEndSequence(previous_byte, last_byte)))
     {
         previous_byte = last_byte;
         long int bytes_received{read(deviceFileDescriptor, &last_byte, 1)};
@@ -209,6 +206,13 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
                         determineChannelMode(last_byte)};
 
     return data;
+}
+
+bool DataRetriever::detectEndSequence(const uint8_t second_last_byte,
+                                      const uint8_t last_byte) const
+{
+    return (determineChannelMode(last_byte) != DualChannelMode::INVALID) and
+           (determineChannelId(second_last_byte) != NUMBER_OF_CHANNELS);
 }
 
 DualChannelMode
