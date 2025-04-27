@@ -15,7 +15,6 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
 
     GtkLabel *label = GTK_LABEL(frequencyLabel);
     std::stringstream labelContent;
-    labelContent << "Signal frequency: ";
 
     const double frequency_Hz{
         dynamicData->signalMeasurementsData.at(CHANNEL_1).frequency_Hz};
@@ -57,11 +56,11 @@ gboolean minVoltageLabelTimeoutAction(gpointer _callbackData)
         const auto min_voltage_mV = scaleYToVoltage_mV(
             *dynamicData, scaleAdcValueToY(*dynamicData, min_value));
 
-        labelContent << "Minimal voltage: " << min_voltage_mV << " mV";
+        labelContent << min_voltage_mV << " mV";
     }
     else
     {
-        labelContent << "Minimal voltage: --- mV";
+        labelContent << "--- mV";
     }
 
     gtk_label_set_text(label, labelContent.str().c_str());
@@ -87,11 +86,11 @@ gboolean maxVoltageLabelTimeoutAction(gpointer _callbackData)
         const auto max_voltage_mV = scaleYToVoltage_mV(
             *dynamicData, scaleAdcValueToY(*dynamicData, max_value));
 
-        labelContent << "Maximal voltage: " << max_voltage_mV << " mV";
+        labelContent << max_voltage_mV << " mV";
     }
     else
     {
-        labelContent << "Maximal voltage: --- mV";
+        labelContent << "--- mV";
     }
 
     gtk_label_set_text(label, labelContent.str().c_str());
@@ -112,12 +111,11 @@ gboolean avgVoltageLabelTimeoutAction(gpointer _callbackData)
     if (dynamicData->signalMeasurementsData.at(CHANNEL_1).average_value ==
         INVALID_VALUE)
     {
-        labelContent << "Average voltage: --- mV";
+        labelContent << "--- mV";
     }
     else
     {
-        labelContent << "Average voltage: "
-                     << scaleYToVoltage_mV(
+        labelContent << scaleYToVoltage_mV(
                             *dynamicData,
                             scaleAdcValueToY(
                                 *dynamicData,
@@ -144,7 +142,7 @@ void MeasurementsControls::prepare(DynamicData &dynamicData)
 
 void MeasurementsControls::prepareFrequencyLabel(DynamicData &dynamicData)
 {
-    frequencyLabel = gtk_label_new("Signal frequency: --- Hz");
+    frequencyLabel = gtk_label_new("--- Hz");
     gtk_widget_set_hexpand(frequencyLabel, TRUE);
 
     callbackDataForFrequencyLabel.widget = frequencyLabel;
@@ -155,7 +153,7 @@ void MeasurementsControls::prepareFrequencyLabel(DynamicData &dynamicData)
 }
 void MeasurementsControls::prepareMinVoltageLabel(DynamicData &dynamicData)
 {
-    minVoltageLabel = gtk_label_new("Minimal voltage: --- mV");
+    minVoltageLabel = gtk_label_new("--- mV");
     gtk_widget_set_hexpand(minVoltageLabel, TRUE);
 
     callbackDataForMinVoltageLabel.widget = minVoltageLabel;
@@ -166,7 +164,7 @@ void MeasurementsControls::prepareMinVoltageLabel(DynamicData &dynamicData)
 }
 void MeasurementsControls::prepareMaxVoltageLabel(DynamicData &dynamicData)
 {
-    maxVoltageLabel = gtk_label_new("Maximal voltage: --- mV");
+    maxVoltageLabel = gtk_label_new("-- mV");
     gtk_widget_set_hexpand(maxVoltageLabel, TRUE);
 
     callbackDataForMaxVoltageLabel.widget = maxVoltageLabel;
@@ -177,7 +175,7 @@ void MeasurementsControls::prepareMaxVoltageLabel(DynamicData &dynamicData)
 }
 void MeasurementsControls::prepareAvgVoltageLabel(DynamicData &dynamicData)
 {
-    avgVoltageLabel = gtk_label_new("Average voltage: --- mV");
+    avgVoltageLabel = gtk_label_new("--- mV");
     gtk_widget_set_hexpand(avgVoltageLabel, TRUE);
 
     callbackDataForAvgVoltageLabel.widget = avgVoltageLabel;
@@ -190,18 +188,18 @@ void MeasurementsControls::prepareAvgVoltageLabel(DynamicData &dynamicData)
 GtkWidget *MeasurementsControls::getMeasurementsGridContainer()
 {
     auto title_label_f = gtk_label_new("f");
-    auto title_label_min = gtk_label_new("min");
-    auto title_label_avg = gtk_label_new("avg");
     auto title_label_max = gtk_label_new("max");
+    auto title_label_avg = gtk_label_new("avg");
+    auto title_label_min = gtk_label_new("min");
     auto title_label_amplitude = gtk_label_new("amplitude");
 
     auto title_label_CH1 = gtk_label_new("CH1");
     auto title_label_CH2 = gtk_label_new("CH2");
 
     gtk_widget_set_hexpand(title_label_f, TRUE);
-    gtk_widget_set_hexpand(title_label_min, TRUE);
-    gtk_widget_set_hexpand(title_label_avg, TRUE);
     gtk_widget_set_hexpand(title_label_max, TRUE);
+    gtk_widget_set_hexpand(title_label_avg, TRUE);
+    gtk_widget_set_hexpand(title_label_min, TRUE);
     gtk_widget_set_hexpand(title_label_amplitude, TRUE);
     gtk_widget_set_hexpand(title_label_CH1, TRUE);
     gtk_widget_set_hexpand(title_label_CH2, TRUE);
@@ -215,6 +213,10 @@ GtkWidget *MeasurementsControls::getMeasurementsGridContainer()
                     1);
 
     gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_CH1, 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid), frequencyLabel, 1, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid), maxVoltageLabel, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid), avgVoltageLabel, 1, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid), minVoltageLabel, 1, 4, 1, 1);
 
     gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_CH2, 2, 0, 1, 1);
 
@@ -238,14 +240,6 @@ GtkWidget *MeasurementsControls::getMeasurementsControlsContainer()
         GTK_BOX(measurementsVerticalBox),
         horizontalMeasurements.getHorizontalMeasurementsContainer(), FALSE, TRUE,
         padding);
-    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), frequencyLabel, FALSE,
-                       TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), minVoltageLabel, FALSE,
-                       TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), maxVoltageLabel, FALSE,
-                       TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), avgVoltageLabel, FALSE,
-                       TRUE, padding);
 
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox),
                        getMeasurementsGridContainer(), FALSE, TRUE, padding);
