@@ -9,6 +9,7 @@
 
 struct LabelsForSingleChannel
 {
+    GtkWidget *titleLabel;
     GtkWidget *frequencyLabel;
     GtkWidget *maxVoltageLabel;
     GtkWidget *avgVoltageLabel;
