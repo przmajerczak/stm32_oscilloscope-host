@@ -10,9 +10,10 @@
 struct LabelsForSingleChannel
 {
     GtkWidget *frequencyLabel;
-    GtkWidget *minVoltageLabel;
     GtkWidget *maxVoltageLabel;
     GtkWidget *avgVoltageLabel;
+    GtkWidget *minVoltageLabel;
+    GtkWidget *amplitudeLabel;
 };
 
 using LabelsPointers = std::array<LabelsForSingleChannel, NUMBER_OF_CHANNELS>;
