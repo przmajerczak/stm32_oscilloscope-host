@@ -3,9 +3,9 @@
 #include <gtk/gtk.h>
 
 #include "CallbackData.hpp"
-#include "sharedData/DynamicData.hpp"
-#include "measurements/VerticalMeasurements.hpp"
 #include "measurements/HorizontalMeasurements.hpp"
+#include "measurements/VerticalMeasurements.hpp"
+#include "sharedData/DynamicData.hpp"
 
 class MeasurementsControls
 {
@@ -18,6 +18,8 @@ private:
     void prepareMinVoltageLabel(DynamicData &dynamicData);
     void prepareMaxVoltageLabel(DynamicData &dynamicData);
     void prepareAvgVoltageLabel(DynamicData &dynamicData);
+
+    GtkWidget *getMeasurementsGridContainer();
 
     GtkWidget *frequencyLabel;
     GtkWidget *minVoltageLabel;

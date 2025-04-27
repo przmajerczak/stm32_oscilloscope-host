@@ -187,6 +187,40 @@ void MeasurementsControls::prepareAvgVoltageLabel(DynamicData &dynamicData)
                   &callbackDataForAvgVoltageLabel);
 }
 
+GtkWidget *MeasurementsControls::getMeasurementsGridContainer()
+{
+    auto title_label_f = gtk_label_new("f");
+    auto title_label_min = gtk_label_new("min");
+    auto title_label_avg = gtk_label_new("avg");
+    auto title_label_max = gtk_label_new("max");
+    auto title_label_amplitude = gtk_label_new("amplitude");
+
+    auto title_label_CH1 = gtk_label_new("CH1");
+    auto title_label_CH2 = gtk_label_new("CH2");
+
+    gtk_widget_set_hexpand(title_label_f, TRUE);
+    gtk_widget_set_hexpand(title_label_min, TRUE);
+    gtk_widget_set_hexpand(title_label_avg, TRUE);
+    gtk_widget_set_hexpand(title_label_max, TRUE);
+    gtk_widget_set_hexpand(title_label_amplitude, TRUE);
+    gtk_widget_set_hexpand(title_label_CH1, TRUE);
+    gtk_widget_set_hexpand(title_label_CH2, TRUE);
+
+    GtkWidget *measurementsGrid = gtk_grid_new();
+    gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_f, 0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_min, 0, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_avg, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_max, 0, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_amplitude, 0, 5, 1,
+                    1);
+
+    gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_CH1, 1, 0, 1, 1);
+
+    gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_CH2, 2, 0, 1, 1);
+
+    return measurementsGrid;
+}
+
 GtkWidget *MeasurementsControls::getMeasurementsControlsContainer()
 {
     GtkWidget *measurementsControlsExpander = gtk_expander_new("Measurements");
@@ -212,6 +246,9 @@ GtkWidget *MeasurementsControls::getMeasurementsControlsContainer()
                        TRUE, padding);
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), avgVoltageLabel, FALSE,
                        TRUE, padding);
+
+    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox),
+                       getMeasurementsGridContainer(), FALSE, TRUE, padding);
 
     gtk_container_add(GTK_CONTAINER(measurementsControlsExpander),
                       measurementsVerticalBox);
