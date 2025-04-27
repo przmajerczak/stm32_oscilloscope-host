@@ -30,10 +30,7 @@ public:
     GtkWidget *getMeasurementsControlsContainer();
 
 private:
-    void prepareFrequencyLabel(DynamicData &dynamicData);
-    void prepareMinVoltageLabel(DynamicData &dynamicData);
-    void prepareMaxVoltageLabel(DynamicData &dynamicData);
-    void prepareAvgVoltageLabel(DynamicData &dynamicData);
+    void prepareLabels(DynamicData &dynamicData);
 
     GtkWidget *getMeasurementsGridContainer();
 
