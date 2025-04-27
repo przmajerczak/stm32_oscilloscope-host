@@ -226,7 +226,7 @@ void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
                                          const TriggersIndexes &triggersIndexes,
                                          const ChannelId channelId)
 {
-    dynamicData.frequency_Hz.at(channelId) =
+    dynamicData.signalMeasurementsData.at(channelId).frequency_Hz =
         calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
                            dynamicData.frame_duration_ns);
 }

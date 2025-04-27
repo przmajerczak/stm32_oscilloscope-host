@@ -17,7 +17,8 @@ gboolean frequencyLabelTimeoutAction(gpointer _callbackData)
     std::stringstream labelContent;
     labelContent << "Signal frequency: ";
 
-    const double frequency_Hz{dynamicData->frequency_Hz.at(CHANNEL_1)};
+    const double frequency_Hz{
+        dynamicData->signalMeasurementsData.at(CHANNEL_1).frequency_Hz};
     if (frequency_Hz > 1000000.0)
     {
         labelContent << std::fixed << std::setprecision(2)
@@ -200,10 +201,13 @@ GtkWidget *MeasurementsControls::getMeasurementsControlsContainer()
         gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
 
     constexpr int padding{0};
-    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), verticalMeasurements.getVerticalMeasurementsContainer(), FALSE,
-                       TRUE, padding);
-    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), horizontalMeasurements.getHorizontalMeasurementsContainer(), FALSE,
-                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox),
+                       verticalMeasurements.getVerticalMeasurementsContainer(),
+                       FALSE, TRUE, padding);
+    gtk_box_pack_start(
+        GTK_BOX(measurementsVerticalBox),
+        horizontalMeasurements.getHorizontalMeasurementsContainer(), FALSE, TRUE,
+        padding);
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), frequencyLabel, FALSE,
                        TRUE, padding);
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox), minVoltageLabel, FALSE,

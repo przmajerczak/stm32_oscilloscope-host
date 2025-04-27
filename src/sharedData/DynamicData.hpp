@@ -1,11 +1,12 @@
 #pragma once
 
-#include "sharedData/constants.hpp"
-#include "sharedData/types.hpp"
+#include "sharedData/HorizontalMeasurementsData.hpp"
+#include "sharedData/SignalMeasurementsData.hpp"
+#include "sharedData/TimemarkersData.hpp"
 #include "sharedData/VerticalBoundsData.hpp"
 #include "sharedData/VerticalMeasurementsData.hpp"
-#include "sharedData/HorizontalMeasurementsData.hpp"
-#include "sharedData/TimemarkersData.hpp"
+#include "sharedData/constants.hpp"
+#include "sharedData/types.hpp"
 #include <array>
 #include <cstdint>
 
@@ -21,7 +22,7 @@ public:
     VerticalBoundsData verticalBoundsData;
     std::array<bool, NUMBER_OF_CHANNELS> active_channels;
     std::array<AdcValues, NUMBER_OF_CHANNELS> retrieved_adc_values;
-    std::array<double, NUMBER_OF_CHANNELS> frequency_Hz{0.0};
+    std::array<SignalMeasurementsData, NUMBER_OF_CHANNELS> signalMeasurementsData;
     double frame_duration_ns;
     double nanoseconds_per_sample;
     uint32_t horizontal_resolution_ns{DEFAULT_HORIZONTAL_RESOLUTION_NS};
