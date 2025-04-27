@@ -2,6 +2,7 @@
 #include "debug/Timemarker.hpp"
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
+#include <algorithm>
 #include <numeric>
 
 AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
@@ -226,7 +227,16 @@ void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
                                          const TriggersIndexes &triggersIndexes,
                                          const ChannelId channelId)
 {
-    dynamicData.signalMeasurementsData.at(channelId).frequency_Hz =
+    SignalMeasurementsData &signalMeasurementsData{
+        dynamicData.signalMeasurementsData.at(channelId)};
+
+    signalMeasurementsData.frequency_Hz =
         calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
                            dynamicData.frame_duration_ns);
+
+    const auto min_value{std::min_element(adc_values_to_display.begin(),
+                                          adc_values_to_display.end())};
+
+    signalMeasurementsData.min_value =
+        (min_value != adc_values_to_display.end()) ? *min_value : INVALID_VALUE;
 }

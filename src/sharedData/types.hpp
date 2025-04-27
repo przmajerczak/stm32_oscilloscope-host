@@ -4,8 +4,10 @@
 #include <list>
 #include <vector>
 
+using AdcValue = uint16_t;
+
 using EncodedAdcValues = std::list<uint8_t>;
-using AdcValues = std::vector<uint16_t>;
+using AdcValues = std::vector<AdcValue>;
 using TriggersIndexes = std::vector<std::size_t>;
 using ChannelId = std::size_t;
 

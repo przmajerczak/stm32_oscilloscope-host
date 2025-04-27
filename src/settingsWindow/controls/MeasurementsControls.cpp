@@ -49,16 +49,15 @@ gboolean minVoltageLabelTimeoutAction(gpointer _callbackData)
     GtkLabel *label = GTK_LABEL(minVoltageLabel);
     std::stringstream labelContent;
 
-    const auto min_voltage =
-        std::min_element(dynamicData->retrieved_adc_values.at(CHANNEL_1).begin(),
-                         dynamicData->retrieved_adc_values.at(CHANNEL_1).end());
-    if (min_voltage != dynamicData->retrieved_adc_values.at(CHANNEL_1).end())
+    const auto min_value{
+        dynamicData->signalMeasurementsData.at(CHANNEL_1).min_value};
+
+    if (min_value != INVALID_VALUE)
     {
-        labelContent << "Minimal voltage: "
-                     << scaleYToVoltage_mV(
-                            *dynamicData,
-                            scaleAdcValueToY(*dynamicData, *min_voltage))
-                     << " mV";
+        const auto min_voltage_mV = scaleYToVoltage_mV(
+            *dynamicData, scaleAdcValueToY(*dynamicData, min_value));
+
+        labelContent << "Minimal voltage: " << min_voltage_mV << " mV";
     }
     else
     {
