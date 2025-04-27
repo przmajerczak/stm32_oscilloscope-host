@@ -125,16 +125,19 @@ gboolean labelsTimeoutAction(gpointer _callbackData)
         (LabelsAndDynamicData *)_callbackData;
     DynamicData *dynamicData = labels_and_dynamic_data->dynamicData;
 
-    fillFrequencyLabel(*(labels_and_dynamic_data->labels_pointers), *dynamicData,
-                       CHANNEL_1);
-    fillMaxVoltageLabel(*(labels_and_dynamic_data->labels_pointers), *dynamicData,
-                        CHANNEL_1);
-    fillAvgVoltageLabel(*(labels_and_dynamic_data->labels_pointers), *dynamicData,
-                        CHANNEL_1);
-    fillMinVoltageLabel(*(labels_and_dynamic_data->labels_pointers), *dynamicData,
-                        CHANNEL_1);
+    for (ChannelId chId = CHANNEL_1; chId < NUMBER_OF_CHANNELS; ++chId)
+    {
+        fillFrequencyLabel(*(labels_and_dynamic_data->labels_pointers),
+                           *dynamicData, chId);
+        fillMaxVoltageLabel(*(labels_and_dynamic_data->labels_pointers),
+                            *dynamicData, chId);
+        fillAvgVoltageLabel(*(labels_and_dynamic_data->labels_pointers),
+                            *dynamicData, chId);
+        fillMinVoltageLabel(*(labels_and_dynamic_data->labels_pointers),
+                            *dynamicData, chId);
 
-    dynamicData->signalMeasurementsData.at(CHANNEL_1).reset();
+        dynamicData->signalMeasurementsData.at(chId).reset();
+    }
 
     return TRUE;
 }
@@ -155,17 +158,22 @@ void MeasurementsControls::prepare(DynamicData &dynamicData)
 
 void MeasurementsControls::prepareLabels(DynamicData &dynamicData)
 {
-    labels_pointers.at(CHANNEL_1).frequencyLabel = gtk_label_new("--- Hz");
-    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).frequencyLabel, TRUE);
+    for (ChannelId chId = CHANNEL_1; chId < NUMBER_OF_CHANNELS; ++chId)
+    {
+        auto &labels_for_single_channel{labels_pointers.at(chId)};
 
-    labels_pointers.at(CHANNEL_1).minVoltageLabel = gtk_label_new("--- mV");
-    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).minVoltageLabel, TRUE);
+        labels_for_single_channel.frequencyLabel = gtk_label_new("--- Hz");
+        gtk_widget_set_hexpand(labels_for_single_channel.frequencyLabel, TRUE);
 
-    labels_pointers.at(CHANNEL_1).maxVoltageLabel = gtk_label_new("-- mV");
-    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).maxVoltageLabel, TRUE);
+        labels_for_single_channel.minVoltageLabel = gtk_label_new("--- mV");
+        gtk_widget_set_hexpand(labels_for_single_channel.minVoltageLabel, TRUE);
 
-    labels_pointers.at(CHANNEL_1).avgVoltageLabel = gtk_label_new("--- mV");
-    gtk_widget_set_hexpand(labels_pointers.at(CHANNEL_1).avgVoltageLabel, TRUE);
+        labels_for_single_channel.maxVoltageLabel = gtk_label_new("-- mV");
+        gtk_widget_set_hexpand(labels_for_single_channel.maxVoltageLabel, TRUE);
+
+        labels_for_single_channel.avgVoltageLabel = gtk_label_new("--- mV");
+        gtk_widget_set_hexpand(labels_for_single_channel.avgVoltageLabel, TRUE);
+    }
 }
 
 GtkWidget *MeasurementsControls::getMeasurementsGridContainer()
@@ -206,6 +214,14 @@ GtkWidget *MeasurementsControls::getMeasurementsGridContainer()
                     labels_pointers.at(CHANNEL_1).minVoltageLabel, 1, 4, 1, 1);
 
     gtk_grid_attach(GTK_GRID(measurementsGrid), title_label_CH2, 2, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid),
+                    labels_pointers.at(CHANNEL_2).frequencyLabel, 2, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid),
+                    labels_pointers.at(CHANNEL_2).maxVoltageLabel, 2, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid),
+                    labels_pointers.at(CHANNEL_2).avgVoltageLabel, 2, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(measurementsGrid),
+                    labels_pointers.at(CHANNEL_2).minVoltageLabel, 2, 4, 1, 1);
 
     return measurementsGrid;
 }
