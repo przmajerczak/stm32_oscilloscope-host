@@ -41,7 +41,6 @@ void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
 
 void VerticalBoundControls::prepare(DynamicData &dynamicData)
 {
-    // TODO: make this display value in mV, not in ys
     GtkAdjustment *lower_bound_slider_adjustment = gtk_adjustment_new(
         MIN_VOLTAGE_mV, MIN_VOLTAGE_mV, MAX_VOLTAGE_mV, 1, 0.0, 0.0);
     vertical_lower_bound_slider =

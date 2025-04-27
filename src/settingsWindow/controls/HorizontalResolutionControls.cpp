@@ -15,8 +15,6 @@ void horizontalResolutionSliderOnChangeAction(GtkRange *range,
 
 void HorizontalResolutionControls::prepare(DynamicData &dynamicData)
 {
-    // TODO: extract to constants.hpp
-    // TODO set to 1-1000 and ad s/ms/us button
     constexpr uint8_t MIN_EXPONENT_OF_10{3};
     constexpr uint8_t DEFAULT_EXPONENT_OF_10{7};
     constexpr uint8_t MAX_EXPONENT_OF_10{8};
