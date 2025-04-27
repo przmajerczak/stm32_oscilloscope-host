@@ -13,11 +13,13 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
     const auto averaged_values{averageAdcValues(dynamicData, current_values)};
     const TriggersIndexes triggersIndexes{
         detectTriggers(dynamicData, averaged_values, channelId)};
-    dynamicData.frequency_Hz.at(channelId) =
-        calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
-                           dynamicData.frame_duration_ns);
 
-    return std::move(centerValuesOnTrigger(averaged_values, dynamicData));
+    const AdcValues adc_values_to_display{
+        centerValuesOnTrigger(averaged_values, dynamicData)};
+    calculateMeasurements(dynamicData, adc_values_to_display, triggersIndexes,
+                          channelId);
+
+    return std::move(adc_values_to_display);
 }
 
 // TODO: change this name
@@ -217,4 +219,14 @@ double DataAnalyzer::calculateFrequency(const TriggersIndexes &triggersIndexes,
     constexpr double NANOSECONDS_PER_GHZ{1000000000.0};
 
     return NANOSECONDS_PER_GHZ / median_signal_period_ns;
+}
+
+void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
+                                         const AdcValues adc_values_to_display,
+                                         const TriggersIndexes &triggersIndexes,
+                                         const ChannelId channelId)
+{
+    dynamicData.frequency_Hz.at(channelId) =
+        calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
+                           dynamicData.frame_duration_ns);
 }

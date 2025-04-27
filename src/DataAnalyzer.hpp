@@ -1,7 +1,7 @@
 #pragma once
 
-#include "sharedData/types.hpp"
 #include "sharedData/DynamicData.hpp"
+#include "sharedData/types.hpp"
 
 class DataAnalyzer
 {
@@ -24,4 +24,8 @@ private:
     double calculateFrequency(const TriggersIndexes &triggersIndexes,
                               const double nanoseconds_per_sample,
                               const double frame_duration_ns);
+    void calculateMeasurements(DynamicData &dynamicData,
+                               const AdcValues adc_values_to_display,
+                               const TriggersIndexes &triggersIndexes,
+                               const ChannelId channelId);
 };
