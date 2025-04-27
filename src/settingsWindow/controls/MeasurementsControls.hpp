@@ -6,6 +6,17 @@
 #include "measurements/HorizontalMeasurements.hpp"
 #include "measurements/VerticalMeasurements.hpp"
 #include "sharedData/DynamicData.hpp"
+#include "sharedData/constants.hpp"
+
+struct LabelsForSingleChannel
+{
+    GtkWidget *frequencyLabel;
+    GtkWidget *minVoltageLabel;
+    GtkWidget *maxVoltageLabel;
+    GtkWidget *avgVoltageLabel;
+};
+
+using LabelsPointers = std::array<LabelsForSingleChannel, NUMBER_OF_CHANNELS>;
 
 class MeasurementsControls
 {
@@ -21,10 +32,7 @@ private:
 
     GtkWidget *getMeasurementsGridContainer();
 
-    GtkWidget *frequencyLabel;
-    GtkWidget *minVoltageLabel;
-    GtkWidget *maxVoltageLabel;
-    GtkWidget *avgVoltageLabel;
+    LabelsPointers labels_pointers;
 
     CallbackData<DynamicData> callbackDataForFrequencyLabel;
     CallbackData<DynamicData> callbackDataForMinVoltageLabel;
