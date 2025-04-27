@@ -182,4 +182,10 @@ void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
 
     signalMeasurementsData.min_value =
         (min_value != adc_values_to_display.end()) ? *min_value : INVALID_VALUE;
+
+    const auto max_value{std::max_element(adc_values_to_display.begin(),
+                                          adc_values_to_display.end())};
+
+    signalMeasurementsData.max_value =
+        (max_value != adc_values_to_display.end()) ? *max_value : INVALID_VALUE;
 }

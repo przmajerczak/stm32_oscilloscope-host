@@ -79,16 +79,15 @@ gboolean maxVoltageLabelTimeoutAction(gpointer _callbackData)
     GtkLabel *label = GTK_LABEL(maxVoltageLabel);
     std::stringstream labelContent;
 
-    const auto max_voltage =
-        std::max_element(dynamicData->retrieved_adc_values.at(CHANNEL_1).begin(),
-                         dynamicData->retrieved_adc_values.at(CHANNEL_1).end());
-    if (max_voltage != dynamicData->retrieved_adc_values.at(CHANNEL_1).end())
+    const auto max_value{
+        dynamicData->signalMeasurementsData.at(CHANNEL_1).max_value};
+
+    if (max_value != INVALID_VALUE)
     {
-        labelContent << "Maximal voltage: "
-                     << scaleYToVoltage_mV(
-                            *dynamicData,
-                            scaleAdcValueToY(*dynamicData, *max_voltage))
-                     << " mV";
+        const auto max_voltage_mV = scaleYToVoltage_mV(
+            *dynamicData, scaleAdcValueToY(*dynamicData, max_value));
+
+        labelContent << "Maximal voltage: " << max_voltage_mV << " mV";
     }
     else
     {
