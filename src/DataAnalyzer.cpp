@@ -44,7 +44,7 @@ AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
     }
 
     AdcValues averaged_values;
-    averaged_values.resize(current_values.size() - averaging_window_size - 1);
+    averaged_values.resize(current_values.size() - averaging_window_size + 1);
 
     auto moving_average_window_front{current_values.begin()};
     auto moving_average_window_back{
@@ -64,7 +64,7 @@ AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
         moving_average_window_front++;
         moving_average_window_back++;
 
-        moving_average_window += *moving_average_window_back;
+        moving_average_window += *(moving_average_window_back - 1);
     }
 
     const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
