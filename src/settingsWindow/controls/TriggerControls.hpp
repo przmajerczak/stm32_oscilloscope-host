@@ -13,12 +13,16 @@ private:
     void prepareTriggerThresholdControls(DynamicData &dynamicData);
     void prepareTriggerHorizontalPositionControls(DynamicData &dynamicData);
     void prepareTriggerEdgeControls(DynamicData &dynamicData);
+    void prepareTriggerModeControls(DynamicData &dynamicData);
     void prepareTriggerSourceSelection(DynamicData &dynamicData);
 
     GtkWidget *trigger_threshold_label = nullptr;
     GtkWidget *trigger_threshold_slider = nullptr;
     GtkWidget *trigger_horizontal_position_label = nullptr;
     GtkWidget *trigger_horizontal_position_slider = nullptr;
+    GtkWidget *trigger_mode_label = nullptr;
+    GtkWidget *trigger_continuous_mode_button = nullptr;
+    GtkWidget *trigger_single_mode_button = nullptr;
     GtkWidget *trigger_edge_label = nullptr;
     GtkWidget *trigger_rising_edge_button = nullptr;
     GtkWidget *trigger_falling_edge_button = nullptr;

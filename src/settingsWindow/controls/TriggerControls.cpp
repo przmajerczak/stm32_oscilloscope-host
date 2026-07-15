@@ -52,6 +52,7 @@ void TriggerControls::prepare(DynamicData &dynamicData)
 {
     prepareTriggerThresholdControls(dynamicData);
     prepareTriggerHorizontalPositionControls(dynamicData);
+    prepareTriggerModeControls(dynamicData);
     prepareTriggerEdgeControls(dynamicData);
     prepareTriggerSourceSelection(dynamicData);
 }
@@ -96,6 +97,18 @@ void TriggerControls::prepareTriggerHorizontalPositionControls(
     g_signal_connect(trigger_horizontal_position_slider, "value-changed",
                      G_CALLBACK(triggerHorizontalPositionSliderOnChangeAction),
                      &dynamicData);
+}
+
+void TriggerControls::prepareTriggerModeControls(DynamicData &dynamicData)
+{
+    trigger_mode_label = gtk_label_new("Trigger mode (NOT YET IMPLEMENTED):");
+    gtk_widget_set_hexpand(trigger_mode_label, TRUE);
+
+    trigger_continuous_mode_button = gtk_button_new_with_label("Continuous");
+    gtk_widget_set_hexpand(trigger_continuous_mode_button, TRUE);
+
+    trigger_single_mode_button = gtk_button_new_with_label("Single");
+    gtk_widget_set_hexpand(trigger_single_mode_button, TRUE);
 }
 
 void TriggerControls::prepareTriggerEdgeControls(DynamicData &dynamicData)
@@ -156,6 +169,13 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
     gtk_box_pack_start(GTK_BOX(trigger_horizontal_position_box),
                        trigger_horizontal_position_slider, FALSE, TRUE, padding);
 
+    GtkWidget *trigger_mode_box =
+        gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
+    gtk_box_pack_start(GTK_BOX(trigger_mode_box), trigger_continuous_mode_button, FALSE,
+                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_mode_box), trigger_single_mode_button, FALSE,
+                       TRUE, padding);
+
     GtkWidget *trigger_edge_box =
         gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
     gtk_box_pack_start(GTK_BOX(trigger_edge_box), trigger_rising_edge_button, FALSE,
@@ -174,6 +194,10 @@ GtkWidget *TriggerControls::getTriggerControlsContainer()
                        trigger_horizontal_position_label, FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(trigger_controls_box),
                        trigger_horizontal_position_box, FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_mode_label, FALSE, TRUE,
+                       padding);
+    gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_mode_box, FALSE,
+                       TRUE, padding);
     gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_edge_label, FALSE, TRUE,
                        padding);
     gtk_box_pack_start(GTK_BOX(trigger_controls_box), trigger_edge_box, FALSE,
