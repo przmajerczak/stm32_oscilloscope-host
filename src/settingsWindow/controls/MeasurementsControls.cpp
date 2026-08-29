@@ -172,9 +172,6 @@ void MeasurementsControls::prepare(DynamicData &dynamicData)
 
     prepareLabels(dynamicData);
 
-    verticalMeasurements.prepare(dynamicData);
-    horizontalMeasurements.prepare(dynamicData);
-
     g_timeout_add(LABELS_REFRESH_RATE_MS, labelsTimeoutAction,
                   &labels_and_dynamic_data);
 }
@@ -262,14 +259,6 @@ GtkWidget *MeasurementsControls::getMeasurementsControlsContainer()
         gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
 
     constexpr int padding{0};
-    gtk_box_pack_start(GTK_BOX(measurementsVerticalBox),
-                       verticalMeasurements.getVerticalMeasurementsContainer(),
-                       FALSE, TRUE, padding);
-    gtk_box_pack_start(
-        GTK_BOX(measurementsVerticalBox),
-        horizontalMeasurements.getHorizontalMeasurementsContainer(), FALSE, TRUE,
-        padding);
-
     gtk_box_pack_start(GTK_BOX(measurementsVerticalBox),
                        getMeasurementsGridContainer(), FALSE, TRUE, padding);
 

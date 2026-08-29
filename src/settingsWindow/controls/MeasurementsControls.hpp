@@ -2,8 +2,6 @@
 
 #include <gtk/gtk.h>
 
-#include "measurements/HorizontalMeasurements.hpp"
-#include "measurements/VerticalMeasurements.hpp"
 #include "sharedData/DynamicData.hpp"
 #include "sharedData/constants.hpp"
 
@@ -38,7 +36,4 @@ private:
 
     LabelsPointers labels_pointers;
     LabelsAndDynamicData labels_and_dynamic_data;
-
-    VerticalMeasurements verticalMeasurements;
-    HorizontalMeasurements horizontalMeasurements;
 };

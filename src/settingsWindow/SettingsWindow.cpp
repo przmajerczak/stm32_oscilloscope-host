@@ -23,6 +23,8 @@ void SettingsWindow::fill(DynamicData &dynamicData)
     averagingControls.prepare(dynamicData);
     verticalBoundControls.prepare(dynamicData);
     horizontalResolutionControls.prepare(dynamicData);
+    verticalMeasurements.prepare(dynamicData);
+    horizontalMeasurements.prepare(dynamicData);
     measurementsControls.prepare(dynamicData);
     debugDataControls.prepare(dynamicData);
 
@@ -39,6 +41,8 @@ void SettingsWindow::fill(DynamicData &dynamicData)
     gtk_box_pack_start(GTK_BOX(vbox), averagingControls.getAveragingControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), verticalBoundControls.getVerticalBoundControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), horizontalResolutionControls.getHorizontalResolutionControlsContainer(), FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), verticalMeasurements.getVerticalMeasurementsContainer(), FALSE, TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(vbox), horizontalMeasurements.getHorizontalMeasurementsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), measurementsControls.getMeasurementsControlsContainer(), FALSE, TRUE, padding);
     gtk_box_pack_start(GTK_BOX(vbox), debugDataControls.getDebugDataControlsContainer(), FALSE, TRUE, padding);
 }
