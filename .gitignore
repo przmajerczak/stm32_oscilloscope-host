@@ -1,0 +1,8 @@
+.gitignore
+*CMakeFiles
+*.cmake
+Makefile
+CMakeCache.txt
+build/
+stm32_oscilloscope-host
+
