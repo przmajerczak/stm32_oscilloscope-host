@@ -1,7 +1,8 @@
 #pragma once
 
-#include "sharedData/DynamicData.hpp"
 #include "sharedData/types.hpp"
+
+class DynamicData;
 
 class DataAnalyzer
 {

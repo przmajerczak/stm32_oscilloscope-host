@@ -1,9 +1,9 @@
 #pragma once
 
 #include <gtk/gtk.h>
-
 #include "CallbackData.hpp"
-#include "sharedData/DynamicData.hpp"
+
+class DynamicData;
 
 class DebugDataControls
 {

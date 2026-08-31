@@ -1,6 +1,7 @@
 #include "DataAnalyzer.hpp"
 #include "debug/Timemarker.hpp"
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 #include "utils.hpp"
 #include <algorithm>
 #include <numeric>

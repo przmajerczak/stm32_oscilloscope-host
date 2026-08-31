@@ -10,7 +10,8 @@
 #include "controls/MeasurementsControls.hpp"
 #include "controls/TriggerControls.hpp"
 #include "controls/VerticalBoundControls.hpp"
-#include "sharedData/DynamicData.hpp"
+
+class DynamicData;
 
 class SettingsWindow
 {

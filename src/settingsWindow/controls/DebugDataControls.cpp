@@ -1,6 +1,7 @@
 #include "DebugDataControls.hpp"
 
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 #include <sstream>
 
 gboolean

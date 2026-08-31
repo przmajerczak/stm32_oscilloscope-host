@@ -1,7 +1,8 @@
 #pragma once
 
-#include "sharedData/DynamicData.hpp"
 #include <gtk/gtk.h>
+
+class DynamicData;
 
 class AveragingControls
 {

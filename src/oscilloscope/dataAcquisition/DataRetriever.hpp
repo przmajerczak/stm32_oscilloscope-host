@@ -3,10 +3,11 @@
 #include "AdcDataDecoder.hpp"
 #include "DeviceConnectionManager.hpp"
 #include "sharedData/constants.hpp"
-#include "sharedData/DynamicData.hpp"
 #include "sharedData/types.hpp"
 #include <array>
 #include <cstdint>
+
+class DynamicData;
 
 class DataRetriever
 {

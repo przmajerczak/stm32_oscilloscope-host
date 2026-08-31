@@ -1,5 +1,7 @@
 #include "VerticalBoundControls.hpp"
+
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 
 void verticalLowerBoundSliderOnChangeAction(GtkRange *range,
                                             gpointer _callbackData)

@@ -1,5 +1,7 @@
 #include "AveragingControls.hpp"
 
+#include "sharedData/DynamicData.hpp"
+
 void averagingWindowSizeSpinButtonOnChangeAction(GtkSpinButton *spin_button,
                                                  gpointer _dynamicData)
 {

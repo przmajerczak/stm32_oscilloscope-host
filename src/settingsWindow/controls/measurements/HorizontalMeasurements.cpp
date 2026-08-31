@@ -1,5 +1,7 @@
 #include "HorizontalMeasurements.hpp"
+
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 
 void baselineTimestampSliderOnChangeAction(GtkRange *range, gpointer data)
 {

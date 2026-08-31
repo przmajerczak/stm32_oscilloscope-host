@@ -1,6 +1,7 @@
 #include "SettingsWindow.hpp"
 
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 #include <thread>
 
 void SettingsWindow::configure()

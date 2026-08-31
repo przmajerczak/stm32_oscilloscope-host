@@ -1,7 +1,8 @@
 #pragma once
 
 #include "sharedData/types.hpp"
-#include "sharedData/DynamicData.hpp"
+
+class DynamicData;
 
 class AdcDataDecoder
 {

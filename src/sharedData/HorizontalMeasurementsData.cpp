@@ -1,4 +1,6 @@
 #include "HorizontalMeasurementsData.hpp"
+
+#include "sharedData/DynamicData.hpp"
 #include "utils.hpp"
 
 void HorizontalMeasurementsData::notifyAboutBaselineChange(

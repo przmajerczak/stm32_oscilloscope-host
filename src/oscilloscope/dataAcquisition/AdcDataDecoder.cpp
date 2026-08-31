@@ -1,6 +1,7 @@
 #include "AdcDataDecoder.hpp"
 
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 
 AdcValuesArray AdcDataDecoder::decodeAdcValues(const EncodedAdcValues &encoded_values)
 {

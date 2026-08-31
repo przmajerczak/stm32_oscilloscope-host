@@ -1,6 +1,7 @@
 #include "HorizontalResolutionControls.hpp"
 
 #include <cmath>
+#include "sharedData/DynamicData.hpp"
 
 void horizontalResolutionSliderOnChangeAction(GtkRange *range,
                                               gpointer _dynamicData)

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include "sharedData/DynamicData.hpp"
+
+class DynamicData;
 
 class TriggerControls
 {

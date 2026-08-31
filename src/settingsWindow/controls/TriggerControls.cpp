@@ -1,6 +1,7 @@
 #include "TriggerControls.hpp"
 
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 #include "sharedData/types.hpp"
 
 void triggerThresholdSliderOnChangeAction(GtkRange *range, gpointer data)

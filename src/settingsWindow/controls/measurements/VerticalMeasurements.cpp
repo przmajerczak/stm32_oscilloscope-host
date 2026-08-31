@@ -1,5 +1,7 @@
 #include "VerticalMeasurements.hpp"
+
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 
 void baselineVoltageSliderOnChangeAction(GtkRange *range, gpointer data)
 {

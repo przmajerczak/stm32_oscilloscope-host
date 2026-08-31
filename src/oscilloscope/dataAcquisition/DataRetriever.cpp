@@ -2,6 +2,7 @@
 
 #include "debug/Timemarker.hpp"
 #include "sharedData/constants.hpp"
+#include "sharedData/DynamicData.hpp"
 #include <fcntl.h>
 #include <iostream>
 #include <thread>

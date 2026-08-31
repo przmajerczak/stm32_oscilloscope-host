@@ -1,8 +1,9 @@
 #pragma once
 
 #include "settingsWindow/controls/CallbackData.hpp"
-#include "sharedData/DynamicData.hpp"
 #include <gtk/gtk.h>
+
+class DynamicData;
 
 class VerticalBoundControls
 {
