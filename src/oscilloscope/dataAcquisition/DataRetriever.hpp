@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AdcDataDecoder.hpp"
 #include "DeviceConnectionManager.hpp"
 #include "sharedData/constants.hpp"
 #include "sharedData/DynamicData.hpp"
@@ -22,11 +23,8 @@ private:
                            const uint8_t last_byte) const;
     DualChannelMode determineChannelMode(const uint8_t last_byte) const;
     ChannelId determineChannelId(const uint8_t second_last_byte) const;
-    AdcValuesArray decodeAdcValues(const EncodedAdcValues &encoded_values);
-    double calculateFrameDuration_ns(EncodedAdcValues &undecodedRetrievedData);
-    uint32_t pullFrameDurationFromUndecodedRetrievedData(
-        EncodedAdcValues &undecodedRetrievedData);
 
+    AdcDataDecoder decoder;
     DeviceConnectionManager device;
     int deviceFileDescriptor;
     std::array<AdcValuesArray, NUMBER_OF_CHANNELS> retrieved_adc_values;

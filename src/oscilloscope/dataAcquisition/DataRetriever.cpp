@@ -54,32 +54,10 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
         receivedBytes = undecodedRetrievedData.values.size();
     }
 
-    if (undecodedRetrievedData.mode == DualChannelMode::ON)
-    {
-        dynamicData.active_channels.at(CHANNEL_1) = true;
-        dynamicData.active_channels.at(CHANNEL_2) = true;
-    }
-    else
-    {
-        if (undecodedRetrievedData.channelId == CHANNEL_1)
-        {
-            dynamicData.active_channels.at(CHANNEL_1) = true;
-            dynamicData.active_channels.at(CHANNEL_2) = false;
-        }
-        else
-        {
-            dynamicData.active_channels.at(CHANNEL_1) = false;
-            dynamicData.active_channels.at(CHANNEL_2) = true;
-        }
-
-        dynamicData.trigger_source = undecodedRetrievedData.channelId;
-    }
-
-    dynamicData.frame_duration_ns =
-        calculateFrameDuration_ns(undecodedRetrievedData.values);
+    decoder.fillDynamicData(dynamicData, undecodedRetrievedData);
 
     retrieved_adc_values.at(undecodedRetrievedData.channelId) =
-        decodeAdcValues(undecodedRetrievedData.values);
+        decoder.decodeAdcValues(undecodedRetrievedData.values);
 }
 
 EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
@@ -167,50 +145,4 @@ DataRetriever::determineChannelId(const uint8_t second_last_byte) const
     }
 
     return NUMBER_OF_CHANNELS;
-}
-
-AdcValuesArray DataRetriever::decodeAdcValues(const EncodedAdcValues &encoded_values)
-{
-    AdcValuesArray decoded_values;
-
-    auto current_encoded_values{encoded_values.begin()};
-    auto next_encoded_values{std::next(current_encoded_values, 1)};
-
-    for (std::size_t i = 0; i < SAMPLES_PER_TRANSMISSION; ++i)
-    {
-        decoded_values.at(i) = *current_encoded_values + (*next_encoded_values << 8);
-
-        ++current_encoded_values;
-        ++current_encoded_values;
-        ++next_encoded_values;
-        ++next_encoded_values;
-    }
-
-    return decoded_values;
-}
-
-double DataRetriever::calculateFrameDuration_ns(
-    EncodedAdcValues &undecodedRetrievedData)
-{
-    uint32_t timer_doubleticks_per_frame{
-        pullFrameDurationFromUndecodedRetrievedData(undecodedRetrievedData)};
-
-    constexpr double TIMER_COUNTS_UPWARDS_EDGE_TICKS{2.0};
-
-    return timer_doubleticks_per_frame * DEVICE_TIMER_SINGLE_TICK_DURATION_NS *
-           TIMER_COUNTS_UPWARDS_EDGE_TICKS;
-}
-
-uint32_t DataRetriever::pullFrameDurationFromUndecodedRetrievedData(
-    EncodedAdcValues &undecodedRetrievedData)
-{
-    uint32_t timer_doubleticks_per_frame{0};
-
-    for (int i = 3; i >= 0; --i)
-    {
-        timer_doubleticks_per_frame += (undecodedRetrievedData.back() << (i * 8));
-        undecodedRetrievedData.pop_back();
-    }
-
-    return timer_doubleticks_per_frame;
 }
