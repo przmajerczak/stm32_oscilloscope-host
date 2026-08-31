@@ -4,7 +4,7 @@
 #include "sharedData/types.hpp"
 #include "display/LineDrawer.hpp"
 #include "DataAnalyzer.hpp"
-#include "DataRetriever.hpp"
+#include "dataAcquisition/DataRetriever.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
