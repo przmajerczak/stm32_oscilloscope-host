@@ -25,6 +25,12 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
     t.detach();
 }
 
+AdcValuesArray DataRetriever::getCopyOfRetrievedAdcValues(const ChannelId chId)
+{
+    // TODO: handle multithreading better
+    return retrieved_adc_values.at(chId);
+}
+
 void DataRetriever::establishConnection()
 {
     deviceFileDescriptor = open(determineDeviceFilepath().c_str(), O_RDONLY);
@@ -162,7 +168,7 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
     dynamicData.frame_duration_ns =
         calculateFrameDuration_ns(undecodedRetrievedData.values);
 
-    dynamicData.retrieved_adc_values.at(undecodedRetrievedData.channelId) =
+    retrieved_adc_values.at(undecodedRetrievedData.channelId) =
         decodeAdcValues(undecodedRetrievedData.values);
 }
 

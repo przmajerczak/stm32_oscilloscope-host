@@ -1,7 +1,9 @@
 #pragma once
 
+#include "sharedData/constants.hpp"
 #include "sharedData/DynamicData.hpp"
 #include "sharedData/types.hpp"
+#include <array>
 #include <cstdint>
 #include <string>
 #include <unistd.h>
@@ -12,6 +14,7 @@ public:
     ~DataRetriever() { close(deviceFileDescriptor); }
 
     void runContinuousDataRetrieve(DynamicData &dynamicData);
+    AdcValuesArray getCopyOfRetrievedAdcValues(const ChannelId chId);
 
 private:
     void establishConnection();
@@ -29,4 +32,5 @@ private:
         EncodedAdcValues &undecodedRetrievedData);
 
     int deviceFileDescriptor;
+    std::array<AdcValuesArray, NUMBER_OF_CHANNELS> retrieved_adc_values;
 };

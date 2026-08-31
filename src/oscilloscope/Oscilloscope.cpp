@@ -63,14 +63,7 @@ void Oscilloscope::display()
 
 void Oscilloscope::drawWaveform(const ChannelId channelId)
 {
-    if (dynamicData.retrieved_adc_values.at(channelId).empty())
-    {
-        return;
-    }
-
-    // TODO: handle multithreading better
-    auto adcValuesToDisplay{dataAnalyzer.prepareData(
-        dynamicData.retrieved_adc_values.at(channelId), dynamicData, channelId)};
+    auto adcValuesToDisplay{dataAnalyzer.prepareData(dataRetriever.getCopyOfRetrievedAdcValues(channelId), dynamicData, channelId)};
 
     auto value_it{adcValuesToDisplay.begin()};
 
