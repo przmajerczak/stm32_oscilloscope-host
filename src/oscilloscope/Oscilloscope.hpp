@@ -2,7 +2,7 @@
 
 #include "sharedData/DynamicData.hpp"
 #include "sharedData/types.hpp"
-#include "display/utils/LineDrawer.hpp"
+#include "display/LineDrawer.hpp"
 #include "DataAnalyzer.hpp"
 #include "DataRetriever.hpp"
 #include <GL/glew.h>

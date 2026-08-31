@@ -1,6 +1,6 @@
 #pragma once
 
-#include "display/utils/TextPrinter.hpp"
+#include "display/TextPrinter.hpp"
 #include "sharedData/DynamicData.hpp"
 #include "sharedData/constants.hpp"
 
