@@ -8,14 +8,14 @@ class DataAnalyzer
 public:
     DataAnalyzer() {}
 
-    AdcValues prepareData(const AdcValues &current_values,
-                          DynamicData &dynamicData, const ChannelId channelId);
+    AdcValuesVector prepareData(const AdcValuesArray &current_values,
+                                DynamicData &dynamicData, const ChannelId channelId);
 
 private:
-    AdcValues averageAdcValues(DynamicData &dynamicData,
-                               const AdcValues &current_values);
+    AdcValuesVector averageAdcValues(DynamicData &dynamicData,
+                                     const AdcValuesArray &current_values);
     TriggersIndexes detectTriggers(DynamicData &dynamicData,
-                                   const AdcValues &averaged_values,
+                                   const AdcValuesVector &averaged_values,
                                    const ChannelId channelId);
     bool isTrigger(const DynamicData &dynamicData, const uint16_t leftValue,
                    const uint16_t rightValue);
@@ -23,7 +23,7 @@ private:
                               const double nanoseconds_per_sample,
                               const double frame_duration_ns);
     void calculateMeasurements(DynamicData &dynamicData,
-                               const AdcValues adc_values_to_display,
+                               const AdcValuesVector adc_values_to_display,
                                const TriggersIndexes &triggersIndexes,
                                const ChannelId channelId);
 };

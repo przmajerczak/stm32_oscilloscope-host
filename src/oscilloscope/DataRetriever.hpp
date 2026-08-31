@@ -22,7 +22,7 @@ private:
                            const uint8_t last_byte) const;
     DualChannelMode determineChannelMode(const uint8_t last_byte) const;
     ChannelId determineChannelId(const uint8_t second_last_byte) const;
-    AdcValues decodeAdcValues(const EncodedAdcValues &encoded_values);
+    AdcValuesArray decodeAdcValues(const EncodedAdcValues &encoded_values);
     bool configureTty(const int deviceFileDescriptor);
     double calculateFrameDuration_ns(EncodedAdcValues &undecodedRetrievedData);
     uint32_t pullFrameDurationFromUndecodedRetrievedData(

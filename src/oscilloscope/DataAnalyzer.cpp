@@ -5,9 +5,9 @@
 #include <algorithm>
 #include <numeric>
 
-AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
-                                    DynamicData &dynamicData,
-                                    const ChannelId channelId)
+AdcValuesVector DataAnalyzer::prepareData(const AdcValuesArray &current_values,
+                                          DynamicData &dynamicData,
+                                          const ChannelId channelId)
 {
     Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
 
@@ -21,30 +21,38 @@ AdcValues DataAnalyzer::prepareData(const AdcValues &current_values,
     return std::move(averaged_values);
 }
 
-AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
-                                         const AdcValues &current_values)
+AdcValuesVector DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
+                                               const AdcValuesArray &current_values)
 {
+    AdcValuesVector averaged_values;
+
     const uint16_t averaging_window_size{dynamicData.averaging_window_size};
 
     if (averaging_window_size < 2)
     {
         const double nanoseconds_per_sample{dynamicData.frame_duration_ns /
-                                            current_values.size()};
+                                            SAMPLES_PER_TRANSMISSION};
         dynamicData.nanoseconds_per_sample = nanoseconds_per_sample;
 
-        return std::move(current_values);
+        averaged_values.resize(SAMPLES_PER_TRANSMISSION);
+        std::copy(current_values.begin(), current_values.end(), averaged_values.begin());
+
+        return std::move(averaged_values);
     }
 
-    if (averaging_window_size > current_values.size())
+    if (averaging_window_size > SAMPLES_PER_TRANSMISSION)
     {
         std::cerr << "Moving average window size exceeds number of samples per "
                      "frame - averaging not possible."
                   << std::endl;
-        return std::move(current_values);
+
+        averaged_values.resize(SAMPLES_PER_TRANSMISSION);
+        std::copy(current_values.begin(), current_values.end(), averaged_values.begin());
+
+        return std::move(averaged_values);
     }
 
-    AdcValues averaged_values;
-    averaged_values.resize(current_values.size() - averaging_window_size + 1);
+    averaged_values.resize(SAMPLES_PER_TRANSMISSION - averaging_window_size + 1);
 
     auto moving_average_window_front{current_values.begin()};
     auto moving_average_window_back{
@@ -75,7 +83,7 @@ AdcValues DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
 }
 
 TriggersIndexes DataAnalyzer::detectTriggers(DynamicData &dynamicData,
-                                             const AdcValues &averaged_values,
+                                             const AdcValuesVector &averaged_values,
                                              const ChannelId channelId)
 {
     TriggersIndexes triggersIndexes;
@@ -174,7 +182,7 @@ double DataAnalyzer::calculateFrequency(const TriggersIndexes &triggersIndexes,
 }
 
 void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
-                                         const AdcValues adc_values_to_display,
+                                         const AdcValuesVector adc_values_to_display,
                                          const TriggersIndexes &triggersIndexes,
                                          const ChannelId channelId)
 {

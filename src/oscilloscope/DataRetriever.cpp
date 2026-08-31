@@ -253,18 +253,16 @@ DataRetriever::determineChannelId(const uint8_t second_last_byte) const
     return NUMBER_OF_CHANNELS;
 }
 
-AdcValues
-DataRetriever::decodeAdcValues(const EncodedAdcValues &encoded_values)
+AdcValuesArray DataRetriever::decodeAdcValues(const EncodedAdcValues &encoded_values)
 {
-    AdcValues decoded_values;
-    decoded_values.resize(encoded_values.size() / 2);
+    AdcValuesArray decoded_values;
 
     auto current_encoded_values{encoded_values.begin()};
     auto next_encoded_values{std::next(current_encoded_values, 1)};
 
-    for (auto &decoded_value : decoded_values)
+    for (std::size_t i = 0; i < SAMPLES_PER_TRANSMISSION; ++i)
     {
-        decoded_value = *current_encoded_values + (*next_encoded_values << 8);
+        decoded_values.at(i) = *current_encoded_values + (*next_encoded_values << 8);
 
         ++current_encoded_values;
         ++current_encoded_values;

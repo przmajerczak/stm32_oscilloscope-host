@@ -21,7 +21,7 @@ public:
 
     VerticalBoundsData verticalBoundsData;
     std::array<bool, NUMBER_OF_CHANNELS> active_channels;
-    std::array<AdcValues, NUMBER_OF_CHANNELS> retrieved_adc_values;
+    std::array<AdcValuesArray, NUMBER_OF_CHANNELS> retrieved_adc_values;
     std::array<SignalMeasurementsData, NUMBER_OF_CHANNELS> signalMeasurementsData;
     double frame_duration_ns;
     double nanoseconds_per_sample;

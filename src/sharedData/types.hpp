@@ -1,13 +1,16 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <list>
 #include <vector>
+#include "sharedData/constants.hpp"
 
 using AdcValue = uint16_t;
 
 using EncodedAdcValues = std::list<uint8_t>;
-using AdcValues = std::vector<AdcValue>;
+using AdcValuesArray = std::array<AdcValue, SAMPLES_PER_TRANSMISSION>;
+using AdcValuesVector = std::vector<AdcValue>;
 using TriggersIndexes = std::vector<std::size_t>;
 using ChannelId = std::size_t;
 
