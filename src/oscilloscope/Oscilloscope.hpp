@@ -2,17 +2,19 @@
 
 #include "sharedData/DynamicData.hpp"
 #include "sharedData/types.hpp"
-#include "utils/LineDrawer.hpp"
+#include "display/utils/LineDrawer.hpp"
 #include "DataAnalyzer.hpp"
+#include "DataRetriever.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-class DisplayHelper
+class Oscilloscope
 {
 public:
-    DisplayHelper(DynamicData &dynamicData);
+    Oscilloscope(DynamicData &dynamicData);
 
     void run();
+    void runDataRetrieve();
 
 private:
     void display();
@@ -22,4 +24,5 @@ private:
     GLFWwindow *window = nullptr;
 
     DataAnalyzer dataAnalyzer;
+    DataRetriever dataRetriever;
 };

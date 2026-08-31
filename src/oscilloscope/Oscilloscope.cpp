@@ -1,10 +1,10 @@
-#include "DisplayHelper.hpp"
+#include "Oscilloscope.hpp"
 
 #include "debug/Timemarker.hpp"
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
 
-DisplayHelper::DisplayHelper(DynamicData &dynamicData)
+Oscilloscope::Oscilloscope(DynamicData &dynamicData)
     : dynamicData(dynamicData)
 {
     glfwInit();
@@ -27,7 +27,7 @@ DisplayHelper::DisplayHelper(DynamicData &dynamicData)
     gluOrtho2D(0.0, X_WINDOW_SIZE, 0.0, Y_WINDOW_SIZE);
 }
 
-void DisplayHelper::display()
+void Oscilloscope::display()
 {
     Timemarker tmarker{
         dynamicData.timemarkersData.customNonLibraryFrameDisplayDuration};
@@ -61,7 +61,7 @@ void DisplayHelper::display()
     glFlush();
 }
 
-void DisplayHelper::drawWaveform(const ChannelId channelId)
+void Oscilloscope::drawWaveform(const ChannelId channelId)
 {
     if (dynamicData.retrieved_adc_values.at(channelId).empty())
     {
@@ -125,7 +125,7 @@ void DisplayHelper::drawWaveform(const ChannelId channelId)
     glEnd();
 }
 
-void DisplayHelper::run()
+void Oscilloscope::run()
 {
     while (!glfwWindowShouldClose(window))
     {
@@ -143,4 +143,9 @@ void DisplayHelper::run()
             dynamicData.display_configuration_changed = false;
         }
     }
+}
+
+void Oscilloscope::runDataRetrieve()
+{
+    dataRetriever.runContinuousDataRetrieve(dynamicData);
 }
