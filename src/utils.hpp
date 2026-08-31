@@ -7,13 +7,13 @@
 #include <iostream>
 
 static float scaleAdcValueToY(const DynamicData &dynamicData,
-                            const uint16_t adc_value)
+                              const uint16_t adc_value)
 {
-    const float current_vertical_display_resolution{
+    const auto current_vertical_display_resolution{
         dynamicData.verticalBoundsData.verticalUpperBound() -
         dynamicData.verticalBoundsData.verticalLowerBound()};
     const float factor{INPUT_SIGNAL_RESOLUTION /
-                       current_vertical_display_resolution};
+                       static_cast<float>(current_vertical_display_resolution)};
     float scaled_adc_value{
         (adc_value - dynamicData.verticalBoundsData.verticalLowerBound()) *
         factor};
@@ -35,11 +35,11 @@ static float scaleAdcValueToY(const DynamicData &dynamicData,
 
 static int scaleYToVoltage_mV(const DynamicData &dynamicData, const float y)
 {
-    const float current_vertical_display_resolution{
+    const auto current_vertical_display_resolution{
         dynamicData.verticalBoundsData.verticalUpperBound_mV() -
         dynamicData.verticalBoundsData.verticalLowerBound_mV()};
 
-    return ((y * current_vertical_display_resolution) /
+    return ((y * static_cast<float>(current_vertical_display_resolution)) /
             static_cast<float>(Y_DISPLAY_RESOLUTION)) +
            dynamicData.verticalBoundsData.verticalLowerBound_mV();
 }
@@ -47,11 +47,11 @@ static int scaleYToVoltage_mV(const DynamicData &dynamicData, const float y)
 static uint16_t scaleYToAdcWithinBounds(const DynamicData &dynamicData,
                                         const float y)
 {
-    const float current_vertical_display_resolution{
+    const auto current_vertical_display_resolution{
         dynamicData.verticalBoundsData.verticalUpperBound() -
         dynamicData.verticalBoundsData.verticalLowerBound()};
 
-    return ((y * current_vertical_display_resolution) /
+    return ((y * static_cast<float>(current_vertical_display_resolution)) /
             static_cast<float>(Y_DISPLAY_RESOLUTION)) +
            dynamicData.verticalBoundsData.verticalLowerBound();
 }
