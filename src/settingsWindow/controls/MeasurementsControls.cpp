@@ -55,8 +55,8 @@ void fillMaxVoltageLabel(const LabelsPointers &labels_pointers,
 
     if (max_value != INVALID_VALUE)
     {
-        const auto max_voltage_mV = scaleYToVoltage_mV(
-            dynamicData, scaleAdcValueToY(dynamicData, max_value));
+        const auto max_voltage_mV = static_cast<int>(scaleYToVoltage_mV(
+            dynamicData, scaleAdcValueToY(dynamicData, max_value)));
 
         labelContent << max_voltage_mV << " mV";
     }
@@ -82,12 +82,12 @@ void fillAvgVoltageLabel(const LabelsPointers &labels_pointers,
     }
     else
     {
-        labelContent << scaleYToVoltage_mV(
+        labelContent << static_cast<int>(scaleYToVoltage_mV(
                             dynamicData,
                             scaleAdcValueToY(
                                 dynamicData,
                                 dynamicData.signalMeasurementsData.at(channelId)
-                                    .average_value))
+                                    .average_value)))
                      << " mV";
     }
 
@@ -106,8 +106,8 @@ void fillMinVoltageLabel(const LabelsPointers &labels_pointers,
 
     if (min_value != INVALID_VALUE)
     {
-        const auto min_voltage_mV = scaleYToVoltage_mV(
-            dynamicData, scaleAdcValueToY(dynamicData, min_value));
+        const auto min_voltage_mV = static_cast<int>(scaleYToVoltage_mV(
+            dynamicData, scaleAdcValueToY(dynamicData, min_value)));
 
         labelContent << min_voltage_mV << " mV";
     }
@@ -131,8 +131,8 @@ void fillAmplitudeLabel(const LabelsPointers &labels_pointers,
 
     if (amplitude != INVALID_VALUE)
     {
-        const auto amplitude_mV = scaleYToVoltage_mV(
-            dynamicData, scaleAdcValueToY(dynamicData, amplitude));
+        const auto amplitude_mV = static_cast<int>(scaleYToVoltage_mV(
+            dynamicData, scaleAdcValueToY(dynamicData, amplitude)));
 
         labelContent << amplitude_mV << " mV";
     }

@@ -102,7 +102,7 @@ void LineDrawer::drawHorizontalLineWithLabels(const float y,
     const float lower_line_y{upper_line_y - 20}; // TODO: remove magic number
 
     const std::string voltage_value{
-        std::to_string(scaleYToVoltage_mV(dynamicData, y))};
+        std::to_string(static_cast<int>(scaleYToVoltage_mV(dynamicData, y)))};
 
     textPrinter.drawText(right_x, upper_line_y, voltage_value.c_str());
     textPrinter.drawText(right_x, lower_line_y, unit_label);

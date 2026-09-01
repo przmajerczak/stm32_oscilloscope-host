@@ -33,13 +33,13 @@ static float scaleAdcValueToY(const DynamicData &dynamicData,
     return y;
 }
 
-static int scaleYToVoltage_mV(const DynamicData &dynamicData, const float y)
+static float scaleYToVoltage_mV(const DynamicData &dynamicData, const float y)
 {
     const auto current_vertical_display_resolution{
         dynamicData.verticalBoundsData.verticalUpperBound_mV() -
         dynamicData.verticalBoundsData.verticalLowerBound_mV()};
 
-    return ((y * static_cast<float>(current_vertical_display_resolution)) /
+    return ((y * current_vertical_display_resolution) /
             static_cast<float>(Y_DISPLAY_RESOLUTION)) +
            dynamicData.verticalBoundsData.verticalLowerBound_mV();
 }
