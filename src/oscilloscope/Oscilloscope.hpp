@@ -19,6 +19,8 @@ public:
 private:
     void display();
     void drawWaveform(const ChannelId channelId);
+    float scaleMillivoltsToYWithinBounds(const DynamicData &dynamicData, const float millivolts) const;
+
     DynamicData &dynamicData;
     LineDrawer lineDrawer{dynamicData};
     GLFWwindow *window = nullptr;

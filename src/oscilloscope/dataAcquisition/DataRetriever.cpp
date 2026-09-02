@@ -25,10 +25,10 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
     t.detach();
 }
 
-AdcValuesArray DataRetriever::getCopyOfRetrievedAdcValues(const ChannelId chId)
+MillivoltsArray DataRetriever::getCopyOfRetrievedValues_mV(const ChannelId chId)
 {
     // TODO: handle multithreading better
-    return retrieved_adc_values.at(chId);
+    return retrieved_values_mV.at(chId);
 }
 
 void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
@@ -57,8 +57,9 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 
     decoder.fillDynamicData(dynamicData, undecodedRetrievedData);
 
-    retrieved_adc_values.at(undecodedRetrievedData.channelId) =
-        decoder.decodeAdcValues(undecodedRetrievedData.values);
+
+    retrieved_values_mV.at(undecodedRetrievedData.channelId) =
+        decoder.decodeAdcValuesInto_mV(undecodedRetrievedData.values);
 }
 
 EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)

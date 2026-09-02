@@ -8,8 +8,7 @@ void triggerThresholdSliderOnChangeAction(GtkRange *range, gpointer data)
 {
     // TODO: use static_cast instead of C-style casts
     DynamicData *dynamicData = (DynamicData *)data;
-    dynamicData->triggerThresholdSliderValue =
-        static_cast<uint16_t>(gtk_range_get_value(range));
+    dynamicData->triggerThresholdSliderValue_mV = gtk_range_get_value(range);
 
     dynamicData->display_configuration_changed = true;
 }
@@ -63,9 +62,8 @@ void TriggerControls::prepareTriggerThresholdControls(DynamicData &dynamicData)
     trigger_threshold_label = gtk_label_new("Trigger threshold value:");
     gtk_widget_set_hexpand(trigger_threshold_label, TRUE);
 
-    // TODO: refactor to allow step=1mV instead of one y
     GtkAdjustment *adjustment = gtk_adjustment_new(
-        DEFAULT_TRIGGER_THRESHOLD, 0, Y_DISPLAY_RESOLUTION, 1, 0.0, 0.0);
+        DEFAULT_TRIGGER_THRESHOLD_mV, MIN_VOLTAGE_mV, MAX_VOLTAGE_mV, 1, 0.0, 0.0);
     trigger_threshold_slider =
         gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adjustment);
 

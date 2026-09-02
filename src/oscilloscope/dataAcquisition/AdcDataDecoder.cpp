@@ -3,16 +3,17 @@
 #include "sharedData/constants.hpp"
 #include "sharedData/DynamicData.hpp"
 
-AdcValuesArray AdcDataDecoder::decodeAdcValues(const EncodedAdcValues &encoded_values)
+MillivoltsArray AdcDataDecoder::decodeAdcValuesInto_mV(const EncodedAdcValues &encoded_values)
 {
-    AdcValuesArray decoded_values;
+    MillivoltsArray decoded_values;
 
     auto current_encoded_values{encoded_values.begin()};
     auto next_encoded_values{std::next(current_encoded_values, 1)};
 
     for (std::size_t i = 0; i < SAMPLES_PER_TRANSMISSION; ++i)
     {
-        decoded_values.at(i) = *current_encoded_values + (*next_encoded_values << 8);
+        AdcValue decoded_value = *current_encoded_values + (*next_encoded_values << 8);
+        decoded_values.at(i) = scaleAdcTo_mV(decoded_value);
 
         ++current_encoded_values;
         ++current_encoded_values;
@@ -75,4 +76,12 @@ uint32_t AdcDataDecoder::pullFrameDurationFromEncodedRetrievedData(
     }
 
     return timer_doubleticks_per_frame;
+}
+
+float AdcDataDecoder::scaleAdcTo_mV(const AdcValue adc_value) const
+{
+    constexpr float RESOLUTION_FACTOR{((ABSOULTE_VERTICAL_RESOLUTION_mV) / (static_cast<float>(INPUT_SIGNAL_RESOLUTION)))};
+    constexpr float SIGNAL_FLOOR{RESOLUTION_FACTOR * static_cast<float>(INPUT_SIGNAL_MIN) + MIN_VOLTAGE_mV};
+
+    return static_cast<float>(adc_value) * RESOLUTION_FACTOR + SIGNAL_FLOOR;
 }

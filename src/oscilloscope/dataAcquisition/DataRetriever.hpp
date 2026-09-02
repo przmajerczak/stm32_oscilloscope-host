@@ -15,7 +15,7 @@ public:
     ~DataRetriever();
 
     void runContinuousDataRetrieve(DynamicData &dynamicData);
-    AdcValuesArray getCopyOfRetrievedAdcValues(const ChannelId chId);
+    MillivoltsArray getCopyOfRetrievedValues_mV(const ChannelId chId);
 
 private:
     void singleDataRetrieve(DynamicData &dynamicData);
@@ -28,5 +28,5 @@ private:
     AdcDataDecoder decoder;
     DeviceConnectionManager device;
     int deviceFileDescriptor;
-    std::array<AdcValuesArray, NUMBER_OF_CHANNELS> retrieved_adc_values;
+    std::array<MillivoltsArray, NUMBER_OF_CHANNELS> retrieved_values_mV;
 };

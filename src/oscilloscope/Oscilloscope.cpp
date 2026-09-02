@@ -44,8 +44,10 @@ void Oscilloscope::display()
         }
     }
 
-    lineDrawer.drawTriggerIndicator(dynamicData.trigger_horizontal_position,
-                                    dynamicData.triggerThresholdSliderValue);
+    lineDrawer.drawTriggerIndicator(
+        dynamicData.trigger_horizontal_position,
+        scaleMillivoltsToYWithinBounds(
+            dynamicData, dynamicData.triggerThresholdSliderValue_mV));
     lineDrawer.drawDisplayAreaBorder();
 
     if (dynamicData.verticalMeasurementsData.active)
@@ -63,11 +65,13 @@ void Oscilloscope::display()
 
 void Oscilloscope::drawWaveform(const ChannelId channelId)
 {
-    auto adcValuesToDisplay{dataAnalyzer.prepareData(dataRetriever.getCopyOfRetrievedAdcValues(channelId), dynamicData, channelId)};
+    MillivoltsVector values_to_display_mV{dataAnalyzer.prepareData(
+        dataRetriever.getCopyOfRetrievedValues_mV(channelId), dynamicData,
+        channelId)};
 
-    auto value_it{adcValuesToDisplay.begin()};
+    auto value_it{values_to_display_mV.begin()};
 
-    if (value_it == adcValuesToDisplay.end())
+    if (value_it == values_to_display_mV.end())
     {
         return;
     }
@@ -104,14 +108,14 @@ void Oscilloscope::drawWaveform(const ChannelId channelId)
         value_it += shiftToDisplayBeginning;
     }
 
-    for (value_it; value_it != adcValuesToDisplay.end(); ++value_it)
+    for (value_it; value_it != values_to_display_mV.end(); ++value_it)
     {
         if (x > marginCorrected(X_DISPLAY_RESOLUTION))
         {
             break;
         }
 
-        y = marginCorrected(scaleAdcValueToY(dynamicData, *value_it));
+        y = marginCorrected(scaleMillivoltsToYWithinBounds(dynamicData, *value_it));
         glVertex2f(x, y);
         x += x_length;
     }
@@ -141,4 +145,31 @@ void Oscilloscope::run()
 void Oscilloscope::runDataRetrieve()
 {
     dataRetriever.runContinuousDataRetrieve(dynamicData);
+}
+
+float Oscilloscope::scaleMillivoltsToYWithinBounds(
+    const DynamicData &dynamicData, const float millivolts) const
+{
+    const float current_vertical_display_resolution_mV{
+        dynamicData.verticalBoundsData.verticalUpperBound_mV() -
+        dynamicData.verticalBoundsData.verticalLowerBound_mV()};
+
+    const float factor{static_cast<float>(Y_DISPLAY_RESOLUTION) /
+                       current_vertical_display_resolution_mV};
+
+    const float y_within_bounds =
+        factor *
+        (millivolts - dynamicData.verticalBoundsData.verticalLowerBound_mV());
+
+    if (y_within_bounds > Y_DISPLAY_RESOLUTION)
+    {
+        return static_cast<float>(Y_DISPLAY_RESOLUTION);
+    }
+
+    if (y_within_bounds < 0.0f)
+    {
+        return 0.0f;
+    }
+
+    return y_within_bounds;
 }

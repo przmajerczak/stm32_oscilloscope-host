@@ -13,7 +13,7 @@
 class DynamicData
 {
 public:
-    uint16_t triggerThresholdSliderValue = DEFAULT_TRIGGER_THRESHOLD;
+    float triggerThresholdSliderValue_mV = DEFAULT_TRIGGER_THRESHOLD_mV;
     ThresholdTrigger thresholdTrigger{ThresholdTrigger::RISING_EDGE};
     double trigger_horizontal_position{X_DISPLAY_RESOLUTION / 2};
     std::size_t trigger_source{DEFAULT_TRIGGER_SOURCE};

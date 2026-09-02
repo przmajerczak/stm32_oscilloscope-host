@@ -1,18 +1,20 @@
 #include "DataAnalyzer.hpp"
-#include "debug/Timemarker.hpp"
-#include "sharedData/constants.hpp"
-#include "sharedData/DynamicData.hpp"
-#include "utils.hpp"
+
 #include <algorithm>
 #include <numeric>
 
-AdcValuesVector DataAnalyzer::prepareData(const AdcValuesArray &current_values,
-                                          DynamicData &dynamicData,
-                                          const ChannelId channelId)
+#include "debug/Timemarker.hpp"
+#include "sharedData/DynamicData.hpp"
+#include "sharedData/constants.hpp"
+#include "utils.hpp"
+
+MillivoltsVector DataAnalyzer::prepareData(
+    const MillivoltsArray &current_values, DynamicData &dynamicData,
+    const ChannelId channelId)
 {
     Timemarker tmarker{dynamicData.timemarkersData.totalDataAnalyzeDuration};
 
-    const auto averaged_values{averageAdcValues(dynamicData, current_values)};
+    const auto averaged_values{applyAveraging(dynamicData, current_values)};
     const TriggersIndexes triggersIndexes{
         detectTriggers(dynamicData, averaged_values, channelId)};
 
@@ -22,10 +24,10 @@ AdcValuesVector DataAnalyzer::prepareData(const AdcValuesArray &current_values,
     return std::move(averaged_values);
 }
 
-AdcValuesVector DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
-                                               const AdcValuesArray &current_values)
+MillivoltsVector DataAnalyzer::applyAveraging(
+    DynamicData &dynamicData, const MillivoltsArray &current_values)
 {
-    AdcValuesVector averaged_values;
+    MillivoltsVector averaged_values;
 
     const uint16_t averaging_window_size{dynamicData.averaging_window_size};
 
@@ -36,7 +38,8 @@ AdcValuesVector DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
         dynamicData.nanoseconds_per_sample = nanoseconds_per_sample;
 
         averaged_values.resize(SAMPLES_PER_TRANSMISSION);
-        std::copy(current_values.begin(), current_values.end(), averaged_values.begin());
+        std::copy(current_values.begin(), current_values.end(),
+                  averaged_values.begin());
 
         return std::move(averaged_values);
     }
@@ -48,7 +51,8 @@ AdcValuesVector DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
                   << std::endl;
 
         averaged_values.resize(SAMPLES_PER_TRANSMISSION);
-        std::copy(current_values.begin(), current_values.end(), averaged_values.begin());
+        std::copy(current_values.begin(), current_values.end(),
+                  averaged_values.begin());
 
         return std::move(averaged_values);
     }
@@ -60,13 +64,12 @@ AdcValuesVector DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
         std::next(moving_average_window_front, averaging_window_size)};
 
     auto moving_average_window{std::accumulate(moving_average_window_front,
-                                               moving_average_window_back, 0)};
+                                               moving_average_window_back, 0.0f)};
 
     for (auto &averaged_value : averaged_values)
     {
         averaged_value =
-            static_cast<AdcValue>(static_cast<double>(moving_average_window) /
-                                  static_cast<double>(averaging_window_size));
+            moving_average_window / static_cast<float>(averaging_window_size);
 
         moving_average_window -= *moving_average_window_front;
 
@@ -83,9 +86,9 @@ AdcValuesVector DataAnalyzer::averageAdcValues(DynamicData &dynamicData,
     return std::move(averaged_values);
 }
 
-TriggersIndexes DataAnalyzer::detectTriggers(DynamicData &dynamicData,
-                                             const AdcValuesVector &averaged_values,
-                                             const ChannelId channelId)
+TriggersIndexes DataAnalyzer::detectTriggers(
+    DynamicData &dynamicData, const MillivoltsVector &averaged_values,
+    const ChannelId channelId)
 {
     TriggersIndexes triggersIndexes;
 
@@ -113,21 +116,19 @@ TriggersIndexes DataAnalyzer::detectTriggers(DynamicData &dynamicData,
 }
 
 bool DataAnalyzer::isTrigger(const DynamicData &dynamicData,
-                             const uint16_t leftValue,
-                             const uint16_t rightValue)
+                             const float leftValue, const float rightValue)
 {
-    const uint16_t threshold{scaleYToAdcWithinBounds(
-        dynamicData, dynamicData.triggerThresholdSliderValue)};
+    const float threshold_mV{dynamicData.triggerThresholdSliderValue_mV};
     const ThresholdTrigger trigger{dynamicData.thresholdTrigger};
 
     if (trigger == ThresholdTrigger::RISING_EDGE)
     {
-        return (leftValue < threshold and rightValue >= threshold);
+        return (leftValue < threshold_mV and rightValue >= threshold_mV);
     }
 
     if (trigger == ThresholdTrigger::FALLING_EDGE)
     {
-        return (leftValue >= threshold and rightValue < threshold);
+        return (leftValue >= threshold_mV and rightValue < threshold_mV);
     }
 
     return false;
@@ -182,10 +183,9 @@ double DataAnalyzer::calculateFrequency(const TriggersIndexes &triggersIndexes,
     return NANOSECONDS_PER_GHZ / median_signal_period_ns;
 }
 
-void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
-                                         const AdcValuesVector adc_values_to_display,
-                                         const TriggersIndexes &triggersIndexes,
-                                         const ChannelId channelId)
+void DataAnalyzer::calculateMeasurements(
+    DynamicData &dynamicData, const MillivoltsVector values_to_display_mV,
+    const TriggersIndexes &triggersIndexes, const ChannelId channelId)
 {
     SignalMeasurementsData &signalMeasurementsData{
         dynamicData.signalMeasurementsData.at(channelId)};
@@ -194,29 +194,29 @@ void DataAnalyzer::calculateMeasurements(DynamicData &dynamicData,
         calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
                            dynamicData.frame_duration_ns);
 
-    const auto min_value{std::min_element(adc_values_to_display.begin(),
-                                          adc_values_to_display.end())};
+    const auto min_value{std::min_element(values_to_display_mV.begin(),
+                                          values_to_display_mV.end())};
 
     signalMeasurementsData.min_value =
-        (min_value != adc_values_to_display.end()) ? *min_value : INVALID_VALUE;
+        (min_value != values_to_display_mV.end()) ? *min_value : INVALID_VALUE;
 
-    const auto max_value{std::max_element(adc_values_to_display.begin(),
-                                          adc_values_to_display.end())};
+    const auto max_value{std::max_element(values_to_display_mV.begin(),
+                                          values_to_display_mV.end())};
 
     signalMeasurementsData.max_value =
-        (max_value != adc_values_to_display.end()) ? *max_value : INVALID_VALUE;
+        (max_value != values_to_display_mV.end()) ? *max_value : INVALID_VALUE;
 
     signalMeasurementsData.amplitude = max_value - min_value;
 
-    if (adc_values_to_display.empty())
+    if (values_to_display_mV.empty())
     {
         signalMeasurementsData.average_value = INVALID_VALUE;
     }
     else
     {
-        const auto average_value{std::accumulate(adc_values_to_display.begin(),
-                                                 adc_values_to_display.end(), 0) /
-                                 adc_values_to_display.size()};
+        const auto average_value{std::accumulate(values_to_display_mV.begin(),
+                                                 values_to_display_mV.end(), 0) /
+                                 values_to_display_mV.size()};
         signalMeasurementsData.average_value = average_value;
     }
 }
