@@ -1,7 +1,7 @@
 #include "VerticalBoundControls.hpp"
 
-#include "sharedData/constants.hpp"
 #include "sharedData/DynamicData.hpp"
+#include "sharedData/constants.hpp"
 
 void verticalLowerBoundSliderOnChangeAction(GtkRange *range,
                                             gpointer _callbackData)
@@ -41,6 +41,40 @@ void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
     dynamicData->display_configuration_changed = true;
 }
 
+void onAutoselectButtonClicked(GtkWidget *button, gpointer data)
+{
+    AutoselectCallbackData *pointers = (AutoselectCallbackData *)data;
+    DynamicData *dynamicData = pointers->dynamicData;
+
+    const float current_max_mV =
+        std::max(dynamicData->signalMeasurementsData.at(CHANNEL_1).max_value_mV,
+                 dynamicData->signalMeasurementsData.at(CHANNEL_2).max_value_mV);
+
+    const float current_min_mV =
+        std::min(dynamicData->signalMeasurementsData.at(CHANNEL_1).min_value_mV,
+                 dynamicData->signalMeasurementsData.at(CHANNEL_2).min_value_mV);
+
+    constexpr float MARGIN_FACTOR{0.1};
+    const float MARGIN_mV{MARGIN_FACTOR * (current_max_mV - current_min_mV)};
+
+    dynamicData->verticalBoundsData.notifyAboutUpperBoundChange(
+        static_cast<int16_t>(current_max_mV + MARGIN_mV));
+    dynamicData->verticalBoundsData.notifyAboutLowerBoundChange(
+        static_cast<int16_t>(current_min_mV - MARGIN_mV));
+
+    GtkWidget *upper_slider = pointers->upper_slider;
+    GtkWidget *lower_slider = pointers->lower_slider;
+
+    gtk_range_set_value(GTK_RANGE(upper_slider),
+                        dynamicData->verticalBoundsData.verticalUpperBound_mV());
+    gtk_range_set_value(GTK_RANGE(lower_slider),
+                        dynamicData->verticalBoundsData.verticalLowerBound_mV());
+
+    dynamicData->verticalMeasurementsData.recalculateValues(*dynamicData);
+
+    dynamicData->display_configuration_changed = true;
+}
+
 void VerticalBoundControls::prepare(DynamicData &dynamicData)
 {
     GtkAdjustment *lower_bound_slider_adjustment = gtk_adjustment_new(
@@ -50,7 +84,8 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
     gtk_widget_set_hexpand(vertical_lower_bound_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(vertical_lower_bound_slider), FALSE);
     gtk_range_set_inverted(GTK_RANGE(vertical_lower_bound_slider), TRUE);
-    gtk_widget_set_size_request(vertical_lower_bound_slider, 0, DEFAULT_SLIDER_HEIGHT);
+    gtk_widget_set_size_request(vertical_lower_bound_slider, 0,
+                                DEFAULT_SLIDER_HEIGHT);
 
     GtkAdjustment *upper_bound_slider_adjustment = gtk_adjustment_new(
         MAX_VOLTAGE_mV, MIN_VOLTAGE_mV, MAX_VOLTAGE_mV, 1, 0.0, 0.0);
@@ -59,7 +94,8 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
     gtk_widget_set_hexpand(vertical_upper_bound_slider, TRUE);
     gtk_scale_set_draw_value(GTK_SCALE(vertical_upper_bound_slider), FALSE);
     gtk_range_set_inverted(GTK_RANGE(vertical_upper_bound_slider), TRUE);
-    gtk_widget_set_size_request(vertical_upper_bound_slider, 0, DEFAULT_SLIDER_HEIGHT);
+    gtk_widget_set_size_request(vertical_upper_bound_slider, 0,
+                                DEFAULT_SLIDER_HEIGHT);
 
     callbackDataForLowerBoundSlider.data = &dynamicData;
     callbackDataForLowerBoundSlider.widget = vertical_upper_bound_slider;
@@ -80,6 +116,17 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
 
     vertical_upper_bound_spin_button =
         gtk_spin_button_new(upper_bound_slider_adjustment, 1.0, 0);
+
+    autoselect_button = gtk_button_new_with_label("Auto select");
+    gtk_widget_set_hexpand(autoselect_button, TRUE);
+
+    autoselect_callback_data.dynamicData = &dynamicData;
+    autoselect_callback_data.upper_slider = vertical_upper_bound_slider;
+    autoselect_callback_data.lower_slider = vertical_lower_bound_slider;
+
+    g_signal_connect(autoselect_button, "clicked",
+                     G_CALLBACK(onAutoselectButtonClicked),
+                     &autoselect_callback_data);
 }
 
 GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
@@ -116,6 +163,8 @@ GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
     gtk_box_pack_start(GTK_BOX(verticalBoundControlsHorizontalBox),
                        vertical_upper_bound_controls_vertical_box, FALSE, TRUE,
                        padding);
+    gtk_box_pack_start(GTK_BOX(verticalBoundControlsHorizontalBox),
+                       autoselect_button, FALSE, TRUE, padding);
 
     gtk_container_add(GTK_CONTAINER(verticalBoundControlsExpander),
                       verticalBoundControlsHorizontalBox);
