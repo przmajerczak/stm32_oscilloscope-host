@@ -6,7 +6,7 @@
 
 class DynamicData;
 
-struct AutoselectCallbackData
+struct ButtonsCallbackData
 {
     DynamicData *dynamicData;
     GtkWidget *upper_slider;
@@ -25,8 +25,9 @@ private:
     GtkWidget *vertical_lower_bound_spin_button = nullptr;
     GtkWidget *vertical_upper_bound_spin_button = nullptr;
     GtkWidget *autoselect_button = nullptr;
+    GtkWidget *zoomout_button = nullptr;
 
-    AutoselectCallbackData autoselect_callback_data;
+    ButtonsCallbackData buttons_callback_data;
     CallbackData<DynamicData> callbackDataForLowerBoundSlider;
     CallbackData<DynamicData> callbackDataForUpperBoundSlider;
 };

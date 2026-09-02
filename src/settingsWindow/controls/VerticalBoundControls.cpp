@@ -41,9 +41,10 @@ void verticalUpperBoundSliderOnChangeAction(GtkRange *range,
     dynamicData->display_configuration_changed = true;
 }
 
+// TODO: refactor both buttons functions - could be one accepting a range
 void onAutoselectButtonClicked(GtkWidget *button, gpointer data)
 {
-    AutoselectCallbackData *pointers = (AutoselectCallbackData *)data;
+    ButtonsCallbackData *pointers = (ButtonsCallbackData *)data;
     DynamicData *dynamicData = pointers->dynamicData;
 
     const float current_max_mV =
@@ -61,6 +62,29 @@ void onAutoselectButtonClicked(GtkWidget *button, gpointer data)
         static_cast<int16_t>(current_max_mV + MARGIN_mV));
     dynamicData->verticalBoundsData.notifyAboutLowerBoundChange(
         static_cast<int16_t>(current_min_mV - MARGIN_mV));
+
+    GtkWidget *upper_slider = pointers->upper_slider;
+    GtkWidget *lower_slider = pointers->lower_slider;
+
+    gtk_range_set_value(GTK_RANGE(upper_slider),
+                        dynamicData->verticalBoundsData.verticalUpperBound_mV());
+    gtk_range_set_value(GTK_RANGE(lower_slider),
+                        dynamicData->verticalBoundsData.verticalLowerBound_mV());
+
+    dynamicData->verticalMeasurementsData.recalculateValues(*dynamicData);
+
+    dynamicData->display_configuration_changed = true;
+}
+
+void onZoomoutButtonClicked(GtkWidget *button, gpointer data)
+{
+    ButtonsCallbackData *pointers = (ButtonsCallbackData *)data;
+    DynamicData *dynamicData = pointers->dynamicData;
+
+    dynamicData->verticalBoundsData.notifyAboutUpperBoundChange(
+        static_cast<int16_t>(MAX_VOLTAGE_mV));
+    dynamicData->verticalBoundsData.notifyAboutLowerBoundChange(
+        static_cast<int16_t>(MIN_VOLTAGE_mV));
 
     GtkWidget *upper_slider = pointers->upper_slider;
     GtkWidget *lower_slider = pointers->lower_slider;
@@ -117,16 +141,20 @@ void VerticalBoundControls::prepare(DynamicData &dynamicData)
     vertical_upper_bound_spin_button =
         gtk_spin_button_new(upper_bound_slider_adjustment, 1.0, 0);
 
+    buttons_callback_data.dynamicData = &dynamicData;
+    buttons_callback_data.upper_slider = vertical_upper_bound_slider;
+    buttons_callback_data.lower_slider = vertical_lower_bound_slider;
+
     autoselect_button = gtk_button_new_with_label("Auto select");
     gtk_widget_set_hexpand(autoselect_button, TRUE);
-
-    autoselect_callback_data.dynamicData = &dynamicData;
-    autoselect_callback_data.upper_slider = vertical_upper_bound_slider;
-    autoselect_callback_data.lower_slider = vertical_lower_bound_slider;
-
     g_signal_connect(autoselect_button, "clicked",
                      G_CALLBACK(onAutoselectButtonClicked),
-                     &autoselect_callback_data);
+                     &buttons_callback_data);
+
+    zoomout_button = gtk_button_new_with_label("Zoom out");
+    gtk_widget_set_hexpand(zoomout_button, TRUE);
+    g_signal_connect(zoomout_button, "clicked",
+                     G_CALLBACK(onZoomoutButtonClicked), &buttons_callback_data);
 }
 
 GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
@@ -154,6 +182,14 @@ GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
     gtk_box_pack_start(GTK_BOX(vertical_upper_bound_controls_vertical_box),
                        vertical_upper_bound_slider, FALSE, TRUE, padding);
 
+    GtkWidget *buttons_vertical_box =
+        gtk_box_new(GTK_ORIENTATION_VERTICAL, spacing);
+
+    gtk_box_pack_start(GTK_BOX(buttons_vertical_box), autoselect_button, FALSE,
+                       TRUE, padding);
+    gtk_box_pack_start(GTK_BOX(buttons_vertical_box), zoomout_button, FALSE, TRUE,
+                       padding);
+
     GtkWidget *verticalBoundControlsHorizontalBox =
         gtk_box_new(GTK_ORIENTATION_HORIZONTAL, spacing);
 
@@ -164,7 +200,7 @@ GtkWidget *VerticalBoundControls::getVerticalBoundControlsContainer()
                        vertical_upper_bound_controls_vertical_box, FALSE, TRUE,
                        padding);
     gtk_box_pack_start(GTK_BOX(verticalBoundControlsHorizontalBox),
-                       autoselect_button, FALSE, TRUE, padding);
+                       buttons_vertical_box, FALSE, TRUE, padding);
 
     gtk_container_add(GTK_CONTAINER(verticalBoundControlsExpander),
                       verticalBoundControlsHorizontalBox);
