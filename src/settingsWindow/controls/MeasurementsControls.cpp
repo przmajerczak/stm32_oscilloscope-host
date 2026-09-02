@@ -1,10 +1,11 @@
 #include "MeasurementsControls.hpp"
 
-#include "sharedData/constants.hpp"
-#include "utils.hpp"
 #include <iomanip>
 #include <numeric>
 #include <sstream>
+
+#include "sharedData/constants.hpp"
+#include "utils.hpp"
 
 void fillFrequencyLabel(const LabelsPointers &labels_pointers,
                         DynamicData &dynamicData, const ChannelId channelId)
@@ -14,7 +15,7 @@ void fillFrequencyLabel(const LabelsPointers &labels_pointers,
     const double frequency_Hz{
         dynamicData.signalMeasurementsData.at(channelId).frequency_Hz};
 
-    if (frequency_Hz >= 0.0)
+    if (dynamicData.active_channels.at(channelId) and frequency_Hz >= 0.0)
     {
         if (frequency_Hz > 1000000.0)
         {
@@ -37,103 +38,83 @@ void fillFrequencyLabel(const LabelsPointers &labels_pointers,
         labelContent << "--- Hz";
     }
 
-    GtkLabel *frequencyLabel =
-        GTK_LABEL(labels_pointers.at(channelId).frequencyLabel);
-
-    gtk_label_set_text(frequencyLabel, labelContent.str().c_str());
+    gtk_label_set_text(GTK_LABEL(labels_pointers.at(channelId).frequencyLabel),
+                       labelContent.str().c_str());
 }
 
 void fillMaxVoltageLabel(const LabelsPointers &labels_pointers,
                          DynamicData &dynamicData, const ChannelId channelId)
 {
-    GtkLabel *maxVoltageLabel =
-        GTK_LABEL(labels_pointers.at(channelId).maxVoltageLabel);
     std::stringstream labelContent;
 
-    const auto max_value{
-        dynamicData.signalMeasurementsData.at(channelId).max_value_mV};
-
-    if (max_value != INVALID_VALUE_FLOAT)
+    if (dynamicData.active_channels.at(channelId))
     {
-        labelContent << static_cast<int>(max_value) << " mV";
+        labelContent
+            << static_cast<int>(
+                   dynamicData.signalMeasurementsData.at(channelId).max_value_mV)
+            << " mV";
     }
     else
     {
         labelContent << "--- mV";
     }
 
-    gtk_label_set_text(maxVoltageLabel, labelContent.str().c_str());
+    gtk_label_set_text(GTK_LABEL(labels_pointers.at(channelId).maxVoltageLabel),
+                       labelContent.str().c_str());
 }
 
 void fillAvgVoltageLabel(const LabelsPointers &labels_pointers,
                          DynamicData &dynamicData, const ChannelId channelId)
 {
-    GtkLabel *avgVoltageLabel =
-        GTK_LABEL(labels_pointers.at(channelId).avgVoltageLabel);
     std::stringstream labelContent;
 
-    if (dynamicData.signalMeasurementsData.at(channelId).average_value_mV ==
-        INVALID_VALUE_FLOAT)
-    {
-        labelContent << "--- mV";
-    }
-    else
+    if (dynamicData.active_channels.at(channelId))
     {
         labelContent << static_cast<int>(
                             dynamicData.signalMeasurementsData.at(channelId)
                                 .average_value_mV)
                      << " mV";
     }
+    else
+    {
+        labelContent << "--- mV";
+    }
 
-    gtk_label_set_text(avgVoltageLabel, labelContent.str().c_str());
+    gtk_label_set_text(GTK_LABEL(labels_pointers.at(channelId).avgVoltageLabel), labelContent.str().c_str());
 }
 
 void fillMinVoltageLabel(const LabelsPointers &labels_pointers,
                          DynamicData &dynamicData, const ChannelId channelId)
 {
-    GtkLabel *minVoltageLabel =
-        GTK_LABEL(labels_pointers.at(channelId).minVoltageLabel);
     std::stringstream labelContent;
 
-    const auto min_value{
-        dynamicData.signalMeasurementsData.at(channelId).min_value_mV};
-
-    if (min_value != INVALID_VALUE_FLOAT)
+    if (dynamicData.active_channels.at(channelId))
     {
-        const auto min_voltage_mV = static_cast<int>(min_value);
-
-        labelContent << min_voltage_mV << " mV";
+        labelContent << static_cast<int>(dynamicData.signalMeasurementsData.at(channelId).min_value_mV) << " mV";
     }
     else
     {
         labelContent << "--- mV";
     }
 
-    gtk_label_set_text(minVoltageLabel, labelContent.str().c_str());
+    gtk_label_set_text(GTK_LABEL(labels_pointers.at(channelId).minVoltageLabel), labelContent.str().c_str());
 }
 
 void fillAmplitudeLabel(const LabelsPointers &labels_pointers,
                         DynamicData &dynamicData, const ChannelId channelId)
 {
-    GtkLabel *amplitudeLabel =
-        GTK_LABEL(labels_pointers.at(channelId).amplitudeLabel);
     std::stringstream labelContent;
 
-    const auto amplitude{
-        dynamicData.signalMeasurementsData.at(channelId).amplitude_mV};
-
-    if (amplitude != INVALID_VALUE_FLOAT)
+    if (dynamicData.active_channels.at(channelId))
     {
-        const auto amplitude_mV = static_cast<int>(amplitude);
-
-        labelContent << amplitude_mV << " mV";
+        labelContent << static_cast<int>(dynamicData.signalMeasurementsData.at(channelId).amplitude_mV) << " mV";
     }
     else
     {
         labelContent << "--- mV";
     }
 
-    gtk_label_set_text(amplitudeLabel, labelContent.str().c_str());
+    gtk_label_set_text(GTK_LABEL(labels_pointers.at(channelId).amplitudeLabel), labelContent.str().c_str());
 }
 
 gboolean labelsTimeoutAction(gpointer _callbackData)
@@ -150,8 +131,6 @@ gboolean labelsTimeoutAction(gpointer _callbackData)
         fillAvgVoltageLabel(*(labels_pointers), *dynamicData, chId);
         fillMinVoltageLabel(*(labels_pointers), *dynamicData, chId);
         fillAmplitudeLabel(*(labels_pointers), *dynamicData, chId);
-
-        dynamicData->signalMeasurementsData.at(chId).reset();
     }
 
     return TRUE;

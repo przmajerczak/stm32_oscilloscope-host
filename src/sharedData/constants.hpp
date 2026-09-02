@@ -22,7 +22,7 @@ constexpr double NANOSECONDS_PER_MHZ{1000.0};
 constexpr double DEVICE_TIMER_SINGLE_TICK_DURATION_NS{
     NANOSECONDS_PER_MHZ / DEVICE_TIME_MEASUREMENT_TIMER_FREQ_MHZ};
 constexpr uint16_t SAMPLES_PER_TRANSMISSION{15000};
-constexpr uint16_t LABELS_REFRESH_RATE_MS{500};
+constexpr uint16_t LABELS_REFRESH_RATE_MS{10};
 constexpr uint16_t DEFAULT_TRIGGER_THRESHOLD_mV{0};
 constexpr uint16_t INVALID_VALUE{0xffff};
 constexpr float INVALID_VALUE_FLOAT{std::numeric_limits<float>::max()};
