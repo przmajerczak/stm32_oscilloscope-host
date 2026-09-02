@@ -194,31 +194,34 @@ void DataAnalyzer::calculateMeasurements(
         calculateFrequency(triggersIndexes, dynamicData.nanoseconds_per_sample,
                            dynamicData.frame_duration_ns);
 
-    const auto min_value{std::min_element(values_to_display_mV.begin(),
-                                          values_to_display_mV.end())};
-
-    signalMeasurementsData.min_value_mV =
-        (min_value != values_to_display_mV.end()) ? *min_value
-                                                  : INVALID_VALUE_FLOAT;
-
-    const auto max_value{std::max_element(values_to_display_mV.begin(),
-                                          values_to_display_mV.end())};
-
-    signalMeasurementsData.max_value_mV =
-        (max_value != values_to_display_mV.end()) ? *max_value
-                                                  : INVALID_VALUE_FLOAT;
-
-    signalMeasurementsData.amplitude_mV = max_value - min_value;
-
     if (values_to_display_mV.empty())
     {
-        signalMeasurementsData.average_value_mV = INVALID_VALUE_FLOAT;
+        return;
     }
-    else
+
+    float min_value{values_to_display_mV.front()};
+    float max_value{values_to_display_mV.front()};
+    float sum_of_values{values_to_display_mV.front()};
+
+    for (std::size_t i = 1; i < values_to_display_mV.size(); ++i)
     {
-        const auto average_value{std::accumulate(values_to_display_mV.begin(),
-                                                 values_to_display_mV.end(), 0) /
-                                 values_to_display_mV.size()};
-        signalMeasurementsData.average_value_mV = average_value;
+        const float value{values_to_display_mV.at(i)};
+
+        sum_of_values += value;
+
+        if (value > max_value)
+        {
+            max_value = value;
+        }
+        else if (value < min_value)
+        {
+            min_value = value;
+        }
     }
+
+    signalMeasurementsData.min_value_mV = min_value;
+    signalMeasurementsData.max_value_mV = max_value;
+    signalMeasurementsData.amplitude_mV = max_value - min_value;
+    signalMeasurementsData.average_value_mV =
+        sum_of_values / static_cast<float>(values_to_display_mV.size());
 }
