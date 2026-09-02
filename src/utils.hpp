@@ -6,33 +6,6 @@
 #include <cstdint>
 #include <iostream>
 
-static float scaleAdcValueToY(const DynamicData &dynamicData,
-                              const uint16_t adc_value)
-{
-    const auto current_vertical_display_resolution{
-        dynamicData.verticalBoundsData.verticalUpperBound() -
-        dynamicData.verticalBoundsData.verticalLowerBound()};
-    const float factor{INPUT_SIGNAL_RESOLUTION /
-                       static_cast<float>(current_vertical_display_resolution)};
-    float scaled_adc_value{
-        (adc_value - dynamicData.verticalBoundsData.verticalLowerBound()) *
-        factor};
-
-    if (scaled_adc_value > INPUT_SIGNAL_MAX)
-    {
-        scaled_adc_value = INPUT_SIGNAL_MAX;
-    }
-    else if (scaled_adc_value < INPUT_SIGNAL_MIN)
-    {
-        scaled_adc_value = INPUT_SIGNAL_MIN;
-    }
-
-    const float y{
-        (scaled_adc_value / static_cast<float>(INPUT_SIGNAL_RESOLUTION)) *
-        static_cast<float>(Y_DISPLAY_RESOLUTION)};
-    return y;
-}
-
 static float scaleYToVoltage_mV(const DynamicData &dynamicData, const float y)
 {
     const auto current_vertical_display_resolution{

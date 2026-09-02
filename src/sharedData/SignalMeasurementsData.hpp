@@ -1,23 +1,22 @@
 #pragma once
 
 #include "sharedData/constants.hpp"
-#include "sharedData/types.hpp"
 
 struct SignalMeasurementsData
 {
-    AdcValue min_value{INVALID_VALUE};
-    AdcValue max_value{INVALID_VALUE};
-    AdcValue average_value{INVALID_VALUE};
-    AdcValue amplitude{INVALID_VALUE};
+    float min_value_mV{INVALID_VALUE_FLOAT};
+    float max_value_mV{INVALID_VALUE_FLOAT};
+    float average_value_mV{INVALID_VALUE_FLOAT};
+    float amplitude_mV{INVALID_VALUE_FLOAT};
 
     double frequency_Hz{-1.0};
 
     void reset()
     {
-        min_value = INVALID_VALUE;
-        max_value = INVALID_VALUE;
-        average_value = INVALID_VALUE;
-        amplitude = INVALID_VALUE;
+        min_value_mV = INVALID_VALUE_FLOAT;
+        max_value_mV = INVALID_VALUE_FLOAT;
+        average_value_mV = INVALID_VALUE_FLOAT;
+        amplitude_mV = INVALID_VALUE_FLOAT;
         frequency_Hz = -1.0;
     }
 };

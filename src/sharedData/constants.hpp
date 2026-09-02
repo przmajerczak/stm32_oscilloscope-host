@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <limits>
 
 constexpr uint16_t X_DISPLAY_RESOLUTION{1024};
 constexpr uint16_t Y_DISPLAY_RESOLUTION{768};
@@ -24,6 +25,7 @@ constexpr uint16_t SAMPLES_PER_TRANSMISSION{15000};
 constexpr uint16_t LABELS_REFRESH_RATE_MS{500};
 constexpr uint16_t DEFAULT_TRIGGER_THRESHOLD_mV{0};
 constexpr uint16_t INVALID_VALUE{0xffff};
+constexpr float INVALID_VALUE_FLOAT{std::numeric_limits<float>::max()};
 constexpr uint8_t NUMBER_OF_CHANNELS{2};
 constexpr std::size_t CHANNEL_1{0};
 constexpr std::size_t CHANNEL_2{1};
