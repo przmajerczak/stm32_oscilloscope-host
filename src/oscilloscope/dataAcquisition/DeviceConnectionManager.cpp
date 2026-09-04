@@ -1,17 +1,30 @@
 #include "DeviceConnectionManager.hpp"
 
+#include <fcntl.h>
+#include <linux/limits.h>
+#include <termios.h>
 #include <unistd.h>
+
 #include <cstdint>
 #include <iostream>
-#include <fcntl.h>
-#include <termios.h>
 #include <regex>
-#include <linux/limits.h>
+
+#include "test/DummyOutputGenerator.hpp"
 
 extern int errno;
 
 int DeviceConnectionManager::establishConnection()
 {
+    if (test_mode)
+    {
+        DummyOutputGenerator{}.generate();
+
+        constexpr const char *filepath_tmp{"dummy_output"};
+        const int deviceFileDescriptor = open(filepath_tmp, O_RDONLY);
+
+        return deviceFileDescriptor;
+    }
+
     int deviceFileDescriptor = open(determineDeviceFilepath().c_str(), O_RDONLY);
 
     constexpr uint8_t FAILED_CONNECTION_ATTEMPTS_LOGGING_LIMIT{20};

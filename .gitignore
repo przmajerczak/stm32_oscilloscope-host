@@ -5,4 +5,5 @@ Makefile
 CMakeCache.txt
 build/
 stm32_oscilloscope-host
+dummy_output
 

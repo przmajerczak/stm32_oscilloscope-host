@@ -1,12 +1,13 @@
 #include "DataRetriever.hpp"
 
-#include "debug/Timemarker.hpp"
-#include "sharedData/constants.hpp"
-#include "sharedData/DynamicData.hpp"
 #include <fcntl.h>
+#include <unistd.h>
 #include <iostream>
 #include <thread>
-#include <unistd.h>
+
+#include "debug/Timemarker.hpp"
+#include "sharedData/DynamicData.hpp"
+#include "sharedData/constants.hpp"
 
 DataRetriever::~DataRetriever() { close(deviceFileDescriptor); }
 
@@ -25,7 +26,8 @@ void DataRetriever::runContinuousDataRetrieve(DynamicData &dynamicData)
     t.detach();
 }
 
-MillivoltsArray DataRetriever::getCopyOfRetrievedValues_mV(const ChannelId chId)
+MillivoltsArray DataRetriever::getCopyOfRetrievedValues_mV(
+    const ChannelId chId)
 {
     // TODO: handle multithreading better
     return retrieved_values_mV.at(chId);
@@ -57,7 +59,6 @@ void DataRetriever::singleDataRetrieve(DynamicData &dynamicData)
 
     decoder.fillDynamicData(dynamicData, undecodedRetrievedData);
 
-
     retrieved_values_mV.at(undecodedRetrievedData.channelId) =
         decoder.decodeAdcValuesInto_mV(undecodedRetrievedData.values);
 }
@@ -87,6 +88,7 @@ EncodedAdcData DataRetriever::retrieveData(DynamicData &dynamicData)
         {
             if (failed_read_attempts++ > FAILED_READ_ATTEMPTS_LIMIT)
             {
+                // TODO: move this reconnect part into DeviceConnectionManager
                 std::cerr << "Device disconnected. Attemping reconnect. " << std::endl;
 
                 close(deviceFileDescriptor);
@@ -111,8 +113,8 @@ bool DataRetriever::detectEndSequence(const uint8_t second_last_byte,
            (determineChannelId(second_last_byte) != NUMBER_OF_CHANNELS);
 }
 
-DualChannelMode
-DataRetriever::determineChannelMode(const uint8_t last_byte) const
+DualChannelMode DataRetriever::determineChannelMode(
+    const uint8_t last_byte) const
 {
     constexpr uint8_t LAST_BYTE_FOR_ONE_CHANNEL_MODE{0xfe};
     constexpr uint8_t LAST_BYTE_FOR_DUAL_CHANNEL_MODE{0xfd};
@@ -130,8 +132,8 @@ DataRetriever::determineChannelMode(const uint8_t last_byte) const
     return DualChannelMode::INVALID;
 }
 
-ChannelId
-DataRetriever::determineChannelId(const uint8_t second_last_byte) const
+ChannelId DataRetriever::determineChannelId(
+    const uint8_t second_last_byte) const
 {
     constexpr uint8_t SECOND_LAST_BYTE_FOR_CHANNEL_1{0xff};
     constexpr uint8_t SECOND_LAST_BYTE_FOR_CHANNEL_2{0xfe};

@@ -4,8 +4,8 @@
 #include "sharedData/constants.hpp"
 #include "utils.hpp"
 
-Oscilloscope::Oscilloscope(DynamicData &dynamicData)
-    : dynamicData(dynamicData)
+Oscilloscope::Oscilloscope(DynamicData &dynamicData, const bool test_mode)
+    : dynamicData(dynamicData), dataRetriever{test_mode}
 {
     glfwInit();
     window = glfwCreateWindow(X_WINDOW_SIZE, Y_WINDOW_SIZE, "STM32 Oscilloscope",
