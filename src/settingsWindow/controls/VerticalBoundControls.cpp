@@ -47,13 +47,29 @@ void onAutoselectButtonClicked(GtkWidget *button, gpointer data)
     ButtonsCallbackData *pointers = (ButtonsCallbackData *)data;
     DynamicData *dynamicData = pointers->dynamicData;
 
-    const float current_max_mV =
-        std::max(dynamicData->signalMeasurementsData.at(CHANNEL_1).max_value_mV,
-                 dynamicData->signalMeasurementsData.at(CHANNEL_2).max_value_mV);
+    float current_max_mV, current_min_mV;
 
-    const float current_min_mV =
-        std::min(dynamicData->signalMeasurementsData.at(CHANNEL_1).min_value_mV,
-                 dynamicData->signalMeasurementsData.at(CHANNEL_2).min_value_mV);
+    if (dynamicData->active_channels.at(CHANNEL_1) and
+        dynamicData->active_channels.at(CHANNEL_2))
+    {
+        current_max_mV = std::max(
+            dynamicData->signalMeasurementsData.at(CHANNEL_1).max_value_mV,
+            dynamicData->signalMeasurementsData.at(CHANNEL_2).max_value_mV);
+
+        current_min_mV = std::min(
+            dynamicData->signalMeasurementsData.at(CHANNEL_1).min_value_mV,
+            dynamicData->signalMeasurementsData.at(CHANNEL_2).min_value_mV);
+    }
+    else
+    {
+        const std::size_t active_channel =
+            dynamicData->active_channels.at(CHANNEL_1) ? CHANNEL_1 : CHANNEL_2;
+
+        current_max_mV =
+            dynamicData->signalMeasurementsData.at(active_channel).max_value_mV;
+        current_min_mV =
+            dynamicData->signalMeasurementsData.at(active_channel).min_value_mV;
+    }
 
     constexpr float MARGIN_FACTOR{0.1};
     const float MARGIN_mV{MARGIN_FACTOR * (current_max_mV - current_min_mV)};
